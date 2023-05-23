@@ -18,7 +18,6 @@ const ArticlesPage = () => {
 
   return (
     <>
-      <h2>Articles page</h2>
       <div className={classes["articles-container"]}>{articleThumbnailList}</div>
     </>
   );
