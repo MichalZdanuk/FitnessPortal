@@ -26,6 +26,8 @@ const MainPageLayout = () =>{
         <button onClick={(e) => {navigate("/calculators")}}>Calculators</button>
         <button onClick={(e) => {navigate("/trainings")}}>MyTrainings</button>
         <button onClick={(e) => {navigate("/friends")}}>Friends</button>
+        <button onClick={(e) => {navigate("/register")}}>REGISTER</button>
+        <button onClick={(e) => {navigate("/login")}}>LOGIN</button>
         <button onClick={(e) => {navigate("/account")}}>Account</button>
 
         <Outlet />
