@@ -28,6 +28,15 @@ namespace FitnessPortalAPI.Controllers
             var result = _articleService.GetAll();
             return Ok(result);
         }
+
+        [HttpPut("{id}")]
+        public ActionResult Update([FromBody]UpdateArticleDto dto, [FromRoute]int id)
+        {
+            _articleService.Update(id, dto);
+
+            return Ok();
+        }
+
         [HttpDelete]
         public ActionResult Delete()
         {

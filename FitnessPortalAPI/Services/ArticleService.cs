@@ -7,6 +7,7 @@ namespace FitnessPortalAPI.Services
     {
         int Create(ArticleDto dto);
         List<ArticleDto> GetAll();
+        void Update(int id, UpdateArticleDto dto);
         void RemoveAll();
         void Remove(int articleId);
 
@@ -57,6 +58,38 @@ namespace FitnessPortalAPI.Services
             return articlesDtos;
         }
 
+        public void Update(int id, UpdateArticleDto dto)
+        {
+            var article = _context
+                .Articles
+                .FirstOrDefault(a => a.Id == id);
+
+            if(article == null)
+            {
+                throw new Exception();
+            }
+
+            if(dto.Title != "" && dto.Title != null)
+            {
+                article.Title = dto.Title;
+            }
+            if(dto.ShortDescription != "" && dto.ShortDescription != null)
+            {
+                article.ShortDescription = dto.ShortDescription;
+            }
+            if(dto.Content != "" && dto.Content != null)
+            {
+                article.Content = dto.Content;
+            }
+            if(dto.Category != "" && dto.Category != null) 
+            {
+                article.Category = dto.Category;
+            }
+
+
+            _context.SaveChanges();
+        }
+
         public void Remove(int articleId)
         {
             var article = _context.Articles.FirstOrDefault(a => a.Id == articleId);
@@ -75,12 +108,7 @@ namespace FitnessPortalAPI.Services
             _context.RemoveRange(articles);
             _context.SaveChanges();
         }
+
+        
     }
 }
-/*
- public string Title { get; set; }
-        public string Content { get; set; }
-        public string Category { get; set; }
-        public DateTime DateOfPublication { get; set; }
-        public int CreatedById { get; set; }
-*/
