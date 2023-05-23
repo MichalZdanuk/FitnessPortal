@@ -1,5 +1,6 @@
 using FitnessPortalAPI;
 using FitnessPortalAPI.Entities;
+using FitnessPortalAPI.Middleware;
 using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Models.Validators;
 using FitnessPortalAPI.Services;
@@ -42,6 +43,7 @@ builder.Services.AddScoped<FitnessPortalSeeder>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<ICalculatorService, CalculatorService>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
@@ -75,6 +77,8 @@ app.UseCors("FrontEndClient");
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<FitnessPortalSeeder>();
 seeder.Seed();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseAuthentication();// before each request from API client there is need to authenticate with JWT
 

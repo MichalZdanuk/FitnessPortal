@@ -29,6 +29,14 @@ namespace FitnessPortalAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<ArticleDto> Get([FromRoute]int id)
+        {
+            var article = _articleService.GetById(id);
+
+            return Ok(article);
+        }
+
         [HttpPut("{id}")]
         public ActionResult Update([FromBody]UpdateArticleDto dto, [FromRoute]int id)
         {

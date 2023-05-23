@@ -1,4 +1,5 @@
 ﻿using FitnessPortalAPI.Entities;
+using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -48,16 +49,16 @@ namespace FitnessPortalAPI.Services
             var user = _context.Users
                 .Include(u => u.Role)
                 .FirstOrDefault(u => u.Email == dto.Email);
+
             if (user == null)
-            {
-                return null;
-            }
+                throw new BadRequestException("Invalid username or password");
+            
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+
             if(result == PasswordVerificationResult.Failed)
-            {
-                return null;
-            }
+                throw new BadRequestException("Invalid username or password");
+            
 
             var claims = new List<Claim>()
             {
@@ -78,6 +79,7 @@ namespace FitnessPortalAPI.Services
                 signingCredentials: cred);
 
             var tokenHandler = new JwtSecurityTokenHandler();
+
             return tokenHandler.WriteToken(token);
         }
     }
