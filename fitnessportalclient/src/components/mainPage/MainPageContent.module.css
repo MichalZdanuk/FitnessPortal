@@ -1,0 +1,18 @@
+
+.div-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.img {
+    width: 30vw;
+  }
+
+.motto-text{
+    font-size: 5vh;
+    color: #00A896;
+    font-weight: 700;
+    font-style: italic;
+}

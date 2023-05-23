@@ -10,6 +10,7 @@ import logoIcon from "../../assets/images/letterHicon.png"
 function MyNavbar() {
   const navigate = useNavigate();
     const [articlesList, setArticlesList] = useState(null);
+    const [anyArticles, setAnyArticles] = useState("");
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -19,6 +20,10 @@ function MyNavbar() {
             setArticlesList(response.data);
             console.log(response.data);
             navigate("/articles", {state:articlesList})
+        })
+        .catch((error) => {
+            setAnyArticles("false");
+            navigate("/articles")
         });
     };
 
