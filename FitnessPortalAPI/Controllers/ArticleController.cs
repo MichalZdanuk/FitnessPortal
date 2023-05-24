@@ -15,7 +15,7 @@ namespace FitnessPortalAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateArticle([FromBody]ArticleDto dto)
+        public ActionResult CreateArticle([FromBody]CreateArticleDto dto)
         {
             var id = _articleService.Create(dto);
 

@@ -1,12 +1,13 @@
 ﻿using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessPortalAPI.Services
 {
     public interface IArticleService
     {
-        int Create(ArticleDto dto);
+        int Create(CreateArticleDto dto);
         List<ArticleDto> GetAll();
         ArticleDto GetById(int id);
         void Update(int id, UpdateArticleDto dto);
@@ -23,7 +24,7 @@ namespace FitnessPortalAPI.Services
             _context = context;
             _userContextService = userContextService;
         }
-        public int Create(ArticleDto dto)
+        public int Create(CreateArticleDto dto)
         {
             var article = new Article()
             {
@@ -43,12 +44,17 @@ namespace FitnessPortalAPI.Services
 
         public List<ArticleDto> GetAll()
         {
-            var articles = _context.Articles.ToList();
+            var articles = _context
+                .Articles
+                .Include(a => a.CreatedBy)
+                .ToList();
             var articlesDtos = new List<ArticleDto>();
             for (int i = 0; i < articles.Count; i++)
             {
                 articlesDtos.Add(new ArticleDto()
                 {
+                    Id = articles[i].Id,
+                    Author = articles[i].CreatedBy.Username,
                     Title = articles[i].Title,
                     ShortDescription = articles[i].ShortDescription,
                     Content = articles[i].Content,
@@ -63,6 +69,7 @@ namespace FitnessPortalAPI.Services
         {
             var article = _context
                 .Articles
+                .Include(a => a.CreatedBy)
                 .FirstOrDefault(a => a.Id == id);
 
             if (article is null)
@@ -70,6 +77,8 @@ namespace FitnessPortalAPI.Services
 
             var result = new ArticleDto()
             {
+                Id = article.Id,
+                Author = article.CreatedBy.Username,
                 Title = article.Title,
                 ShortDescription = article.ShortDescription,
                 Content = article.Content,
