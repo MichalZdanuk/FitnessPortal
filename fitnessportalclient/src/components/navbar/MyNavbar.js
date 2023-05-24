@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from "axios";
-import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -9,22 +8,15 @@ import logoIcon from "../../assets/images/letterHicon.png"
 
 function MyNavbar() {
   const navigate = useNavigate();
-    const [articlesList, setArticlesList] = useState(null);
-    const [anyArticles, setAnyArticles] = useState("");
-
     const handleClick = async (e) => {
-        e.preventDefault();
-        await axios
-        .get("https://localhost:7087/api/article", {})
-        .then((response) => {
-            setArticlesList(response.data);
-            console.log(response.data);
-            navigate("/articles", {state:articlesList})
-        })
-        .catch((error) => {
-            setAnyArticles("false");
-            navigate("/articles")
-        });
+      e.preventDefault();
+      try {
+        const response = await axios.get("https://localhost:7087/api/article", {});
+        const articlesData = response.data;
+        navigate("/articles", { state: articlesData });
+      } catch (error) {
+        console.log(error);
+      }
     };
 
   return (

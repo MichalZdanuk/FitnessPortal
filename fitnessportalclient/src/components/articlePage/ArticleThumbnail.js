@@ -9,15 +9,16 @@ const ArticleThumbnail = (props) => {
     <div
       className={classes["article-thumbnail-div"]}
       onClick={(e) => {
-        navigate("/articles/x");
+        navigate(`/articles/${props.id}`, {state:props});
+
       }}
     >
       <div className={classes["article-top-info-container"]}>
         <h1 className={classes["article-title"]}>{props.title}</h1>
         <h1 className={classes["article-category"]}>{props.category}</h1>
       </div>
-      <p className={classes["article-date"]}><img src={clock} alt="clock" className={classes["img"]}></img> {props.date.substring(0,10)}</p>
-      <p>{props.shortDescription}</p>
+      <p className={classes["article-date"]}><img src={clock} alt="clock" className={classes["img"]}/> {props.date.substring(0,10)}</p>
+      <p className={classes["article-short-description"]}>{props.shortDescription}</p>
     </div>
   );
 };

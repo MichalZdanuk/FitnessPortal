@@ -5,12 +5,16 @@ import { useLocation } from "react-router-dom";
 const ArticlesPage = () => {
   const location = useLocation();
   const data = location.state;
+  console.log(data);
 
   let articleThumbnailList = (data === null) ? "" : data.map((article, idx) => (
     <ArticleThumbnail
-      key={idx}
+      key={article.id}
+      id={article.id}
+      author={article.author}
       title={article.title}
       shortDescription={article.shortDescription}
+      content={article.content}
       date={article.dateOfPublication}
       category={article.category}
     />
