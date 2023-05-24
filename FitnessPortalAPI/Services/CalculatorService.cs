@@ -6,6 +6,7 @@ namespace FitnessPortalAPI.Services
     public interface ICalculatorService
     {
         BMIDto CalculateBMI(CreateBMIDto dto);
+        BMIDto CalculateBMIForAnonymous(CreateBMIDto dto);
         List<BMIDto> GetAllBMIsForUser();
 
     }
@@ -32,21 +33,32 @@ namespace FitnessPortalAPI.Services
                 BMICategory = bmiCategory,
             };
             
-            if (_userContextService.GetUserId is not null) // to be fixed
+            var bmi = new BMI()
             {
-                var bmi = new BMI()
-                {
-                    Date = DateTime.Now,
-                    BMIScore = bmiIndex,
-                    BMICategory = bmiCategory,
-                    Height = dto.Height,
-                    Weight = dto.Weight,
-                };
-                bmi.UserId = (int)_userContextService.GetUserId;
-                _context.BMIs.Add(bmi);
-                _context.SaveChanges();
-            }
+                Date = DateTime.Now,
+                BMIScore = bmiIndex,
+                BMICategory = bmiCategory,
+                Height = dto.Height,
+                Weight = dto.Weight,
+            };
 
+            bmi.UserId = (int)_userContextService.GetUserId;
+            _context.BMIs.Add(bmi);
+            _context.SaveChanges();
+
+            return bmiDto;
+        }
+        public BMIDto CalculateBMIForAnonymous(CreateBMIDto dto)
+        {
+            var bmiIndex = 0.0f;
+            var bmiCategory = "";
+            _calculator.CalculateBmi(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
+            var bmiDto = new BMIDto()
+            {
+                Date = DateTime.Now,
+                BMIScore = bmiIndex,
+                BMICategory = bmiCategory,
+            };
 
             return bmiDto;
         }
