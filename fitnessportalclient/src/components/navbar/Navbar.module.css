@@ -17,3 +17,7 @@
 .margin-main-text{
   margin-left: 3%;
 }
+
+.navbar-shadow{
+  box-shadow: 0px 18px 25px -19px rgba(66, 68, 90, 1);
+}

@@ -28,7 +28,7 @@ function MyNavbar() {
     };
 
   return (
-    <Navbar collapseOnSelect expand="lg" bg="light" variant="light" sticky="top">
+    <Navbar collapseOnSelect expand="lg" bg="light" variant="light" sticky="top" className={classes["navbar-shadow"]}>
       <Container>
         <Navbar.Brand href="/" className={classes["main-text"]}><img src={logoIcon} className={classes["logo-img"]} alt="logo"/><emph className={classes["margin-main-text"]}>HealthyHabitHub</emph></Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
