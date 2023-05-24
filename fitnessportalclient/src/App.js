@@ -24,6 +24,7 @@ const router = createBrowserRouter(
       <Route path="articles/:articleId" element={<Article/>} />,
       <Route path="exercises" element={<ExercisesPage/>}/>,
       <Route path="calculators" element={<CalculatorsPage/>}/>,
+      <Route path="calculators/:calculatorType" element={<CalculatorsPage/>}/>,
       <Route path="trainings" element={<TrainingsPage/>}/>,
       <Route path="friends" element={<FriendsPage/>}/>,
       <Route path="account" element={<AccountPage/>}/>
