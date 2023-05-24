@@ -34,9 +34,10 @@
   }
   
   .logo-img {
-    width: 25vw;
+    width: 6vw;
     margin-top: 2vh;
-    margin-bottom: 0.5vh;
+    margin-bottom: 6vh;
+    cursor: pointer;
   }
   
   .form-container {

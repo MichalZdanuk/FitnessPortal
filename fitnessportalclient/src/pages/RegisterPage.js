@@ -1,15 +1,16 @@
 import classes from "./RegisterPage.module.css";
 import extendedIcon from "../assets/images/extended.png";
-import logoIcon from "../assets/images/logoIcon.png";
+import logoIcon from "../assets/images/letterHicon.png";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   return (
     <div className={classes["container"]}>
       <div className={classes["left-side"]}>
         <div className={classes["right-side-content"]}>
-          <img className={classes["logo-img"]} src={logoIcon} alt="lotus" />
+          <img onClick={(e) => {navigate("/")}} className={classes["logo-img"]} src={logoIcon} alt="lotus" />
           <RegisterForm />
         </div>
       </div>
