@@ -1,5 +1,5 @@
 import ExerciseThumbnail from "../components/exercise/ExerciseThumbnail"
-import {exercisesList} from "../components/exercise/exercise"
+import {exercisesList} from "../mocks/mockedData"
 import classes from "./ExercisePage.module.css"
 
 const ExercisesPage = () => {

@@ -16,6 +16,8 @@ import TrainingsPage from "./pages/TrainingsPage";
 import FriendsPage from "./pages/FriendsPage";
 import AccountPage from "./pages/AccountPage";
 import Article from "./components/articlePage/Article"
+import FriendProfilePage from "./pages/FriendProfilePage";
+import AddTrainingPage from "./pages/AddTrainingPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -27,7 +29,9 @@ const router = createBrowserRouter(
       <Route path="calculators/:calculatorType" element={<CalculatorsPage/>}/>,
       <Route path="trainings" element={<TrainingsPage/>}/>,
       <Route path="friends" element={<FriendsPage/>}/>,
+      <Route path="friends/:friendEmail" element={<FriendProfilePage/>}/>,
       <Route path="account" element={<AccountPage/>}/>
+      <Route path="addTraining" element={<AddTrainingPage/>}/>
     </Route>,
     <Route path="register" element={<RegisterPage/>}></Route>,
     <Route path="login" element={<LoginPage/>}></Route>

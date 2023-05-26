@@ -1,7 +1,10 @@
 import classes from "./TrainingPage.module.css";
 import workout from "../assets/images/workout.png";
+import { useNavigate } from "react-router-dom";
+import {trainings, exercises} from "../mocks/mockedData"
 
 const TrainingsPage = () => {
+  const navigate = useNavigate();
   const trainingList = trainings.map((training) => {
     return (
       <TrainingCard
@@ -16,7 +19,10 @@ const TrainingsPage = () => {
     <div className={classes["container"]}>
       <div className={classes["left-side"]}>
         <img src={workout} className={classes["workout-img"]} alt="workout" />
-        <button className={classes["add-training-button"]}>
+        <button onClick={(e) => {
+        navigate(`/addTraining`);
+
+      }} className={classes["add-training-button"]}>
           Add new training
         </button>
         <MostFrequentExercisesTable />
@@ -31,53 +37,9 @@ const TrainingsPage = () => {
   );
 };
 
-const trainings = [
-  {
-    id: 3,
-    date: "18.03.2023",
-    numOfSeries: 4,
-    listOfExercises: [
-      { name: "biceps curl", reps: "8", weight: "18" },
-      { name: "squat", reps: "8", weight: "120" },
-      { name: "push-up", reps: "20", weight: "" },
-      { name: "bench press", reps: "6", weight: "80" },
-      { name: "pull-up", reps: "12", weight: "" },
-      { name: "deadlift", reps: "8", weight: "110" },
-      { name: "overhead press", reps: "8", weight: "45" },
-    ],
-  },
-  {
-    id: 2,
-    date: "21.03.2023",
-    numOfSeries: 3,
-    listOfExercises: [
-      { name: "push-up", reps: "20", weight: "" },
-      { name: "biceps curl", reps: "8", weight: "20" },
-      { name: "squat", reps: "8", weight: "120" },
-      { name: "bench press", reps: "6", weight: "75" },
-      { name: "pull-up", reps: "12", weight: "" },
-      { name: "deadlift", reps: "8", weight: "115" },
-      { name: "overhead press", reps: "8", weight: "47.5" },
-    ],
-  },
-  {
-    id: 1,
-    date: "25.03.2023",
-    numOfSeries: 4,
-    listOfExercises: [
-      { name: "push-up", reps: "22", weight: "" },
-      { name: "biceps curl", reps: "7", weight: "22" },
-      { name: "squat", reps: "8", weight: "125" },
-      { name: "pull-up", reps: "12", weight: "" },
-      { name: "deadlift", reps: "8", weight: "117.5" },
-      { name: "overhead press", reps: "8", weight: "50" },
-    ],
-  },
-];
-
 const TrainingCard = (props) => {
-
-    const middleIndex = Math.ceil(props.listOfExercises.length / 2);
+  const middleIndex = Math.ceil(props.listOfExercises.length / 2);
+  
   return (
     <div className={classes["training-div"]}>
       <p className={classes["training-title"]}>
@@ -103,12 +65,6 @@ const TrainingCard = (props) => {
     </div>
   );
 };
-
-const exercises = [
-  { name: "squats", reps: "100" },
-  { name: "push-up", reps: "90" },
-  { name: "pull-up", reps: "90" },
-];
 
 const MostFrequentExercisesTable = () => {
   return (

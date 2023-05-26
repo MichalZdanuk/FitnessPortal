@@ -3,6 +3,7 @@ import friendsImg from "../assets/images/friends.png";
 import addFriendIcon from "../assets/images/add-user.png";
 import userIcon from "../assets/images/user.png";
 import {friendsList} from "../mocks/mockedData"
+import { useNavigate } from "react-router-dom";
 
 const FriendsPage = () => {
   return (
@@ -36,6 +37,7 @@ const FriendsPage = () => {
 };
 
 const FriendsList = (props) => {
+    const navigate = useNavigate();
     const listOfFriends = props.friendsData.map((friend) => {
       return (
         <div className={classes["friend-row"]}>
@@ -43,7 +45,8 @@ const FriendsList = (props) => {
             <img src={userIcon} className={classes["user-img"]} alt="user" />
             <p className={classes["friend-elem"]}><emph className={classes["friend-username"]}>{friend.username}</emph> {friend.email}</p>
           </div>
-          <button className={classes["profile-button"]}>Profile</button>
+          <button className={classes["profile-button"]} onClick={(e) => {navigate(`/friends/${friend.email}`, {state:friend});
+}}>Profile</button>
         </div>
       );
     });
