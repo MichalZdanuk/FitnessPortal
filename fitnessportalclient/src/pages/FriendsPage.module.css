@@ -1,0 +1,138 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 100vh;
+}
+
+.left-side {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-side {
+  width: 50%;
+  background-color: #f0f3bd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add-friend-button {
+  font-size: 3.8vh;
+  font-weight: 650;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #00a896;
+  border: none;
+  width: 40%;
+  border-radius: 10px;
+  margin-bottom: 5%;
+  padding: 1%;
+  transition: transform 0.25s;
+}
+
+.add-friend-button:hover {
+  transform: scale(1.1);
+}
+
+.friends-img {
+  margin-bottom: 2%;
+  width: 20vw;
+}
+
+.add-img {
+  width: 1.5vw;
+}
+
+.user-img {
+  width: 2.2vw;
+  align-self: flex-start;
+  margin-right: 10px;
+}
+
+.list-of-friends-label {
+  font-size: 7vh;
+  font-weight: 700;
+  color: #000000;
+}
+
+.show-more-button {
+  width: 30%;
+  font-size: 4vh;
+  font-weight: 600;
+  cursor: pointer;
+  color: #00a896;
+  background-color: #ffffff;
+  border: 2px #00a896 solid;
+  border-radius: 15px;
+  margin-bottom: 5%;
+  transition: transform 0.25s;
+}
+
+.show-more-button:hover {
+  transform: scale(1.1);
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5%;
+  align-items: center;
+}
+
+.input-box {
+  height: 4vh;
+  border-radius: 7px;
+  border: 3px solid #00a896;
+  font-size: 2.6vh;
+  padding-left: 10px;
+}
+
+.add-friend-label {
+  font-family: "Alkatra";
+  font-size: 4.5vh;
+  font-weight: 650;
+  margin-bottom: 1%;
+}
+
+.profile-button {
+  font-size: 2.5vh;
+  text-decoration: underline;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #00a896;
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.25s;
+  align-self: flex-start; /*added to fix vertical centring of button with text*/
+}
+
+.profile-button:hover {
+  transform: scale(1.1);
+}
+
+.friend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.friend-info {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.friend-username {
+  font-weight: 700;
+}
+
+.friend-elem {
+  font-size: 2.6vh;
+}
