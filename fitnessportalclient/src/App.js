@@ -11,13 +11,14 @@ import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import ArticlesPage from "./pages/ArticlesPage";
 import ExercisesPage from "./pages/ExercisesPage";
-import CalculatorsPage from "./pages/CalculatorsPage";
+import ChooseCalculatorsPage from "./pages/ChooseCalculatorsPage";
 import TrainingsPage from "./pages/TrainingsPage";
 import FriendsPage from "./pages/FriendsPage";
 import AccountPage from "./pages/AccountPage";
 import Article from "./components/articlePage/Article"
 import FriendProfilePage from "./pages/FriendProfilePage";
 import AddTrainingPage from "./pages/AddTrainingPage";
+import CalculatorPage from "./pages/CalculatorPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -25,8 +26,8 @@ const router = createBrowserRouter(
       <Route path="articles" element={<ArticlesPage/>}/>,
       <Route path="articles/:articleId" element={<Article/>} />,
       <Route path="exercises" element={<ExercisesPage/>}/>,
-      <Route path="calculators" element={<CalculatorsPage/>}/>,
-      <Route path="calculators/:calculatorType" element={<CalculatorsPage/>}/>,
+      <Route path="calculators" element={<ChooseCalculatorsPage/>}/>,
+      <Route path="calculators/:calculatorType" element={<CalculatorPage/>}/>,
       <Route path="trainings" element={<TrainingsPage/>}/>,
       <Route path="friends" element={<FriendsPage/>}/>,
       <Route path="friends/:friendEmail" element={<FriendProfilePage/>}/>,

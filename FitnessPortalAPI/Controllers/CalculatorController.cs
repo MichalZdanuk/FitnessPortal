@@ -16,7 +16,7 @@ namespace FitnessPortalAPI.Controllers
             _calculatorService= calculatorService;
         }
         [HttpPost]
-        public ActionResult<BMIDto> CalculateBmi([FromBody]CreateBMIDto dto)
+        public ActionResult<BMIDto> CalculateBmi([FromBody]CreateBMIQuery dto)
         {
         
             var calculatedBMI = _calculatorService.CalculateBMI(dto);
@@ -25,7 +25,7 @@ namespace FitnessPortalAPI.Controllers
         }
 
         [HttpGet("anonymous")]
-        public ActionResult<BMIDto> CalculateBmiForNotLogged([FromBody]CreateBMIDto dto)
+        public ActionResult<BMIDto> CalculateBmiForNotLogged([FromQuery]CreateBMIQuery dto)
         {
             var calcualtedBMI = _calculatorService.CalculateBMIForAnonymous(dto);
 

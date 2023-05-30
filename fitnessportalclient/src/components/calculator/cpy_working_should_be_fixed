@@ -1,0 +1,58 @@
+import { useState } from "react"
+import classes from "./BMICalculator.module.css"
+import axios from "axios";
+
+const BMICalculator = () => {
+    const [weight, setWeight] = useState(0);
+    const [height, setHeight] = useState(0);
+    const [result, setResult] = useState({
+        bmiScore: 0,
+        bmiCategory: ""
+    });
+
+    const handleCalculate = async (e) => {
+        e.preventDefault();
+        try {
+          const response = await axios.post("https://localhost:7087/api/calculator/anonymous", {
+            height: height,
+            weight: weight
+          });
+          const bmiResult = response.data;
+          console.log(bmiResult);
+          setResult({bmiScore: bmiResult.bmiScore,
+        bmiCategory: bmiResult.bmiCategory});
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+    const isObjectEmpty = (objectName) => {
+        return Object.keys(objectName).length === 0
+      }
+
+    return (
+        <div>
+            <h1>BMI Calc</h1>
+            <label>Weight</label>
+            <input value={weight}
+            onChange={(e) => setWeight(e.target.value)}></input>
+            <label>Height</label>
+            <input value={height}
+            onChange={(e) => setHeight(e.target.value)}></input>
+            <button onClick={handleCalculate}>CALCULATE</button>
+
+            {result.bmiScore !== 0 && <BMIResult bmiScore={result.bmiScore} bmiCategory={result.bmiCategory} />}
+        </div>
+    )
+}
+
+const BMIResult = (props) => {
+    return (
+        <div>
+            <h1>Your BMI: {props.bmiScore}</h1>
+            <h5>BMI Category: {props.bmiCategory}</h5>
+        </div>
+    )
+}
+
+export default BMICalculator

@@ -5,8 +5,8 @@ namespace FitnessPortalAPI.Services
 {
     public interface ICalculatorService
     {
-        BMIDto CalculateBMI(CreateBMIDto dto);
-        BMIDto CalculateBMIForAnonymous(CreateBMIDto dto);
+        BMIDto CalculateBMI(CreateBMIQuery dto);
+        BMIDto CalculateBMIForAnonymous(CreateBMIQuery dto);
         List<BMIDto> GetAllBMIsForUser();
 
     }
@@ -21,7 +21,7 @@ namespace FitnessPortalAPI.Services
             _userContextService = userContextService;
             _context = context;
         }
-        public BMIDto CalculateBMI(CreateBMIDto dto)
+        public BMIDto CalculateBMI(CreateBMIQuery dto)
         {
             var bmiIndex = 0.0f;
             var bmiCategory = "";
@@ -48,7 +48,7 @@ namespace FitnessPortalAPI.Services
 
             return bmiDto;
         }
-        public BMIDto CalculateBMIForAnonymous(CreateBMIDto dto)
+        public BMIDto CalculateBMIForAnonymous(CreateBMIQuery dto)
         {
             var bmiIndex = 0.0f;
             var bmiCategory = "";
