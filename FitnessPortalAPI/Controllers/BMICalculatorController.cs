@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPortalAPI.Controllers
 {
-    [Route("api/calculator")]
+    [Route("api/calculator/bmi")]
     [ApiController]
-    public class CalculatorController : ControllerBase
+    public class BMICalculatorController : ControllerBase
     {
-        private readonly ICalculatorService _calculatorService;
+        private readonly IBMICalculatorService _calculatorService;
 
-        public CalculatorController(ICalculatorService calculatorService)
+        public BMICalculatorController(IBMICalculatorService calculatorService)
         {
             _calculatorService= calculatorService;
         }

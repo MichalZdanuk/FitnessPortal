@@ -3,20 +3,20 @@ using FitnessPortalAPI.Models;
 
 namespace FitnessPortalAPI.Services
 {
-    public interface ICalculatorService
+    public interface IBMICalculatorService
     {
         BMIDto CalculateBMI(CreateBMIQuery dto);
         BMIDto CalculateBMIForAnonymous(CreateBMIQuery dto);
         List<BMIDto> GetAllBMIsForUser();
 
     }
-    public class CalculatorService : ICalculatorService
+    public class BMICalculatorService : IBMICalculatorService
     {
         private readonly FitnessPortalDbContext _context;
         private readonly IUserContextService _userContextService;
         private Calculator _calculator = new Calculator();
 
-        public CalculatorService(FitnessPortalDbContext context,IUserContextService userContextService)
+        public BMICalculatorService(FitnessPortalDbContext context,IUserContextService userContextService)
         {
             _userContextService = userContextService;
             _context = context;

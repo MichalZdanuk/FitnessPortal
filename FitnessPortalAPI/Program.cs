@@ -42,7 +42,8 @@ builder.Services.AddDbContext<FitnessPortalDbContext>();
 builder.Services.AddScoped<FitnessPortalSeeder>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
-builder.Services.AddScoped<ICalculatorService, CalculatorService>();
+builder.Services.AddScoped<IBMICalculatorService, BMICalculatorService>();
+builder.Services.AddScoped<IBMRCalculatorService, BMRCalculatorService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 

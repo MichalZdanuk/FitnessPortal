@@ -1,7 +1,8 @@
-.bmi-calc-div {
+.body-fat-calc-div {
   background-color: #f2ecff;
   border: solid 5px #00a896;
   border-radius: 25px;
+  /* width: 30%; */
   box-shadow: 8px 8px 43px -11px rgba(66, 68, 90, 1);
   text-align: center;
   padding-left: 2%;
@@ -11,20 +12,20 @@
 .calculator-title {
   font-size: 3vw;
   margin-top: 2%;
-  margin-bottom: 15%;
+  margin-bottom: 10%;
 }
 
 .input-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 5%;
 }
 
 .form-label {
   font-family: "Alkatra";
   font-size: 2.0vw;
   font-weight: 650;
+  margin-bottom: 10px;
 }
 
 .input-box {
@@ -45,7 +46,7 @@
   color: #f7f7f7;
   cursor: pointer;
   transition: transform 0.2s;
-  margin-top: 20%;
+  margin-top: 8%;
   margin-bottom: 5%;
 }
 
@@ -53,13 +54,26 @@
   transform: scale(1.05);
 }
 
-.bmi-score {
+.bmr-score {
   font-size: 3.2vw;
-  text-align: center;
+  margin-top: 5%;
   color: #00a896;
 }
 
-.bmi-category {
-  text-align: center;
+.radio-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.sex-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-label {
+  font-family: "Alkatra";
+  color: #00a896;
   font-size: 1.6vw;
+  font-weight: 650;
 }

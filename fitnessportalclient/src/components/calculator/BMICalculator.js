@@ -14,7 +14,7 @@ const BMICalculator = () => {
     e.preventDefault();
     try {
       const response = await axios.get(
-        "https://localhost:7087/api/calculator/anonymous",
+        "https://localhost:7087/api/calculator/bmi/anonymous",
         {
           params: {
             height: height,
@@ -34,18 +34,18 @@ const BMICalculator = () => {
   };
 
   return (
-    <div className={classes["main-container"]}>
-      {result.bmiScore !== 0 && (
+    <>
+      {
         <BMIResult
           bmiScore={result.bmiScore}
           bmiCategory={result.bmiCategory}
         />
-      )}
-      <div className={classes["form-container"]}>
+      }
+      <div className={classes["bmi-calc-div"]}>
         <h1 className={classes["calculator-title"]}>BMI Calculator</h1>
         <form onSubmit={handleCalculate}>
           <div className={classes["input-container"]}>
-            <label className={classes["form-label"]}>Weight</label>
+            <label className={classes["form-label"]}>Weight (kg)</label>
             <input
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
@@ -54,7 +54,7 @@ const BMICalculator = () => {
             ></input>
           </div>
           <div className={classes["input-container"]}>
-            <label className={classes["form-label"]}>Height</label>
+            <label className={classes["form-label"]}>Height (cm)</label>
             <input
               value={height}
               onChange={(e) => setHeight(e.target.value)}
@@ -69,7 +69,7 @@ const BMICalculator = () => {
           />
         </form>
       </div>
-    </div>
+    </>
   );
 };
 
