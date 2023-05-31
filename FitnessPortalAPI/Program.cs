@@ -44,6 +44,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IBMICalculatorService, BMICalculatorService>();
 builder.Services.AddScoped<IBMRCalculatorService, BMRCalculatorService>();
+builder.Services.AddScoped<IBodyFatCalculatorService, BodyFatCalculatorService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 

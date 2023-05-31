@@ -1,4 +1,4 @@
-﻿using FitnessPortalAPI.Models;
+﻿using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +15,7 @@ namespace FitnessPortalAPI.Controllers
             _calculatorService = calculatorService;
         }
         [HttpGet("anonymous")]
-        public ActionResult<BMIDto> CalculateBmiForNotLogged([FromQuery] CreateBMRQuery bmrQuery)
+        public ActionResult<BMRDto> CalculateBmiForNotLogged([FromQuery] CreateBMRQuery bmrQuery)
         {
             var calcualtedBMR = _calculatorService.CalculateBMRForAnonymous(bmrQuery);
 

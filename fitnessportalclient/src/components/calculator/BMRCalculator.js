@@ -7,7 +7,7 @@ const BMRCalculator = () => {
   const [height, setHeight] = useState(0);
   const [age, setAge] = useState(0);
   const [sex, setSex] = useState("");
-  const [bmrScore, setbmrScore] = useState("");
+  const [bmrScore, setbmrScore] = useState("XXX");
 
   const handleCalculate = async (e) => {
     e.preventDefault();

@@ -1,5 +1,5 @@
 ﻿using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Models;
+using FitnessPortalAPI.Models.Calculators;
 
 namespace FitnessPortalAPI.Services
 {

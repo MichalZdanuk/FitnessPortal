@@ -3,33 +3,31 @@ import axios from "axios";
 import { useState } from "react";
 
 const BodyFatCalculator = () => {
-  const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
-  const [age, setAge] = useState(0);
+  const [waist, setWaist] = useState(0);
+  const [hip, setHip] = useState(0);
+  const [neck, setNeck] = useState(0);
   const [sex, setSex] = useState("");
-  const [result, setResult] = useState({
-    bmiScore: 10,
-    bmiCategory: "",
-  });
+  const [bodyFatLevel, setBodyFatLevel] = useState("__");
 
   const handleCalculate = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.get(
-        "https://localhost:7087/api/calculator/bmr/anonymous",
+        "https://localhost:7087/api/calculator/bodyFat/anonymous",
         {
           params: {
             height: height,
-            weight: weight,
+            waist: waist,
+            hip: hip,
+            neck: neck,
+            sex: sex
           },
         }
       );
-      const bmiResult = response.data;
-      console.log(bmiResult);
-      setResult({
-        bmiScore: bmiResult.bmiScore,
-        bmiCategory: bmiResult.bmiCategory,
-      });
+      const bodyFatResult = response.data;
+      console.log(bodyFatResult);
+      setBodyFatLevel(bodyFatResult.bodyFatLevel);
     } catch (error) {
       console.log(error);
     }
@@ -37,12 +35,11 @@ const BodyFatCalculator = () => {
 
   return (
     <>
-      {result.bmiScore !== 0 && (
+      {
         <BodyFatResult
-          bmiScore={result.bmiScore}
-          bmiCategory={result.bmiCategory}
+          bodyFatLevel={bodyFatLevel}
         />
-      )}
+      }
       <div className={classes["body-fat-calc-div"]}>
         <h1 className={classes["calculator-title"]}>BodyFat Calculator</h1>
         <form onSubmit={handleCalculate}>
@@ -69,15 +66,6 @@ const BodyFatCalculator = () => {
             </div>
           </div>
           <div className={classes["input-container"]}>
-            <label className={classes["form-label"]}>Weight</label>
-            <input
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-              className={classes["input-box"]}
-              type="number"
-            ></input>
-          </div>
-          <div className={classes["input-container"]}>
             <label className={classes["form-label"]}>Height</label>
             <input
               value={height}
@@ -87,10 +75,28 @@ const BodyFatCalculator = () => {
             ></input>
           </div>
           <div className={classes["input-container"]}>
-            <label className={classes["form-label"]}>Age</label>
+            <label className={classes["form-label"]}>Waist</label>
             <input
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
+              value={waist}
+              onChange={(e) => setWaist(e.target.value)}
+              className={classes["input-box"]}
+              type="number"
+            ></input>
+          </div>
+          <div className={classes["input-container"]}>
+            <label className={classes["form-label"]}>Hip</label>
+            <input
+              value={hip}
+              onChange={(e) => setHip(e.target.value)}
+              className={classes["input-box"]}
+              type="number"
+            ></input>
+          </div>
+          <div className={classes["input-container"]}>
+            <label className={classes["form-label"]}>Neck</label>
+            <input
+              value={neck}
+              onChange={(e) => setNeck(e.target.value)}
               className={classes["input-box"]}
               type="number"
             ></input>
@@ -109,8 +115,8 @@ const BodyFatCalculator = () => {
 const BodyFatResult = (props) => {
   return (
     <div>
-      <h1 className={classes["bmr-score"]}>
-        Your BodyFat is: {props.bmiScore} %
+      <h1 className={classes["bodyFat-level"]}>
+        Your BodyFat is: {props.bodyFatLevel} %
       </h1>
     </div>
   );

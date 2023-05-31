@@ -12,7 +12,7 @@
 .calculator-title {
   font-size: 3vw;
   margin-top: 2%;
-  margin-bottom: 10%;
+  margin-bottom: 5%;
 }
 
 .input-container {
@@ -25,7 +25,6 @@
   font-family: "Alkatra";
   font-size: 2.0vw;
   font-weight: 650;
-  margin-bottom: 10px;
 }
 
 .input-box {
@@ -54,7 +53,7 @@
   transform: scale(1.05);
 }
 
-.bmr-score {
+.bodyFat-level {
   font-size: 3.2vw;
   margin-top: 5%;
   color: #00a896;

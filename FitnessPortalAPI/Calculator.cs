@@ -38,5 +38,24 @@
 
             return bmrResult;
         }
+
+        public float CalculateBodyFat(float height, float waist, float neck, float hip, string sex)
+        {
+            float bodyFatResult = 0.0f;
+
+            switch (sex)
+            {
+                case "male":
+                    bodyFatResult = (float)(495.0f /(1.0324f-0.19077f*Math.Log10(waist-neck)+0.15456f*Math.Log10(height)) - 450.0f);
+                    break;
+                case "female":
+                    bodyFatResult = (float)(495.0f / (1.29579f - 0.35004f * Math.Log10(waist + hip - neck) + 0.22100f * Math.Log10(height)) - 450.0f);
+                    break;
+                default:
+                    break;
+            }
+
+            return bodyFatResult;
+        }
     }
 }
