@@ -3,35 +3,35 @@
 .exercise-div{
     font-family: "Pt Sans";
     background-color: #00A896;
-    width: 35%;
-    margin-bottom: 5%;
+    /* width: 35%; */
+    width: 500px;
+    min-height: 380px;
+    margin-bottom: 3%;
     border-radius: 14px;
     min-height: 25vh;
     box-shadow: 16px 20px 52px -1px rgba(66, 68, 90, 1);
     transition: transform 0.4s;
-    min-height: 275px;
-    padding: 1%;
+    padding: 1% 2% 1% 2%;
+    text-align: center;
 }
 
 .exercise-div:hover{
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .exercise-title{
     font-size: 4vh;
     color: #FFFFFF;
     font-weight: 700;
-    margin-left: 8%;
-}
-
-.description-label{
-    font-size: 2.1vh;
-    color: #d0d9df;
-    font-weight: 600;
 }
 
 .text{
     text-align: justify;
     font-size: 2.2vh;
     font-weight: 550;
+}
+
+.exercise-img{
+
+    width: 12vw;
 }

@@ -123,7 +123,7 @@ export const exercisesList = [
   {
       id: 5,
       name: "Squat",
-      description: "Begin by standing with your feet slightly wider than shoulder-width apart and toes slightly turned out. Keeping your chest up and core engaged, lower your body down by bending your knees and pushing your hips back, as if sitting into a chair. Go as low as you comfortably can while maintaining proper form, ideally until your thighs are parallel to the ground. Push through your heels to rise back up to the starting position, engaging your quads, hamstrings, and glutes throughout the movement."
+      description: "Begin by standing with your feet slightly wider than shoulder. Keeping your core engaged, lower your body down by bending your knees and pushing your hips back. Go as low as you comfortably can while maintaining proper form. Push through your heels to rise back up to the starting position, engaging your quads and glutes."
   },
   {
       id: 6,
