@@ -1,8 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
-import MyNavbar from "../components/navbar/MyNavbar";
-import MainPageContent from "../components/mainPage/MainPageContent"
-import { useState } from "react";
-import { Alert } from "react-bootstrap";
+import MyNavbar from "../../components/navbar/MyNavbar";
+import MainPageContent from "../../components/mainPage/MainPageContent";
 
 const MainPageLayout = () => {
   const location = useLocation();

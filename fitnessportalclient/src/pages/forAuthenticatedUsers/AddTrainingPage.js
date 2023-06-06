@@ -1,5 +1,5 @@
 import classes from "./AddTraining.module.css"
-import { RequiredAuth } from "../store/authContext";
+import { RequiredAuth } from "../../store/authContext";
 
 const AddTrainingPage = () => {
     return(

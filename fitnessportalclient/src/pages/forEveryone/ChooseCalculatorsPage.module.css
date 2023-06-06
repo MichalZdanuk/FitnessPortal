@@ -1,0 +1,7 @@
+.calculators-div {
+  margin-top: 7vw;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  /* gap: 1%; */
+}

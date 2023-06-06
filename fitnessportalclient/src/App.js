@@ -8,20 +8,20 @@ import {
   Routes,
 } from "react-router-dom";
 
-import MainPageLayout from "./pages/MainPageLayout";
-import LoginPage from "./pages/LoginPage"
-import RegisterPage from "./pages/RegisterPage"
-import ArticlesPage from "./pages/ArticlesPage";
-import ExercisesPage from "./pages/ExercisesPage";
-import ChooseCalculatorsPage from "./pages/ChooseCalculatorsPage";
-import TrainingsPage from "./pages/TrainingsPage";
-import FriendsPage from "./pages/FriendsPage";
-import AccountPage from "./pages/AccountPage";
+import MainPageLayout from "./pages/forEveryone/MainPageLayout";
+import LoginPage from "./pages/loginAndRegister/LoginPage"
+import RegisterPage from "./pages/loginAndRegister/RegisterPage"
+import ArticlesPage from "./pages/forEveryone/ArticlesPage";
+import ExercisesPage from "./pages/forEveryone/ExercisesPage";
+import ChooseCalculatorsPage from "./pages/forEveryone/ChooseCalculatorsPage";
+import TrainingsPage from "./pages/forAuthenticatedUsers/TrainingsPage";
+import FriendsPage from "./pages/forAuthenticatedUsers/FriendsPage";
+import AccountPage from "./pages/forAuthenticatedUsers/AccountPage";
 import Article from "./components/articlePage/Article"
-import FriendProfilePage from "./pages/FriendProfilePage";
-import AddTrainingPage from "./pages/AddTrainingPage";
-import CalculatorPage from "./pages/CalculatorPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import FriendProfilePage from "./pages/forAuthenticatedUsers/FriendProfilePage";
+import AddTrainingPage from "./pages/forAuthenticatedUsers/AddTrainingPage";
+import CalculatorPage from "./pages/forEveryone/CalculatorPage";
+import NotFoundPage from "./pages/forEveryone/NotFoundPage";
 
 
 import { AuthContextProvider } from "./store/authContext";

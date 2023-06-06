@@ -1,10 +1,10 @@
 import classes from "./FriendsPage.module.css";
-import friendsImg from "../assets/images/friends.png";
-import addFriendIcon from "../assets/images/add-user.png";
-import userIcon from "../assets/images/user.png";
-import {friendsList} from "../mocks/mockedData"
+import friendsImg from "../../assets/images/friends.png";
+import addFriendIcon from "../../assets/images/add-user.png";
+import userIcon from "../../assets/images/user.png";
+import {friendsList} from "../../mocks/mockedData"
 import { useNavigate } from "react-router-dom";
-import { RequiredAuth } from "../store/authContext";
+import { RequiredAuth } from "../../store/authContext";
 
 const FriendsPage = () => {
   return (

@@ -1,4 +1,4 @@
-import { RequiredAuth } from "../store/authContext";
+import { RequiredAuth } from "../../store/authContext";
 
 const AccountPage = () => {
     return (

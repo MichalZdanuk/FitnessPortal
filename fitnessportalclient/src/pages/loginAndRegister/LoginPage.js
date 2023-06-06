@@ -1,9 +1,9 @@
 import classes from "./LoginPage.module.css";
-import lotusIcon from "../assets/images/lotus.png";
-import logoIcon from "../assets/images/letterHicon.png";
+import lotusIcon from "../../assets/images/lotus.png";
+import logoIcon from "../../assets/images/letterHicon.png";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../store/authContext";
+import AuthContext from "../../store/authContext";
 import axios from "axios";
 // import 'bootstrap/dist/css/bootstrap.css';
 import { Alert } from "react-bootstrap";

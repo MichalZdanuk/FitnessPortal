@@ -1,6 +1,6 @@
 import classes from "./RegisterPage.module.css";
-import extendedIcon from "../assets/images/extended.png";
-import logoIcon from "../assets/images/letterHicon.png";
+import extendedIcon from "../../assets/images/extended.png";
+import logoIcon from "../../assets/images/letterHicon.png";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";

@@ -1,14 +1,15 @@
 import classes from "./TrainingPage.module.css";
-import workout from "../assets/images/workout.png";
+import workout from "../../assets/images/workout.png";
 import { useNavigate } from "react-router-dom";
-import {trainings, exercises} from "../mocks/mockedData"
-import { RequiredAuth } from "../store/authContext";
+import {trainings, exercises} from "../../mocks/mockedData"
+import { RequiredAuth } from "../../store/authContext";
 
 const TrainingsPage = () => {
   const navigate = useNavigate();
   const trainingList = trainings.map((training) => {
     return (
       <TrainingCard
+        key={training.id}
         id={training.id}
         date={training.date}
         numOfSeries={training.numOfSeries}
@@ -81,7 +82,7 @@ const MostFrequentExercisesTable = () => {
       <p>
         {exercises.map((ex) => {
           return (
-            <li className={classes["most-exercise-single-exercise"]}>
+            <li key={ex.id} className={classes["most-exercise-single-exercise"]}>
               {ex.name} reps: {ex.reps}
             </li>
           );

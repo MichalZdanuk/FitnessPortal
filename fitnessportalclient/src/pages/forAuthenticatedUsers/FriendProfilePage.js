@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import classes from "./FriendProfilePage.module.css";
-import { RequiredAuth } from "../store/authContext";
+import { RequiredAuth } from "../../store/authContext";
 
 const FriendProfilePage = () => {
   const location = useLocation();

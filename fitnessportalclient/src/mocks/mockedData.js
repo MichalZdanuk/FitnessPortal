@@ -94,9 +94,9 @@ export const trainings = [
 ];
 
 export const exercises = [
-  { name: "squats", reps: "100" },
-  { name: "push-up", reps: "90" },
-  { name: "pull-up", reps: "90" },
+  { id: 1, name: "squats", reps: "100" },
+  { id: 2, name: "push-up", reps: "90" },
+  { id: 3, name: "pull-up", reps: "90" },
 ];
 
 export const exercisesList = [
