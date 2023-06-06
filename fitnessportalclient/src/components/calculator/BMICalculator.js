@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import classes from "./BMICalculator.module.css";
 import axios from "axios";
+import AuthContext from "../../store/authContext";
 
 const BMICalculator = () => {
+  const authCtx = useContext(AuthContext);
+
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
   const [result, setResult] = useState({
@@ -12,6 +15,7 @@ const BMICalculator = () => {
 
   const handleCalculate = async (e) => {
     e.preventDefault();
+    if(!authCtx.isUserLogged){
     try {
       const response = await axios.get(
         "https://localhost:7087/api/calculator/bmi/anonymous",
@@ -31,7 +35,31 @@ const BMICalculator = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  } else if(authCtx.isUserLogged){
+    const token = authCtx.tokenJWT;
+    try {
+      const response = await axios.post(
+        "https://localhost:7087/api/calculator/bmi",
+        {
+          height: height,
+          weight: weight,
+        },
+        {
+          headers:{
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const bmiResult = response.data;
+      console.log(bmiResult);
+      setResult({
+        bmiScore: bmiResult.bmiScore,
+        bmiCategory: bmiResult.bmiCategory,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }};
 
   return (
     <>
