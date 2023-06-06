@@ -4,35 +4,38 @@ import addFriendIcon from "../assets/images/add-user.png";
 import userIcon from "../assets/images/user.png";
 import {friendsList} from "../mocks/mockedData"
 import { useNavigate } from "react-router-dom";
+import { RequiredAuth } from "../store/authContext";
 
 const FriendsPage = () => {
   return (
-    <div className={classes["container"]}>
-      <div className={classes["left-side"]}>
-        <img
-          src={friendsImg}
-          className={classes["friends-img"]}
-          alt="friends"
-        />
-        <div className={classes["input-container"]}>
-          <label className={classes["add-friend-label"]}>Friends email</label>
-          <input
-            placeholder="friend@wp.pl"
-            className={classes["input-box"]}
-          ></input>
+    <RequiredAuth>
+      <div className={classes["container"]}>
+        <div className={classes["left-side"]}>
+          <img
+            src={friendsImg}
+            className={classes["friends-img"]}
+            alt="friends"
+          />
+          <div className={classes["input-container"]}>
+            <label className={classes["add-friend-label"]}>Friends email</label>
+            <input
+              placeholder="friend@wp.pl"
+              className={classes["input-box"]}
+            ></input>
+          </div>
+          <button className={classes["add-friend-button"]}>
+            ADD FRIEND{" "}
+            <img src={addFriendIcon} className={classes["add-img"]} alt="add" />
+          </button>
         </div>
-        <button className={classes["add-friend-button"]}>
-          ADD FRIEND{" "}
-          <img src={addFriendIcon} className={classes["add-img"]} alt="add" />
-        </button>
-      </div>
 
-      <div className={classes["right-side"]}>
-        <p className={classes["list-of-friends-label"]}>List of friends</p>
-        <FriendsList friendsData={friendsList} />
-        <button className={classes["show-more-button"]}>Show more</button>
+        <div className={classes["right-side"]}>
+          <p className={classes["list-of-friends-label"]}>List of friends</p>
+          <FriendsList friendsData={friendsList} />
+          <button className={classes["show-more-button"]}>Show more</button>
+        </div>
       </div>
-    </div>
+    </RequiredAuth>
   );
 };
 

@@ -2,6 +2,7 @@ import classes from "./TrainingPage.module.css";
 import workout from "../assets/images/workout.png";
 import { useNavigate } from "react-router-dom";
 import {trainings, exercises} from "../mocks/mockedData"
+import { RequiredAuth } from "../store/authContext";
 
 const TrainingsPage = () => {
   const navigate = useNavigate();
@@ -16,24 +17,26 @@ const TrainingsPage = () => {
     );
   });
   return (
-    <div className={classes["container"]}>
-      <div className={classes["left-side"]}>
-        <img src={workout} className={classes["workout-img"]} alt="workout" />
-        <button onClick={(e) => {
-        navigate(`/addTraining`);
+    <RequiredAuth>
+      <div className={classes["container"]}>
+        <div className={classes["left-side"]}>
+          <img src={workout} className={classes["workout-img"]} alt="workout" />
+          <button onClick={(e) => {
+          navigate(`/addTraining`);
 
-      }} className={classes["add-training-button"]}>
-          Add new training
-        </button>
-        <MostFrequentExercisesTable />
+        }} className={classes["add-training-button"]}>
+            Add new training
+          </button>
+          <MostFrequentExercisesTable />
+        </div>
+        <div className={classes["right-side"]}>
+          <p className={classes["training-history-label"]}>Training history</p>
+              {trainingList}
+              {/* needs to be fixed, if empty list then white stripe at bottom */}
+        <button className={classes["show-more-button"]}>Show more</button>
+        </div>
       </div>
-      <div className={classes["right-side"]}>
-        <p className={classes["training-history-label"]}>Training history</p>
-            {trainingList}
-            {/* needs to be fixed, if empty list then white stripe at bottom */}
-      <button className={classes["show-more-button"]}>Show more</button>
-      </div>
-    </div>
+    </RequiredAuth>
   );
 };
 

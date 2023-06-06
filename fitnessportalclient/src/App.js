@@ -1,9 +1,11 @@
 import "./App.css";
 import {
   Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
+  // createBrowserRouter,
+  // createRoutesFromElements,
+  // RouterProvider,
+  BrowserRouter,
+  Routes,
 } from "react-router-dom";
 
 import MainPageLayout from "./pages/MainPageLayout";
@@ -19,32 +21,66 @@ import Article from "./components/articlePage/Article"
 import FriendProfilePage from "./pages/FriendProfilePage";
 import AddTrainingPage from "./pages/AddTrainingPage";
 import CalculatorPage from "./pages/CalculatorPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
-const router = createBrowserRouter(
-  createRoutesFromElements([
-    <Route path="/" element={<MainPageLayout />}>
-      <Route path="articles" element={<ArticlesPage/>}/>,
-      <Route path="articles/:articleId" element={<Article/>} />,
-      <Route path="exercises" element={<ExercisesPage/>}/>,
-      <Route path="calculators" element={<ChooseCalculatorsPage/>}/>,
-      <Route path="calculators/:calculatorType" element={<CalculatorPage/>}/>,
-      <Route path="trainings" element={<TrainingsPage/>}/>,
-      <Route path="friends" element={<FriendsPage/>}/>,
-      <Route path="friends/:friendEmail" element={<FriendProfilePage/>}/>,
-      <Route path="account" element={<AccountPage/>}/>
-      <Route path="addTraining" element={<AddTrainingPage/>}/>
-    </Route>,
-    <Route path="test/:calculatorType" element={<CalculatorPage/>}/>,
-    <Route path="register" element={<RegisterPage/>}></Route>,
-    <Route path="login" element={<LoginPage/>}></Route>
-  ])
-);
+
+import { AuthContextProvider } from "./store/authContext";
+
+// const router = createBrowserRouter(
+//   createRoutesFromElements([
+//     <Route path="/" element={<MainPageLayout />}>
+//       <Route path="articles" element={<ArticlesPage/>}/>,
+//       <Route path="articles/:articleId" element={<Article/>} />,
+//       <Route path="exercises" element={<ExercisesPage/>}/>,
+//       <Route path="calculators" element={<ChooseCalculatorsPage/>}/>,
+//       <Route path="calculators/:calculatorType" element={<CalculatorPage/>}/>,
+//       <Route path="trainings" element={<TrainingsPage/>}/>,
+//       <Route path="friends" element={<FriendsPage/>}/>,
+//       <Route path="friends/:friendEmail" element={<FriendProfilePage/>}/>,
+//       <Route path="account" element={<AccountPage/>}/>
+//       <Route path="addTraining" element={<AddTrainingPage/>}/>
+//     </Route>,
+//     <Route path="test/:calculatorType" element={<CalculatorPage/>}/>,
+//     <Route path="register" element={<RegisterPage/>}></Route>,
+//     <Route path="login" element={<LoginPage/>}></Route>
+//   ])
+// );
+
+// function App() {
+//   return (
+//     <AuthContextProvider>
+//       <RouterProvider router={router}>
+//         <div className="App"></div>
+//       </RouterProvider>
+//     </AuthContextProvider>
+//   );
+// }
 
 function App() {
   return (
-    <RouterProvider router={router}>
-      <div className="App"></div>
-    </RouterProvider>
+    <AuthContextProvider>
+        <div className="App">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<MainPageLayout />}>
+                <Route path="articles" element={<ArticlesPage/>}/>,
+                <Route path="articles/:articleId" element={<Article/>} />,
+                <Route path="exercises" element={<ExercisesPage/>}/>,
+                <Route path="calculators" element={<ChooseCalculatorsPage/>}/>,
+                <Route path="calculators/:calculatorType" element={<CalculatorPage/>}/>,
+                <Route path="trainings" element={<TrainingsPage/>}/>,
+                <Route path="friends" element={<FriendsPage/>}/>,
+                <Route path="friends/:friendEmail" element={<FriendProfilePage/>}/>,
+                <Route path="account" element={<AccountPage/>}/>
+                <Route path="addTraining" element={<AddTrainingPage/>}/>
+              </Route>,
+              <Route path="register" element={<RegisterPage/>}></Route>,
+              <Route path="login" element={<LoginPage/>}></Route>,
+              <Route path="*" element={<NotFoundPage/>}/>
+            </Routes>
+          </BrowserRouter>
+        </div>
+    </AuthContextProvider>
   );
 }
 

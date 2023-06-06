@@ -1,10 +1,11 @@
+import { RequiredAuth } from "../store/authContext";
 
 const AccountPage = () => {
     return (
-        <>
-        <h2>Account page</h2>
-        <p>To be implemented</p>
-        </>
+        <RequiredAuth>
+            <h2>Account page</h2>
+            <p>To be implemented</p>
+        </RequiredAuth>
     );
 };
 

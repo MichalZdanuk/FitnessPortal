@@ -84,7 +84,7 @@
 }
 
 .submit-button {
-  margin-top: 15vh;
+  margin-top: 10vh;
   width: 50%;
   text-align: center;
   padding: 1%;
@@ -100,4 +100,8 @@
 
 .submit-button:hover {
   transform: scale(1.05);
+}
+
+.alert-div {
+  margin-top: 2vh;
 }

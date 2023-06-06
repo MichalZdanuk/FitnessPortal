@@ -1,8 +1,12 @@
 import classes from "./LoginPage.module.css";
 import lotusIcon from "../assets/images/lotus.png";
 import logoIcon from "../assets/images/letterHicon.png";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../store/authContext";
+import axios from "axios";
+// import 'bootstrap/dist/css/bootstrap.css';
+import { Alert } from "react-bootstrap";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -28,12 +32,30 @@ const LoginPage = () => {
 
 const LoginForm = () => {
   const navigate = useNavigate("");
+  const authCtx = useContext(AuthContext)
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate("/");
+    await axios
+      .post("https://localhost:7087/api/account/login",{
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        if(response.data){
+          console.log(response.data);
+          authCtx.login(response.data);
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        if(error.response && error.response.status === 400)
+          setLoginError(error.response.data);
+      });
   };
 
   return (
@@ -46,6 +68,7 @@ const LoginForm = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="email"
             className={classes["input-box"]}
+            required
           ></input>
         </div>
         <div className={classes["input-container"]}>
@@ -56,6 +79,7 @@ const LoginForm = () => {
             type="password"
             placeholder="password"
             className={classes["input-box"]}
+            required
           ></input>
         </div>
 
@@ -69,8 +93,13 @@ const LoginForm = () => {
                 navigate("/register");
               }}>
         Do not have an account?{" "}
-        <emph className={classes["emph-text"]}>Create NOW</emph>
+        <span className={classes["emph-text"]}>Create NOW</span>
       </p>
+      {loginError && (
+        <div className={classes["alert-div"]}>
+          <Alert variant={'danger'}>{loginError}</Alert>
+        </div>
+      )}
     </div>
   );
 };
