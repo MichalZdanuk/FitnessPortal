@@ -47,7 +47,7 @@ const LoginForm = () => {
       })
       .then((response) => {
         if(response.data){
-          console.log(response.data);
+          //console.log(response.data);
           authCtx.login(response.data);
           navigate("/");
         }

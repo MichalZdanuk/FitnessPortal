@@ -12,7 +12,10 @@ function MyNavbar() {
   const authCtx = useContext(AuthContext);
   const isUserLogged = authCtx.isUserLogged;
   const username = authCtx.username;
-  console.log("username: ",username);
+  // console.log("username: ",username);
+  // const decodedToken = jwtDecode(authCtx.tokenJWT);
+  // console.log("tokenDate: ", decodedToken.exp);
+  // console.log("dateNow: ", Date.now()/1000)
 
   const navigate = useNavigate();
     const handleClick = async (e) => {

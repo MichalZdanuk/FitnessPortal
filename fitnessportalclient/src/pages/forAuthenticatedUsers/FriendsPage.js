@@ -43,10 +43,10 @@ const FriendsList = (props) => {
     const navigate = useNavigate();
     const listOfFriends = props.friendsData.map((friend) => {
       return (
-        <div className={classes["friend-row"]}>
+        <div key={friend.id} className={classes["friend-row"]}>
           <div className={classes["friend-info"]}>
             <img src={userIcon} className={classes["user-img"]} alt="user" />
-            <p className={classes["friend-elem"]}><emph className={classes["friend-username"]}>{friend.username}</emph> {friend.email}</p>
+            <p className={classes["friend-elem"]}><span className={classes["friend-username"]}>{friend.username}</span> {friend.email}</p>
           </div>
           <button className={classes["profile-button"]} onClick={(e) => {navigate(`/friends/${friend.email}`, {state:friend});
 }}>Profile</button>

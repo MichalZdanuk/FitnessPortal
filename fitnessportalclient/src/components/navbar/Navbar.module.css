@@ -1,7 +1,7 @@
 .custom-link {
   color: #00A896;
   font-weight: 600;
-  font-size: 2.85vh;
+  font-size: 1.4vw;
 }
 
 .logo-img {
@@ -11,12 +11,12 @@
 .main-text{
   color: #00A896;
   font-weight: 650;
-  font-size: 3.25vh;
+  font-size: 1.6vw;
 }
 
 .logged-panel{
   color: #00A896;
-  font-size: 3.25vh;
+  font-size: 1.6vw;
   cursor: pointer;
 }
 

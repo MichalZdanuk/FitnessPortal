@@ -24,7 +24,9 @@ import CalculatorPage from "./pages/forEveryone/CalculatorPage";
 import NotFoundPage from "./pages/forEveryone/NotFoundPage";
 
 
-import { AuthContextProvider } from "./store/authContext";
+import AuthContext from "./store/authContext";
+import { useContext, useEffect } from "react";
+import jwtDecode from "jwt-decode";
 
 // const router = createBrowserRouter(
 //   createRoutesFromElements([
@@ -57,8 +59,29 @@ import { AuthContextProvider } from "./store/authContext";
 // }
 
 function App() {
+  const authCtx = useContext(AuthContext);
+
+  const checkTokenExpiration = () => {
+    const token = localStorage.getItem('healthyhabithubTOKEN');
+
+    if(token) {
+      const decodedToken = jwtDecode(token);
+
+      if(decodedToken.exp < Date.now()/1000 ){
+        authCtx.logout();
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkTokenExpiration();
+  
+  }, []);
+
+  
+
   return (
-    <AuthContextProvider>
+    
         <div className="App">
           <BrowserRouter>
             <Routes>
@@ -80,7 +103,6 @@ function App() {
             </Routes>
           </BrowserRouter>
         </div>
-    </AuthContextProvider>
   );
 }
 
