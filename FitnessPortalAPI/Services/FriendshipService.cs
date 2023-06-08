@@ -7,12 +7,12 @@ namespace FitnessPortalAPI.Services
 {
     public interface IFriendshipService
     {
-        int SendFriendshipRequest(CreateFriendshipRequestDto dto);
+        int SendFriendshipRequest(int userId, int userToBeRequestedId);
         List<FriendshipDto> GetFriendshipRequests(int userId);
-        void RejectFriendRequest(int requestId);
-        void AcceptFriendRequest(int requestId);
+        void RejectFriendRequest(int userId, int requestId);
+        void AcceptFriendRequest(int userId, int requestId);
         List<FriendDto> GetFriends(int userId);
-        void RemoveFriendship(int userToBeRemovedId);
+        void RemoveFriendship(int userId, int userToBeRemovedId);
     }
     public class FriendshipService : IFriendshipService
     {
@@ -22,28 +22,28 @@ namespace FitnessPortalAPI.Services
         {
             _context = context;
         }
-        public int SendFriendshipRequest(CreateFriendshipRequestDto dto)
+        public int SendFriendshipRequest(int userId, int userToBeRequestedId)
         {
             //checking if receiver is in db
-            var receiverUser = _context.Users.Find(dto.ReceiverId);
+            var receiverUser = _context.Users.Find(userToBeRequestedId);
             if (receiverUser == null)
                 throw new BadRequestException("Receiver user does not exist.");
 
             //checking if such friendship request has already been sent
-            var existingRequest = _context.FriendshipRequests.FirstOrDefault(fr => fr.SenderId == dto.SenderId && fr.ReceiverId == dto.ReceiverId);
+            var existingRequest = _context.FriendshipRequests.FirstOrDefault(fr => fr.SenderId == userId && fr.ReceiverId == userToBeRequestedId);
             if(existingRequest != null)
                 throw new BadRequestException("A friend request has already been sent between these users.");
 
             //checking if users are already friends
             var areFriends = _context.Users
-                .Any(u => u.Id == dto.SenderId && u.Friends.Any(f => f.Id == dto.ReceiverId));
+                .Any(u => u.Id == userId && u.Friends.Any(f => f.Id == userToBeRequestedId));
             if (areFriends)
                 throw new BadRequestException("These users are already friends.");
 
             var friendRequest = new FriendshipRequest
             {
-                SenderId = dto.SenderId,
-                ReceiverId = dto.ReceiverId,
+                SenderId = userId,
+                ReceiverId = userToBeRequestedId,
                 SendDate = DateTime.Now,
             };
 
@@ -73,17 +73,20 @@ namespace FitnessPortalAPI.Services
             return friendshipDtos;
         }
 
-        public void RejectFriendRequest(int requestId)
+        public void RejectFriendRequest(int userId, int requestId)
         {
             var friendRequest = _context.FriendshipRequests.Find(requestId);
             if (friendRequest == null)
                 throw new BadRequestException("Friend request not found");
 
+            if (friendRequest.ReceiverId != userId)
+                throw new ForbiddenException("You are not allowed to remove someone else request!!!");
+
             _context.FriendshipRequests.Remove(friendRequest);
             _context.SaveChanges();
         }
 
-        public void AcceptFriendRequest(int requestId)
+        public void AcceptFriendRequest(int userId, int requestId)
         {
             var friendRequest = _context.FriendshipRequests
                 .Include(fr => fr.Sender)
@@ -100,6 +103,9 @@ namespace FitnessPortalAPI.Services
 
             if (sender == null || receiver == null)
                 throw new BadRequestException("Invalid sender or receiver");
+
+            if (friendRequest.ReceiverId != userId)
+                throw new ForbiddenException("You are not allowed to remove someone else request!!!");
 
             sender.Friends.Add(receiver);
             receiver.Friends.Add(sender);
@@ -121,6 +127,7 @@ namespace FitnessPortalAPI.Services
 
             var friendDtos = friends.Select(friend => new FriendDto
             {
+                Id = friend.Id,
                 Username = friend.Username,
                 Email = friend.Email,
             }).ToList();
@@ -128,9 +135,27 @@ namespace FitnessPortalAPI.Services
             return friendDtos;
         }
 
-        public void RemoveFriendship(int userToBeRemovedId)
+        public void RemoveFriendship(int userId, int userToBeRemovedId)
         {
+            var user = _context.Users
+                .Include(u => u.Friends)
+                .FirstOrDefault(u => u.Id == userId);
 
+            if (user == null)
+                throw new BadRequestException("User not found");
+
+            var friendToBeRemoved = _context.Users
+                .Include(f => f.Friends)
+                .FirstOrDefault(f => f.Id == userToBeRemovedId);
+
+
+            if (friendToBeRemoved == null)
+                throw new BadRequestException("Friend not found");
+
+            user.Friends.Remove(friendToBeRemoved);
+            friendToBeRemoved.Friends.Remove(user);
+
+            _context.SaveChanges();
         }
 
     }

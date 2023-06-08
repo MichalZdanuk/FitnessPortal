@@ -1,6 +1,9 @@
 # FitnessPortal
 Projekt portalu fitness -  WebAPI z podłączoną do niej aplikacją kliencką.
 ***
+## Projekt graficzny - FIGMA:
+https://www.figma.com/file/Gbzk6fX0RZ585CyDuZ9sMN/PortalFitness?type=design&node-id=0-1&t=eWWCsW8vmUPUCj6D-0
+
 ## Technologie:
 ### BackEnd:
 * technologia C# .NET(6.0) - ASP.NET Core Web API
