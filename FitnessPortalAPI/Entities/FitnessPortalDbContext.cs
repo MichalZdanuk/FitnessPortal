@@ -12,6 +12,7 @@ namespace FitnessPortalAPI.Entities
         public DbSet<Article> Articles { get; set; }
         public DbSet<Training> Trainings { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<FriendshipRequest> FriendshipRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +26,20 @@ namespace FitnessPortalAPI.Entities
             modelBuilder.Entity<Role>()
                 .Property(r => r.Name)
                 .IsRequired();
+
+            // Configure the relationship between FriendRequest and User
+            modelBuilder.Entity<FriendshipRequest>()
+                .HasOne(fr => fr.Sender)
+                .WithMany(u => u.SentFriendRequests)
+                .HasForeignKey(fr => fr.SenderId)
+                .OnDelete(DeleteBehavior.Restrict); // Choose the appropriate delete behavior
+
+            modelBuilder.Entity<FriendshipRequest>()
+                .HasOne(fr => fr.Receiver)
+                .WithMany(u => u.ReceivedFriendRequests)
+                .HasForeignKey(fr => fr.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict); // Choose the appropriate delete behavior
+
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

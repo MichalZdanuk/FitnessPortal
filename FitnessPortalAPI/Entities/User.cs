@@ -14,6 +14,8 @@
         public virtual Role Role { get; set; }
         public virtual List<BMI> BMIs { get; set; }
         public virtual List<Training> Trainings { get; set; }
-
+        public virtual List<User> Friends { get; set; }
+        public virtual List<FriendshipRequest> SentFriendRequests { get; set; }
+        public virtual List<FriendshipRequest> ReceivedFriendRequests { get; set; }
     }
 }
