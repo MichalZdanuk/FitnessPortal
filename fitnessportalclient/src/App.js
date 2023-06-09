@@ -22,7 +22,9 @@ import FriendProfilePage from "./pages/forAuthenticatedUsers/FriendProfilePage";
 import AddTrainingPage from "./pages/forAuthenticatedUsers/AddTrainingPage";
 import CalculatorPage from "./pages/forEveryone/CalculatorPage";
 import NotFoundPage from "./pages/forEveryone/NotFoundPage";
-
+import AccountPageLayout from "./pages/forAuthenticatedUsers/AccountPageLayout";
+import TrainingHistoryPage from "./pages/forAuthenticatedUsers/TrainingHistoryPage";
+import BMIHistoryPage from "./pages/forAuthenticatedUsers/BMIHistoryPage";
 
 import AuthContext from "./store/authContext";
 import { useContext, useEffect } from "react";
@@ -92,9 +94,15 @@ function App() {
                 <Route path="calculators" element={<ChooseCalculatorsPage/>}/>,
                 <Route path="calculators/:calculatorType" element={<CalculatorPage/>}/>,
                 <Route path="trainings" element={<TrainingsPage/>}/>,
-                <Route path="friends" element={<FriendsPage/>}/>,
-                <Route path="friends/:friendEmail" element={<FriendProfilePage/>}/>,
-                <Route path="account" element={<AccountPage/>}/>
+                {/* <Route path="friends" element={<FriendsPage/>}/>,
+                <Route path="friends/:friendEmail" element={<FriendProfilePage/>}/>, */}
+                <Route path="account" element={<AccountPageLayout/>}>
+                  <Route path ="" element={<AccountPage/>}/>
+                  <Route path="friendlist" element={<FriendsPage/>}/>
+                  <Route path="friendlist/:friendEmail" element={<FriendProfilePage/>}/>
+                  <Route path="traininghistory" element={<TrainingHistoryPage/>}/>
+                  <Route path="bmihistory" element={<BMIHistoryPage/>}/>
+                </Route>
                 <Route path="addTraining" element={<AddTrainingPage/>}/>
               </Route>,
               <Route path="register" element={<RegisterPage/>}></Route>,

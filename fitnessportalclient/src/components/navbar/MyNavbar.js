@@ -12,7 +12,9 @@ function MyNavbar() {
   const authCtx = useContext(AuthContext);
   const isUserLogged = authCtx.isUserLogged;
   const username = authCtx.username;
-  // console.log("username: ",username);
+  // console.log("isUserLogged: ",isUserLogged);
+  
+  //console.log("username: ",username);
   // const decodedToken = jwtDecode(authCtx.tokenJWT);
   // console.log("tokenDate: ", decodedToken.exp);
   // console.log("dateNow: ", Date.now()/1000)
@@ -47,9 +49,9 @@ function MyNavbar() {
             <Nav.Link href="/calculators" className={classes["custom-link"]}>Calculators</Nav.Link>
             {isUserLogged && (
               <>
-                <Nav.Link href="/trainings" className={classes["custom-link"]}>MyTrainings</Nav.Link>
-                <Nav.Link href="/friends" className={classes["custom-link"]}>Friends</Nav.Link>
-                <Nav.Link href="/account" className={classes["custom-link"]}>Account</Nav.Link>
+                <Nav.Link href="/trainings" className={classes["custom-link"]}>Training Centre</Nav.Link>
+                {/* <Nav.Link href="/friends" className={classes["custom-link"]}>Friends</Nav.Link> */}
+                
               </>
             )
 
@@ -62,7 +64,7 @@ function MyNavbar() {
             </>
             )}
             {isUserLogged && (<>
-            
+              <Nav.Link href="/account" className={classes["custom-link"]}>Account</Nav.Link>
             <Navbar.Brand onClick={handleLogout} className={classes["logged-panel"]}>Logged as: {username} <LogoutIcon /></Navbar.Brand>
             </>
             )}

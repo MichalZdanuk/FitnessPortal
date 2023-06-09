@@ -44,6 +44,7 @@ export const AuthContextProvider = (props) => {
             const username = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
             localStorage.setItem("healthyhabithubUSERNAME", username);
             setUsername(username);
+            console.log("username:",username);
             // console.log(decodedToken);
         } catch (error){
             console.log('Error decoding token:', error);

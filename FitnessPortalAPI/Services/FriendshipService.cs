@@ -105,7 +105,7 @@ namespace FitnessPortalAPI.Services
                 throw new BadRequestException("Invalid sender or receiver");
 
             if (friendRequest.ReceiverId != userId)
-                throw new ForbiddenException("You are not allowed to remove someone else request!!!");
+                throw new ForbiddenException("You are not allowed to accept someone else request!!!");
 
             sender.Friends.Add(receiver);
             receiver.Friends.Add(sender);

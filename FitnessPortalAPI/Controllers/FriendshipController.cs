@@ -59,9 +59,11 @@ namespace FitnessPortalAPI.Controllers
             return NoContent();
         }
 
-        [HttpGet("friends/{userId}")]
-        public ActionResult<IEnumerable<FriendDto>> GetFriends([FromRoute]int userId)
+        [HttpGet("friends")]
+        public ActionResult<IEnumerable<FriendDto>> GetFriends()
         {
+            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
             var friends = _friendshipService.GetFriends(userId);
 
             return Ok(friends);
