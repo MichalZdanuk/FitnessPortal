@@ -72,20 +72,20 @@ const BMICalculator = () => {
       <div className={classes["bmi-calc-div"]}>
         <h1 className={classes["calculator-title"]}>BMI Calculator</h1>
         <form onSubmit={handleCalculate}>
-          <div className={classes["input-container"]}>
-            <label className={classes["form-label"]}>Weight (kg)</label>
+        <div className={classes["input-container"]}>
+            <label className={classes["form-label"]}>Height (cm)</label>
             <input
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
+              value={height}
+              onChange={(e) => setHeight(e.target.value)}
               className={classes["input-box"]}
               type="number"
             ></input>
           </div>
           <div className={classes["input-container"]}>
-            <label className={classes["form-label"]}>Height (cm)</label>
+            <label className={classes["form-label"]}>Weight (kg)</label>
             <input
-              value={height}
-              onChange={(e) => setHeight(e.target.value)}
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
               className={classes["input-box"]}
               type="number"
             ></input>

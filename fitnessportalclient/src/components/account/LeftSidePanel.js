@@ -30,31 +30,14 @@ const LeftSidePanel = () => {
         }
       };
 
-    const fetchProfileInfo = async (e) => {
-        e.preventDefault();
-        try {
-          const response = await axios.get("https://localhost:7087/api/account/profile-info",
-          {
-            headers:{
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          const profileData = response.data;
-          console.log(profileData);
-          navigate("/account", { state: profileData });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
     return (
         <div className={classes["panel-div"]}>
             <p className={classes["panel-title"]}>Manage your account</p>
             <ul className={classes["ul-blank"]}>
-                <li className={classes["li-item"]} onClick={fetchProfileInfo}><AccountBoxIcon/> My Profile</li>
+                <li className={classes["li-item"]} onClick={() => {navigate("/account")}}><AccountBoxIcon/> My Profile</li>
                 <li className={classes["li-item"]} onClick={fetchFriends}><Diversity3Icon/> My Friends</li>
                 <li className={classes["li-item"]} onClick={() => {navigate("/account/traininghistory")}}><FitnessCenterIcon/> Training History</li>
-                <li className={classes["li-item"]} onClick={() => {navigate("/account/bmihistory")}}><ScaleIcon/> BMI records</li>
+                <li className={classes["li-item"]} onClick={() => {navigate("/account/bmihistory")}}><ScaleIcon/> BMI History</li>
             </ul>
         </div>
     )

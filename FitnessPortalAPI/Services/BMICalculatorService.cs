@@ -65,6 +65,7 @@ namespace FitnessPortalAPI.Services
 
         public List<BMIDto> GetAllBMIsForUser()
         {
+            Thread.Sleep(1500);//added to present loading spinner in client app
             var bmis = _context.BMIs.Where(b => b.UserId == _userContextService.GetUserId).ToList();
             var bmisDtos = new List<BMIDto>();
 
@@ -72,6 +73,7 @@ namespace FitnessPortalAPI.Services
             {
                 bmisDtos.Add(new BMIDto()
                 {
+                    Id = bmis[i].Id,
                     Date = bmis[i].Date,
                     BMIScore = bmis[i].BMIScore,
                     BMICategory= bmis[i].BMICategory,

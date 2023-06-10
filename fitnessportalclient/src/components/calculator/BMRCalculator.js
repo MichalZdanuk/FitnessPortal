@@ -62,19 +62,19 @@ const BMRCalculator = () => {
             </div>
           </div>
           <div className={classes["input-container"]}>
-            <label className={classes["form-label"]}>Weight (kg)</label>
-            <input
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-              className={classes["input-box"]}
-              type="number"
-            ></input>
-          </div>
           <div className={classes["input-container"]}>
             <label className={classes["form-label"]}>Height (cm)</label>
             <input
               value={height}
               onChange={(e) => setHeight(e.target.value)}
+              className={classes["input-box"]}
+              type="number"
+            ></input>
+          </div>
+            <label className={classes["form-label"]}>Weight (kg)</label>
+            <input
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
               className={classes["input-box"]}
               type="number"
             ></input>
