@@ -84,5 +84,15 @@ namespace FitnessPortalAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("matching-users")]
+        public ActionResult<IEnumerable<MatchingUserDto>> FindMatchingUsers([FromQuery] string pattern)
+        {
+            //var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var users = _friendshipService.FindUsersWithPattern(pattern);
+
+            return Ok(users);
+        }
     }
 }

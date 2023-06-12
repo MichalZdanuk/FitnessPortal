@@ -2,6 +2,7 @@
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 
 namespace FitnessPortalAPI.Services
 {
@@ -13,6 +14,7 @@ namespace FitnessPortalAPI.Services
         void AcceptFriendRequest(int userId, int requestId);
         List<FriendDto> GetFriends(int userId);
         void RemoveFriendship(int userId, int userToBeRemovedId);
+        List<MatchingUserDto> FindUsersWithPattern(string pattern);
     }
     public class FriendshipService : IFriendshipService
     {
@@ -158,6 +160,22 @@ namespace FitnessPortalAPI.Services
 
             _context.SaveChanges();
         }
+
+        public List<MatchingUserDto> FindUsersWithPattern(string pattern)
+        {
+            var users = _context.Users
+                .Where(user => user.Email.Contains(pattern))
+                .Select(user => new MatchingUserDto
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Email = user.Email,
+                })
+                .ToList();
+
+            return users;
+        }
+
 
     }
 }

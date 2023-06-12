@@ -9,6 +9,8 @@ import { useState } from "react";
 import AuthContext from "../../store/authContext";
 import axios from "axios";
 import { InfinitySpin } from "react-loader-spinner";
+import 'bootstrap/dist/css/bootstrap.css';
+import { Alert } from "react-bootstrap";
 
 
 const FriendsPage = () => {
@@ -21,16 +23,91 @@ const FriendsPage = () => {
   return (
     <div className={classes["friends-main-div"]}>
       <div className={classes["friend-request-panel"]}>
-        <p className={classes["friend-request-header"]}>Friend Requests</p>
+        <p className={classes["main-header"]}>Friend Requests</p>
+        <hr/>
         <FriendRequests token={token}/>
       </div>
       <div className={classes["friend-list-panel"]}>
-        <p className={classes["welcome-header"]}>Welcome to your personal web page where you can manage your friend list and easily add new friends.</p>
+        <p className={classes["main-header"]}>Friend Panel</p>
+        <hr/>
+        <p className={classes["submain-header"]}>Add new Friend</p>
+        <UserInvite token={token}/>
+        <hr/>
+        <p className={classes["submain-header"]}>Friend List</p>
         <FriendsList friends={data} token={token}/>
       </div>
     </div>
   )
 }
+
+const UserInvite = (props) => {
+  const [pattern, setPattern] = useState('');
+  const [matchingUsers, setMatchingUsers] = useState([]);
+  const [successfullySentInvitation, setSuccessfullySentInvitation] = useState(false);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${props.token}`
+    }
+  };
+  // Fetch matching users based on the pattern
+  useEffect(() => {
+    const fetchMatchingUsers = async () => {
+      try {
+        // Call your API to fetch matching users based on the pattern
+        const response = await axios.get(`https://localhost:7087/api/friendship/matching-users?pattern=${pattern}`, config);
+        setMatchingUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching matching users:', error);
+      }
+    };
+
+    if (pattern !== '' && pattern.length > 2) {
+      fetchMatchingUsers();
+    } else {
+      setMatchingUsers([]);
+    }
+  }, [pattern]);
+
+  // Handler for sending invitations to the API
+  const handleInvite = async (userId) => {
+    try {
+      // Call your API to send invitations to the selected user
+      await axios.post(`https://localhost:7087/api/friendship/request/${userId}`, null,config);
+      console.log('Invitation sent successfully!');
+      setSuccessfullySentInvitation(true);
+    } catch (error) {
+      console.error('Error sending invitation:', error);
+    }
+  };
+
+  return (
+    <div className={classes["search-div"]}>
+      <input
+        type="text"
+        value={pattern}
+        onChange={(e) => setPattern(e.target.value)}
+        placeholder="Enter an email"
+        className={classes["input-box"]}
+      />
+      <ul className={classes["matching-users-list"]}>
+        {matchingUsers.map((user) => (
+          <li key={user.id} onClick={() => {setPattern(`${user.email}`)}} className={classes["matching-user"]}>
+            {user.email} {user.username}
+          </li>
+        ))}
+      </ul>
+      <button className={classes["invite-button"]} onClick={() => handleInvite(matchingUsers[0].id)} disabled={matchingUsers.length !== 1}>
+        Invite
+      </button>
+      {successfullySentInvitation && (
+        <div className={classes["alert-div"]}>
+          <Alert variant={'success'}>Invitation sent successfully!</Alert>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const FriendRequests = (props) => {
   const [friendRequestsList, setFriendRequestsList] = useState(null);
@@ -109,13 +186,13 @@ const FriendRequests = (props) => {
         ) : friendRequestsList && friendRequestsList.length > 0 ? (
           friendRequestsList.map((request) => {
             return (
-              <div key={request.id} className={classes["request-div"]}>
-            <p>{request.senderName}</p>
-            <div className={classes["icons-container"]}>
-              <p>{request.sendDate.toString().substring(0,10)}</p>
-              <p className={classes["icon"]}><PersonAddIcon onClick={() => acceptRequest(request.id)} className={classes["accept-request-icon"]}/></p>
-              <p className={classes["icon"]}><PersonRemoveIcon onClick={() => rejectRequest(request.id)}className={classes["reject-request-icon"]}/></p>
-            </div>
+            <div key={request.id} className={classes["request-div"]}>
+              <p>{request.senderName}</p>
+              <div className={classes["icons-container"]}>
+                <p>{request.sendDate.toString().substring(0,10)}</p>
+                <p className={classes["icon"]}><PersonAddIcon onClick={() => acceptRequest(request.id)} className={classes["accept-request-icon"]}/></p>
+                <p className={classes["icon"]}><PersonRemoveIcon onClick={() => rejectRequest(request.id)}className={classes["reject-request-icon"]}/></p>
+              </div>
           </div>
               )
           })
@@ -192,7 +269,9 @@ const FriendsList = (props) => {
               <AccountCircleIcon/> {friend.username} {friend.email}
               </div>
               <div className={classes["manage-div"]}>
-                <button className={classes["profile-button"]} onClick={(e) => {navigate(`/account/friendlist/${friend.email}`, {state:friend});}}><AccountBoxIcon/> Profile</button>
+                <div className={classes["profile-icon"]} onClick={(e) => {navigate(`/account/friendlist/${friend.email}`, {state:friend});}}>
+                  <AccountBoxIcon/>  
+                </div>
                 <div className={classes["remove-icon"]} data-friend-id={friend.id} onClick={removeFriend}>
                   <PersonRemoveIcon/>  
                 </div>

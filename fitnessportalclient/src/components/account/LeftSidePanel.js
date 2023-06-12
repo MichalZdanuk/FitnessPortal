@@ -33,6 +33,7 @@ const LeftSidePanel = () => {
     return (
         <div className={classes["panel-div"]}>
             <p className={classes["panel-title"]}>Manage your account</p>
+            <hr/>
             <ul className={classes["ul-blank"]}>
                 <li className={classes["li-item"]} onClick={() => {navigate("/account")}}><AccountBoxIcon/> My Profile</li>
                 <li className={classes["li-item"]} onClick={() => {navigate("/account/friendlist")}}><Diversity3Icon/> My Friends</li>
