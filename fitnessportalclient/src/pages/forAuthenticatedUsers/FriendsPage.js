@@ -181,7 +181,7 @@ const FriendRequests = (props) => {
         <p className={classes["friend-request-motto"]}>Expand your social circle, accept new connections!</p>
         { loading ? (
           <div className={classes["spinner"]}>
-          <InfinitySpin width="200" color="red" />
+          <InfinitySpin width="200" color="#02C39A" />
             </div>
         ) : friendRequestsList && friendRequestsList.length > 0 ? (
           friendRequestsList.map((request) => {
