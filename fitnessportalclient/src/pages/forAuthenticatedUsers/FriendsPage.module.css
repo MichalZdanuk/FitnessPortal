@@ -92,3 +92,32 @@
   transform: scale(1.2);
 }
 
+.request-div{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accept-request-icon{
+  color: green;
+}
+
+.reject-request-icon{
+  color: red;
+}
+
+.icons-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon {
+  cursor: pointer;
+  transition: transform 0.25s;
+}
+
+.icon:hover{
+  transform: scale(1.2);
+}

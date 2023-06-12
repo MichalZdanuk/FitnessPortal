@@ -35,7 +35,7 @@ const LeftSidePanel = () => {
             <p className={classes["panel-title"]}>Manage your account</p>
             <ul className={classes["ul-blank"]}>
                 <li className={classes["li-item"]} onClick={() => {navigate("/account")}}><AccountBoxIcon/> My Profile</li>
-                <li className={classes["li-item"]} onClick={fetchFriends}><Diversity3Icon/> My Friends</li>
+                <li className={classes["li-item"]} onClick={() => {navigate("/account/friendlist")}}><Diversity3Icon/> My Friends</li>
                 <li className={classes["li-item"]} onClick={() => {navigate("/account/traininghistory")}}><FitnessCenterIcon/> Training History</li>
                 <li className={classes["li-item"]} onClick={() => {navigate("/account/bmihistory")}}><ScaleIcon/> BMI History</li>
             </ul>
