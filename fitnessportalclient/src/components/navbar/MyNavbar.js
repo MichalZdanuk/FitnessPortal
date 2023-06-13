@@ -12,22 +12,14 @@ function MyNavbar() {
   const authCtx = useContext(AuthContext);
   const isUserLogged = authCtx.isUserLogged;
   const username = authCtx.username;
-  // console.log("username: ",username);
+  // console.log("isUserLogged: ",isUserLogged);
+  
+  //console.log("username: ",username);
   // const decodedToken = jwtDecode(authCtx.tokenJWT);
   // console.log("tokenDate: ", decodedToken.exp);
   // console.log("dateNow: ", Date.now()/1000)
 
   const navigate = useNavigate();
-    const handleClick = async (e) => {
-      e.preventDefault();
-      try {
-        const response = await axios.get("https://localhost:7087/api/article", {});
-        const articlesData = response.data;
-        navigate("/articles", { state: articlesData });
-      } catch (error) {
-        console.log(error);
-      }
-    };
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -42,14 +34,12 @@ function MyNavbar() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link onClick={handleClick} className={classes["custom-link"]}>Articles</Nav.Link>
+            <Nav.Link href="/articles" className={classes["custom-link"]}>Articles</Nav.Link>
             <Nav.Link href="/exercises" className={classes["custom-link"]}>Exercises</Nav.Link>
             <Nav.Link href="/calculators" className={classes["custom-link"]}>Calculators</Nav.Link>
             {isUserLogged && (
               <>
-                <Nav.Link href="/trainings" className={classes["custom-link"]}>MyTrainings</Nav.Link>
-                <Nav.Link href="/friends" className={classes["custom-link"]}>Friends</Nav.Link>
-                <Nav.Link href="/account" className={classes["custom-link"]}>Account</Nav.Link>
+                <Nav.Link href="/trainings" className={classes["custom-link"]}>Training Centre</Nav.Link>     
               </>
             )
 
@@ -62,7 +52,7 @@ function MyNavbar() {
             </>
             )}
             {isUserLogged && (<>
-            
+              <Nav.Link href="/account" className={classes["custom-link"]}>Account</Nav.Link>
             <Navbar.Brand onClick={handleLogout} className={classes["logged-panel"]}>Logged as: {username} <LogoutIcon /></Navbar.Brand>
             </>
             )}

@@ -4,6 +4,7 @@ using FitnessPortalAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessPortalAPI.Migrations
 {
     [DbContext(typeof(FitnessPortalDbContext))]
-    partial class FitnessPortalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230608200238_addedFriendship")]
+    partial class addedFriendship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,7 +124,7 @@ namespace FitnessPortalAPI.Migrations
                     b.ToTable("Exercises");
                 });
 
-            modelBuilder.Entity("FitnessPortalAPI.Entities.FriendshipRequest", b =>
+            modelBuilder.Entity("FitnessPortalAPI.Entities.FriendRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -129,11 +132,11 @@ namespace FitnessPortalAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("SendDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("SenderId")
                         .HasColumnType("int");
@@ -144,7 +147,7 @@ namespace FitnessPortalAPI.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("FriendshipRequests");
+                    b.ToTable("FriendRequests");
                 });
 
             modelBuilder.Entity("FitnessPortalAPI.Entities.Role", b =>
@@ -269,7 +272,7 @@ namespace FitnessPortalAPI.Migrations
                     b.Navigation("Training");
                 });
 
-            modelBuilder.Entity("FitnessPortalAPI.Entities.FriendshipRequest", b =>
+            modelBuilder.Entity("FitnessPortalAPI.Entities.FriendRequest", b =>
                 {
                     b.HasOne("FitnessPortalAPI.Entities.User", "Receiver")
                         .WithMany("ReceivedFriendRequests")

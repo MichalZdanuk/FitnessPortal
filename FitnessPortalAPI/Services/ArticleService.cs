@@ -44,6 +44,7 @@ namespace FitnessPortalAPI.Services
 
         public List<ArticleDto> GetAll()
         {
+            Thread.Sleep(700);//added to present loading spinner in client app
             var articles = _context
                 .Articles
                 .Include(a => a.CreatedBy)

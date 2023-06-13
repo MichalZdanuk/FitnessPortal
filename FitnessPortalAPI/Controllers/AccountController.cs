@@ -1,6 +1,8 @@
 ﻿using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FitnessPortalAPI.Controllers
 {
@@ -9,9 +11,11 @@ namespace FitnessPortalAPI.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public AccountController(IAccountService accountService, IHttpContextAccessor contextAccessor)
         {
             _accountService = accountService;
+            _contextAccessor = contextAccessor;
         }
 
         [HttpPost("register")]
@@ -32,6 +36,16 @@ namespace FitnessPortalAPI.Controllers
             }
 
             return Ok(token);
+        }
+        [Authorize]
+        [HttpGet("profile-info")]
+        public ActionResult<UserProfileInfoDto> GetMyProfileInfo()
+        {
+            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var userInfo = _accountService.GetProfileInfo(userId);
+
+            return Ok(userInfo);
         }
     }
 }

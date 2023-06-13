@@ -14,6 +14,7 @@ namespace FitnessPortalAPI.Services
     {
         string GenerateJwt(LoginUserDto dto);
         void RegisterUser(RegisterUserDto dto);
+        UserProfileInfoDto GetProfileInfo(int userId);
     }
     public class AccountService : IAccountService
     {
@@ -63,6 +64,7 @@ namespace FitnessPortalAPI.Services
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
                 new Claim("DateOfBirth", user.DateOfBirth.Value.ToString("yyyy-MM-dd"))
@@ -82,5 +84,28 @@ namespace FitnessPortalAPI.Services
 
             return tokenHandler.WriteToken(token);
         }
+
+        public UserProfileInfoDto GetProfileInfo(int userId)
+        {
+            Thread.Sleep(700);//added to present loading spinner in client app
+            var user = _context.Users
+                .Include(u => u.Friends)
+                .FirstOrDefault(u => u.Id == userId);
+
+            if (user == null)
+                throw new NotFoundException("User not found");
+
+            var userInfo = new UserProfileInfoDto()
+            {
+                Username = user.Username,
+                Email = user.Email,
+                DateOfBirth = user.DateOfBirth,
+                Weight = user.Weight,
+                Height = user.Height,
+            };
+
+            return userInfo;
+        }
+
     }
 }

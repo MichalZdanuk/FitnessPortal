@@ -1,138 +1,174 @@
-.container {
+.friends-main-div {
+  width: 60%;
+  text-align: left;
+  margin-bottom: 2%;
+}
+
+.friend-request-panel {
+  background-color: #e3e6e5;
+  border-radius: 15px;
+  box-shadow: 8px 8px 24px -8px rgba(66, 68, 90, 1);
+  padding: 2px 20px 2px 20px;
+  margin-bottom: 3vh;
+}
+
+.friend-request-panel:hover {
+  transition: transform 0.2s;
+  transform: scale(1.02);
+}
+
+.main-header {
+  font-size: 1.6vw;
+  font-weight: 650;
+}
+
+.friend-request-motto {
+  font-size: 1.1vw;
+  font-style: italic;
+}
+
+.no-friend-requests {
+  font-size: 1vw;
+  color: rgb(110, 108, 108);
+}
+
+.friend-list-panel {
+  padding: 2%;
+  background-color: #e3e6e5;
+  border-radius: 15px;
+  box-shadow: 8px 8px 24px -8px rgba(66, 68, 90, 1);
+  min-height: 300px;
+}
+
+.friend-list-panel:hover {
+  transition: transform 0.2s;
+  transform: scale(1.02);
+}
+
+.friend-div {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
-  height: 100vh;
-}
-
-.left-side {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.right-side {
-  width: 50%;
-  background-color: #f0f3bd;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.add-friend-button {
-  font-size: 3.8vh;
-  font-weight: 650;
-  cursor: pointer;
-  color: #ffffff;
-  background-color: #00a896;
-  border: none;
-  width: 40%;
-  border-radius: 10px;
-  margin-bottom: 5%;
-  padding: 1%;
-  transition: transform 0.25s;
-}
-
-.add-friend-button:hover {
-  transform: scale(1.1);
-}
-
-.friends-img {
-  margin-bottom: 2%;
-  width: 20vw;
-}
-
-.add-img {
-  width: 1.5vw;
-}
-
-.user-img {
-  width: 2.2vw;
-  align-self: flex-start;
-  margin-right: 10px;
-}
-
-.list-of-friends-label {
-  font-size: 7vh;
-  font-weight: 700;
-  color: #000000;
-}
-
-.show-more-button {
-  width: 30%;
-  font-size: 4vh;
-  font-weight: 600;
-  cursor: pointer;
-  color: #00a896;
-  background-color: #ffffff;
-  border: 2px #00a896 solid;
-  border-radius: 15px;
-  margin-bottom: 5%;
-  transition: transform 0.25s;
-}
-
-.show-more-button:hover {
-  transform: scale(1.1);
-}
-
-.input-container {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 5%;
-  align-items: center;
-}
-
-.input-box {
-  height: 4vh;
-  border-radius: 7px;
-  border: 3px solid #00a896;
-  font-size: 2.6vh;
-  padding-left: 10px;
-}
-
-.add-friend-label {
-  font-family: "Alkatra";
-  font-size: 4.5vh;
-  font-weight: 650;
-  margin-bottom: 1%;
-}
-
-.profile-button {
-  font-size: 2.5vh;
-  text-decoration: underline;
-  font-weight: 600;
-  cursor: pointer;
-  color: #ffffff;
-  background-color: #00a896;
-  border: none;
-  border-radius: 10px;
-  transition: transform 0.25s;
-  align-self: flex-start; /*added to fix vertical centring of button with text*/
-}
-
-.profile-button:hover {
-  transform: scale(1.1);
-}
-
-.friend-row {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
+  margin-left: 5%;
+  margin-right: 10%;
   margin-bottom: 10px;
 }
 
-.friend-info {
+.manage-div {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.remove-icon {
+  color: red;
+  cursor: pointer;
+  transition: transform 0.25s;
+}
+
+.remove-icon:hover {
+  transform: scale(1.2);
+}
+
+.profile-icon {
+  color: #00a896;
+  cursor: pointer;
+  transition: transform 0.25s;
+}
+
+.profile-icon:hover {
+  transform: scale(1.2);
+}
+
+.request-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accept-request-icon {
+  color: green;
+}
+
+.reject-request-icon {
+  color: red;
+}
+
+.icons-container {
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  gap: 15px;
 }
 
-.friend-username {
-  font-weight: 700;
+.icon {
+  cursor: pointer;
+  transition: transform 0.25s;
 }
 
-.friend-elem {
-  font-size: 2.6vh;
+.icon:hover {
+  transform: scale(1.2);
+}
+
+.input-box {
+  width: 30%;
+  height: 4vh;
+  border-radius: 7px;
+  border: 3px solid #00a896;
+  font-size: 2vh;
+  padding-left: 20px;
+  margin-bottom: 1%;
+}
+
+.invite-button {
+  padding: 1px 1px 1px 1px;
+  border-radius: 7px;
+  border: none;
+  font-size: 1.2vw;
+  width: 15%;
+  font-family: "Alkatra";
+  background-color: #00a896;
+  color: #f7f7f7;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-bottom: 1%;
+  margin-top: 1%;
+}
+
+.invite-button:disabled {
+  background-color: #878a89;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.invite-button:hover {
+  transform: scale(1.05);
+}
+
+.search-div {
+  text-align: center;
+}
+
+.matching-user {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.matching-user:hover {
+  color: #00a896;
+  transform: scale(1.05);
+}
+
+.matching-users-list {
+  list-style: none;
+  padding: 0;
+}
+
+.submain-header {
+  font-size: 1.2vw;
+  font-weight: 600;
+}
+
+.spinner{
+  text-align: center;
 }
