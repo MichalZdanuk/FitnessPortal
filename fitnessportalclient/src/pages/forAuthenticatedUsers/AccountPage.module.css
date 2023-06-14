@@ -4,7 +4,14 @@
   border-radius: 15px;
   box-shadow: 8px 8px 24px -8px rgba(66, 68, 90, 1);
   padding: 2px 20px 2px 20px;
+  text-align: left;
 }
+
+.acount-main-div:hover {
+  transition: transform 0.35s;
+  transform: scale(1.03);
+}
+
 .spinner {
   display: flex;
   justify-content: center;
@@ -15,34 +22,12 @@
   font-weight: 650;
 }
 
-.panel-label {
-  font-size: 1.8vw;
-  font-weight: 600;
-}
-
-.property-label {
-  font-size: 1.1vw;
-}
-
-.container {
+.button-center{
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
 }
 
-.personal-div {
-}
-
-.physical-div {
-}
-
-.vertical-line {
-  width: 1px;
-  background-color: #000;
-  margin: 0 20px;
-}
-
-.show-more-button {
+.update-profile-button {
   width: 30%;
   font-size: 1.8vw;
   font-weight: 600;
@@ -56,6 +41,6 @@
   transition: transform 0.25s;
 }
 
-.show-more-button:hover {
+.update-profile-button:hover {
   transform: scale(1.1);
 }

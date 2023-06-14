@@ -4,6 +4,9 @@ import axios from "axios";
 import AuthContext from "../../store/authContext";
 import { InfinitySpin } from "react-loader-spinner";
 
+import PersonalInfo from "../../components/profile/PersonalInfo";
+import TrainingInfo from "../../components/profile/TrainingInfo";
+
 const AccountPage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -40,35 +43,19 @@ const AccountPage = () => {
           <InfinitySpin width="200" color="#02C39A" />
         </div>
       ) : data ? (
-        <div className={classes["container"]}>
-          <div className={classes["personal-div"]}>
-            <p className={classes["panel-label"]}>Personal</p>
-            <p className={classes["property-label"]}>
-              username: {data.username}
-            </p>
-            <p className={classes["property-label"]}>email: {data.email}</p>
-          </div>
-          <hr className={classes["vertical-line"]} />
-          <div className={classes["physical-div"]}>
-            <p className={classes["panel-label"]}>Physical</p>
-            <p className={classes["property-label"]}>
-              date of birth: {data.dateOfBirth.substring(0,10)}
-            </p>
-            <p className={classes["property-label"]}>
-              weight: {data.weight} kg
-            </p>
-            <p className={classes["property-label"]}>
-              height: {data.height} cm
-            </p>
-          </div>
+        <div>
+          <PersonalInfo data={data}/>
+          <TrainingInfo />
         </div>
       ) : (
         <p>Error: Failed to fetch data</p>
       )}
-
-      <button className={classes["show-more-button"]}>Update Profile</button>
+      <div className={classes["button-center"]}>
+        <button className={classes["update-profile-button"]}>Update Profile</button>
+      </div>
     </div>
   );
 };
+
 
 export default AccountPage;

@@ -1,0 +1,61 @@
+.pagination-div {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.arrow-icon {
+  cursor: pointer;
+}
+
+.arrow-icon:hover {
+  color: #00a896;
+  transform: scale(1.2);
+  transition: transform 0.2s;
+}
+
+select {
+  appearance: none;
+  background-color: transparent;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: none;
+  border-color: #02c39a;
+  box-shadow: 0 0 3px #02c39a;
+}
+
+/* Styling the dropdown arrow */
+select::-ms-expand {
+  display: none;
+}
+
+select::after {
+  content: "\f107";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  pointer-events: none;
+}
+
+/* Style for each option */
+option {
+  background-color: #fff;
+  color: #333;
+  padding: 8px;
+  font-size: 14px;
+}
+
+option:hover {
+  background-color: #f2f2f2;
+}

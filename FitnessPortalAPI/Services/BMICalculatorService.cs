@@ -1,27 +1,26 @@
 ﻿using FitnessPortalAPI.Entities;
+using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Models.Calculators;
 
 namespace FitnessPortalAPI.Services
 {
     public interface IBMICalculatorService
     {
-        BMIDto CalculateBMI(CreateBMIQuery dto);
+        BMIDto CalculateBMI(CreateBMIQuery dto, int userId);
         BMIDto CalculateBMIForAnonymous(CreateBMIQuery dto);
-        List<BMIDto> GetAllBMIsForUser();
+        PageResult<BMIDto> GetAllBMIsForUserPaginated(BMIQuery query, int userId);
 
     }
     public class BMICalculatorService : IBMICalculatorService
     {
         private readonly FitnessPortalDbContext _context;
-        private readonly IUserContextService _userContextService;
         private Calculator _calculator = new Calculator();
 
-        public BMICalculatorService(FitnessPortalDbContext context,IUserContextService userContextService)
+        public BMICalculatorService(FitnessPortalDbContext context)
         {
-            _userContextService = userContextService;
             _context = context;
         }
-        public BMIDto CalculateBMI(CreateBMIQuery dto)
+        public BMIDto CalculateBMI(CreateBMIQuery dto, int userId)
         {
             var bmiIndex = 0.0f;
             var bmiCategory = "";
@@ -42,7 +41,7 @@ namespace FitnessPortalAPI.Services
                 Weight = dto.Weight,
             };
 
-            bmi.UserId = (int)_userContextService.GetUserId;
+            bmi.UserId = userId;
             _context.BMIs.Add(bmi);
             _context.SaveChanges();
 
@@ -62,25 +61,36 @@ namespace FitnessPortalAPI.Services
 
             return bmiDto;
         }
-
-        public List<BMIDto> GetAllBMIsForUser()
+        public PageResult<BMIDto> GetAllBMIsForUserPaginated(BMIQuery query, int userId)
         {
-            Thread.Sleep(1500);//added to present loading spinner in client app
-            var bmis = _context.BMIs.Where(b => b.UserId == _userContextService.GetUserId).ToList();
-            var bmisDtos = new List<BMIDto>();
+            var baseQuery = _context
+                .BMIs
+                .Where(b => b.UserId == userId);
 
+            var bmis = baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
+                .ToList(); 
+                
+            var totalItemsCount = baseQuery.Count();
+
+            var bmiDtos = new List<BMIDto>();
             for (int i = 0; i < bmis.Count; i++)
             {
-                bmisDtos.Add(new BMIDto()
+                bmiDtos.Add(new BMIDto()
                 {
                     Id = bmis[i].Id,
                     Date = bmis[i].Date,
                     BMIScore = bmis[i].BMIScore,
-                    BMICategory= bmis[i].BMICategory,
+                    BMICategory = bmis[i].BMICategory,
                 });
             }
 
-            return bmisDtos;
+            var result = new PageResult<BMIDto>(bmiDtos, totalItemsCount, query.PageSize, query.PageNumber);
+
+
+            return result;
         }
+
     }
 }

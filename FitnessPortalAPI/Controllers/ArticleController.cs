@@ -23,9 +23,9 @@ namespace FitnessPortalAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ArticleDto>> GetAll()
+        public ActionResult<IEnumerable<ArticleDto>> GetAllPaginated([FromQuery]ArticleQuery query)
         {
-            var result = _articleService.GetAll();
+            var result = _articleService.GetAllPaginated(query);
             return Ok(result);
         }
 
