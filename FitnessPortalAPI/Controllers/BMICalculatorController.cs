@@ -2,6 +2,7 @@
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FitnessPortalAPI.Controllers
 {
@@ -10,16 +11,19 @@ namespace FitnessPortalAPI.Controllers
     public class BMICalculatorController : ControllerBase
     {
         private readonly IBMICalculatorService _calculatorService;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public BMICalculatorController(IBMICalculatorService calculatorService)
+        public BMICalculatorController(IBMICalculatorService calculatorService, IHttpContextAccessor contextAccessor)
         {
+            _contextAccessor= contextAccessor;
             _calculatorService= calculatorService;
         }
         [HttpPost]
         public ActionResult<BMIDto> CalculateBmi([FromBody]CreateBMIQuery dto)
         {
-        
-            var calculatedBMI = _calculatorService.CalculateBMI(dto);
+            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var calculatedBMI = _calculatorService.CalculateBMI(dto, userId);
 
             return Ok(calculatedBMI);
         }
@@ -32,10 +36,13 @@ namespace FitnessPortalAPI.Controllers
             return Ok(calcualtedBMI);
         }
 
+
         [HttpGet]
-        public ActionResult GetAllBMIs()
+        public ActionResult<IEnumerable<BMIDto>> GetAllBMIsPaginated([FromQuery]BMIQuery query)
         {
-            var bmis = _calculatorService.GetAllBMIsForUser();
+            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var bmis = _calculatorService.GetAllBMIsForUserPaginated(query, userId);
 
             return Ok(bmis);
         }

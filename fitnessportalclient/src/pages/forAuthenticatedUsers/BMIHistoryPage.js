@@ -6,33 +6,59 @@ import AuthContext from "../../store/authContext";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral";
+import PaginationPanel from "../../components/pagination/PaginationPanel";
 
 const BMIHistoryPage = () => {
   const [bmiData, setBmiData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(3);
+  const [itemFrom, setItemFrom] = useState(0);
+  const [itemTo, setItemTo] = useState(0);
+  const [totalItemsCount, setTotalItemsCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const authCtx = useContext(AuthContext);
   const token = authCtx.tokenJWT;
 
   useEffect(() => {
-    const fetchBmiData = async () => {
-      try {
-        const response = await axios.get(
-          "https://localhost:7087/api/calculator/bmi",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setBmiData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchBmiData();
-  }, []);
+  }, [pageNumber, pageSize]);
+
+  const fetchBmiData = async () => {
+    try {
+      const response = await axios.get(
+        "https://localhost:7087/api/calculator/bmi",
+        {
+          params: {
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setBmiData(response.data.items);
+      setItemFrom(response.data.itemFrom);
+      setItemTo(response.data.itemTo);
+      setTotalItemsCount(response.data.totalItemsCount);
+      setTotalPages(response.data.totalPages);
+      console.log("data: ", response.data);
+
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(Number(event.target.value));
+    setPageNumber(1);
+  };
+
+  const handlePageChange = (newPageNumber) => {
+    setPageNumber(newPageNumber);
+  };
 
   const getCategoryIcon = (categoryName) => {
     let icon;
@@ -85,14 +111,29 @@ const BMIHistoryPage = () => {
           </div>
         ) : // Render the BMI data if loaded
         bmiData && bmiData.length > 0 ? (
-          bmiData.map((bmiEntry) => (
+          <div>
+          {bmiData.map((bmiEntry) => (
             <div className={classes["bmi-row"]} key={bmiEntry.id}>
               <p>{bmiEntry.bmiScore.toString().substring(0, 5)}</p>
               <p>{bmiEntry.bmiCategory}</p>
               <p>{bmiEntry.date.substring(0, 10)}</p>
               <p>{getCategoryIcon(bmiEntry.bmiCategory)}</p>
             </div>
-          ))
+          ))}
+          <div className={classes["pagination-panel-div"]}>
+          <PaginationPanel 
+            pageSize={pageSize} 
+            itemName="BMI Results" 
+            handlePageSizeChange={handlePageSizeChange} 
+            handlePageChange={handlePageChange}
+            itemFrom={itemFrom} 
+            itemTo={itemTo}
+            pageNumber={pageNumber}
+            totalItemsCount={totalItemsCount}
+            totalPages={totalPages}
+          />
+          </div>
+          </div>
         ) : (
           // Render a message if no BMI data is available
           <p className={classes["no-data"]}>No BMI data available</p>

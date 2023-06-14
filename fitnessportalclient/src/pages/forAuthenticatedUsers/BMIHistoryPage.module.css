@@ -4,12 +4,7 @@
   border-radius: 15px;
   box-shadow: 8px 8px 24px -8px rgba(66, 68, 90, 1);
   padding: 2px 20px 2px 20px;
-  transition: transform 0.35s;
   margin-bottom: 2%;
-}
-
-.bmihistory-main-div:hover {
-  transform: scale(1.05);
 }
 
 .bmi-header {
@@ -56,4 +51,9 @@
   font-size: 1.8vw;
   font-style: italic;
   color: rgb(110, 108, 108);
+}
+
+.pagination-panel-div {
+  display: flex;
+  justify-content: center;
 }

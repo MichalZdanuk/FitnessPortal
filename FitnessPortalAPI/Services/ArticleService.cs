@@ -2,13 +2,14 @@
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace FitnessPortalAPI.Services
 {
     public interface IArticleService
     {
         int Create(CreateArticleDto dto);
-        List<ArticleDto> GetAll();
+        PageResult<ArticleDto> GetAllPaginated(ArticleQuery query);
         ArticleDto GetById(int id);
         void Update(int id, UpdateArticleDto dto);
         void RemoveAll();
@@ -41,14 +42,19 @@ namespace FitnessPortalAPI.Services
 
             return article.Id;
         }
-
-        public List<ArticleDto> GetAll()
+        public PageResult<ArticleDto> GetAllPaginated(ArticleQuery query)
         {
-            Thread.Sleep(700);//added to present loading spinner in client app
-            var articles = _context
+            var baseQuery = _context
                 .Articles
-                .Include(a => a.CreatedBy)
+                .Include(a => a.CreatedBy);
+
+            var articles = baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
                 .ToList();
+
+            var totalItemsCount = baseQuery.Count();
+
             var articlesDtos = new List<ArticleDto>();
             for (int i = 0; i < articles.Count; i++)
             {
@@ -64,8 +70,12 @@ namespace FitnessPortalAPI.Services
                 });
             }
 
-            return articlesDtos;
+            var result = new PageResult<ArticleDto>(articlesDtos, totalItemsCount, query.PageSize, query.PageNumber);
+
+
+            return result;
         }
+
         public ArticleDto GetById(int id)
         {
             var article = _context
