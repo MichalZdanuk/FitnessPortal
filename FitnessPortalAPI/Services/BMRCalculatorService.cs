@@ -6,7 +6,7 @@ namespace FitnessPortalAPI.Services
 {
     public interface IBMRCalculatorService
     {
-        BMRDto CalculateBMRForAnonymous(CreateBMRQuery bmrQuery);
+        Task<BMRDto> CalculateBMRForAnonymous(CreateBMRQuery bmrQuery);
     }
     public class BMRCalculatorService : IBMRCalculatorService
     {
@@ -18,7 +18,7 @@ namespace FitnessPortalAPI.Services
             _userContextService = userContextService;
             _context = context;
         }
-        public BMRDto CalculateBMRForAnonymous(CreateBMRQuery bmrQuery)
+        public async Task<BMRDto> CalculateBMRForAnonymous(CreateBMRQuery bmrQuery)
         {
             var bmrResult = _calculator.CalculateBMR(bmrQuery.Weight, bmrQuery.Height, bmrQuery.Age, bmrQuery.Sex);
             var bmrDto = new BMRDto()

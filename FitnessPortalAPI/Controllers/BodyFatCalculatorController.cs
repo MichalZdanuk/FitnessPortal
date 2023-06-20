@@ -15,9 +15,9 @@ namespace FitnessPortalAPI.Controllers
             _calculatorService = calculatorService;
         }
         [HttpGet("anonymous")]
-        public ActionResult<BodyFatDto> CalculateBmiForNotLogged([FromQuery] CreateBodyFatQuery bodyFatQuery)
+        public async Task<ActionResult<BodyFatDto>> CalculateBmiForNotLogged([FromQuery] CreateBodyFatQuery bodyFatQuery)
         {
-            var calcualtedBodyFat = _calculatorService.CalculateBodyFatForAnonymous(bodyFatQuery);
+            var calcualtedBodyFat = await _calculatorService.CalculateBodyFatForAnonymous(bodyFatQuery);
 
             return Ok(calcualtedBodyFat);
         }

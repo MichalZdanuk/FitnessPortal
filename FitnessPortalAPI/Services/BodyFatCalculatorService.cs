@@ -5,7 +5,7 @@ namespace FitnessPortalAPI.Services
 {
     public interface IBodyFatCalculatorService
     {
-        BodyFatDto CalculateBodyFatForAnonymous(CreateBodyFatQuery bodyFatQuery);
+        Task<BodyFatDto> CalculateBodyFatForAnonymous(CreateBodyFatQuery bodyFatQuery);
     }
     public class BodyFatCalculatorService : IBodyFatCalculatorService
     {
@@ -17,7 +17,7 @@ namespace FitnessPortalAPI.Services
             _userContextService = userContextService;
             _context = context;
         }
-        public BodyFatDto CalculateBodyFatForAnonymous(CreateBodyFatQuery bodyFatQuery)
+        public async Task<BodyFatDto> CalculateBodyFatForAnonymous(CreateBodyFatQuery bodyFatQuery)
         {
             var bodyFatResult = _calculator.CalculateBodyFat(bodyFatQuery.Height, bodyFatQuery.Waist, bodyFatQuery.Neck, bodyFatQuery.Hip, bodyFatQuery.Sex);
             var bodyFatDto = new BodyFatDto()

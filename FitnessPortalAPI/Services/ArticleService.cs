@@ -8,12 +8,12 @@ namespace FitnessPortalAPI.Services
 {
     public interface IArticleService
     {
-        int Create(CreateArticleDto dto);
-        PageResult<ArticleDto> GetAllPaginated(ArticleQuery query);
-        ArticleDto GetById(int id);
-        void Update(int id, UpdateArticleDto dto);
-        void RemoveAll();
-        void Remove(int articleId);
+        Task<int> CreateAsync(CreateArticleDto dto);
+        Task<PageResult<ArticleDto>> GetAllPaginatedAsync(ArticleQuery query);
+        Task<ArticleDto> GetByIdAsync(int id);
+        Task UpdateAsync(int id, UpdateArticleDto dto);
+        Task RemoveAllAsync();
+        Task RemoveAsync(int articleId);
 
     }
     public class ArticleService : IArticleService
@@ -25,7 +25,7 @@ namespace FitnessPortalAPI.Services
             _context = context;
             _userContextService = userContextService;
         }
-        public int Create(CreateArticleDto dto)
+        public async Task<int> CreateAsync(CreateArticleDto dto)
         {
             var article = new Article()
             {
@@ -38,22 +38,22 @@ namespace FitnessPortalAPI.Services
 
             article.CreatedById = (int)_userContextService.GetUserId;
             _context.Articles.Add(article);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return article.Id;
         }
-        public PageResult<ArticleDto> GetAllPaginated(ArticleQuery query)
+        public async Task<PageResult<ArticleDto>> GetAllPaginatedAsync(ArticleQuery query)
         {
             var baseQuery = _context
                 .Articles
                 .Include(a => a.CreatedBy);
 
-            var articles = baseQuery
+            var articles = await baseQuery
                 .Skip(query.PageSize * (query.PageNumber - 1))
                 .Take(query.PageSize)
-                .ToList();
+                .ToListAsync();
 
-            var totalItemsCount = baseQuery.Count();
+            var totalItemsCount = await baseQuery.CountAsync();
 
             var articlesDtos = new List<ArticleDto>();
             for (int i = 0; i < articles.Count; i++)
@@ -76,12 +76,12 @@ namespace FitnessPortalAPI.Services
             return result;
         }
 
-        public ArticleDto GetById(int id)
+        public async Task<ArticleDto> GetByIdAsync(int id)
         {
-            var article = _context
+            var article = await _context
                 .Articles
                 .Include(a => a.CreatedBy)
-                .FirstOrDefault(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id);
 
             if (article is null)
                 throw new NotFoundException("Article not found");
@@ -100,11 +100,11 @@ namespace FitnessPortalAPI.Services
             return result;
         }
 
-        public void Update(int id, UpdateArticleDto dto)
+        public async Task UpdateAsync(int id, UpdateArticleDto dto)
         {
-            var article = _context
+            var article = await _context
                 .Articles
-                .FirstOrDefault(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id);
 
             if(article == null)
                 throw new NotFoundException("Article not found");
@@ -123,9 +123,9 @@ namespace FitnessPortalAPI.Services
             
             _context.SaveChanges();
         }
-        public void Remove(int articleId)
+        public async Task RemoveAsync(int articleId)
         {
-            var article = _context.Articles.FirstOrDefault(a => a.Id == articleId);
+            var article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == articleId);
 
             if (article is null)
                 throw new NotFoundException("Article not found");
@@ -133,9 +133,9 @@ namespace FitnessPortalAPI.Services
             _context.Remove(article);
             _context.SaveChanges();
         }
-        public void RemoveAll()
+        public async Task RemoveAllAsync()
         {
-            var articles = _context.Articles.ToList();
+            var articles = await _context.Articles.ToListAsync();
 
             if (articles is null)
                 throw new NotFoundException("Article not found");

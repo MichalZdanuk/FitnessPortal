@@ -19,30 +19,30 @@ namespace FitnessPortalAPI.Controllers
             _calculatorService= calculatorService;
         }
         [HttpPost]
-        public ActionResult<BMIDto> CalculateBmi([FromBody]CreateBMIQuery dto)
+        public async Task<ActionResult<BMIDto>> CalculateBmi([FromBody]CreateBMIQuery dto)
         {
             var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var calculatedBMI = _calculatorService.CalculateBMI(dto, userId);
+            var calculatedBMI = await _calculatorService.CalculateBMI(dto, userId);
 
             return Ok(calculatedBMI);
         }
 
         [HttpGet("anonymous")]
-        public ActionResult<BMIDto> CalculateBmiForNotLogged([FromQuery]CreateBMIQuery dto)
+        public async Task<ActionResult<BMIDto>> CalculateBmiForNotLogged([FromQuery]CreateBMIQuery dto)
         {
-            var calcualtedBMI = _calculatorService.CalculateBMIForAnonymous(dto);
+            var calcualtedBMI = await _calculatorService.CalculateBMIForAnonymous(dto);
 
             return Ok(calcualtedBMI);
         }
 
 
         [HttpGet]
-        public ActionResult<IEnumerable<BMIDto>> GetAllBMIsPaginated([FromQuery]BMIQuery query)
+        public async Task<ActionResult<IEnumerable<BMIDto>>> GetAllBMIsPaginated([FromQuery]BMIQuery query)
         {
             var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var bmis = _calculatorService.GetAllBMIsForUserPaginated(query, userId);
+            var bmis = await _calculatorService.GetAllBMIsForUserPaginated(query, userId);
 
             return Ok(bmis);
         }

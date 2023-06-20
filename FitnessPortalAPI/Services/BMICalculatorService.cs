@@ -1,14 +1,15 @@
 ﻿using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Models.Calculators;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessPortalAPI.Services
 {
     public interface IBMICalculatorService
     {
-        BMIDto CalculateBMI(CreateBMIQuery dto, int userId);
-        BMIDto CalculateBMIForAnonymous(CreateBMIQuery dto);
-        PageResult<BMIDto> GetAllBMIsForUserPaginated(BMIQuery query, int userId);
+        Task<BMIDto> CalculateBMI(CreateBMIQuery dto, int userId);
+        Task<BMIDto> CalculateBMIForAnonymous(CreateBMIQuery dto);
+        Task<PageResult<BMIDto>> GetAllBMIsForUserPaginated(BMIQuery query, int userId);
 
     }
     public class BMICalculatorService : IBMICalculatorService
@@ -20,7 +21,7 @@ namespace FitnessPortalAPI.Services
         {
             _context = context;
         }
-        public BMIDto CalculateBMI(CreateBMIQuery dto, int userId)
+        public async Task<BMIDto> CalculateBMI(CreateBMIQuery dto, int userId)
         {
             var bmiIndex = 0.0f;
             var bmiCategory = "";
@@ -43,11 +44,11 @@ namespace FitnessPortalAPI.Services
 
             bmi.UserId = userId;
             _context.BMIs.Add(bmi);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return bmiDto;
         }
-        public BMIDto CalculateBMIForAnonymous(CreateBMIQuery dto)
+        public async Task<BMIDto> CalculateBMIForAnonymous(CreateBMIQuery dto)
         {
             var bmiIndex = 0.0f;
             var bmiCategory = "";
@@ -61,16 +62,16 @@ namespace FitnessPortalAPI.Services
 
             return bmiDto;
         }
-        public PageResult<BMIDto> GetAllBMIsForUserPaginated(BMIQuery query, int userId)
+        public async Task<PageResult<BMIDto>> GetAllBMIsForUserPaginated(BMIQuery query, int userId)
         {
             var baseQuery = _context
                 .BMIs
                 .Where(b => b.UserId == userId);
 
-            var bmis = baseQuery
+            var bmis = await baseQuery
                 .Skip(query.PageSize * (query.PageNumber - 1))
                 .Take(query.PageSize)
-                .ToList(); 
+                .ToListAsync(); 
                 
             var totalItemsCount = baseQuery.Count();
 

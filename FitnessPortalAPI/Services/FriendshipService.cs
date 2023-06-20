@@ -8,13 +8,13 @@ namespace FitnessPortalAPI.Services
 {
     public interface IFriendshipService
     {
-        int SendFriendshipRequest(int userId, int userToBeRequestedId);
-        List<FriendshipDto> GetFriendshipRequests(int userId);
-        void RejectFriendRequest(int userId, int requestId);
-        void AcceptFriendRequest(int userId, int requestId);
-        List<FriendDto> GetFriends(int userId);
-        void RemoveFriendship(int userId, int userToBeRemovedId);
-        List<MatchingUserDto> FindUsersWithPattern(string pattern);
+        Task<int> SendFriendshipRequest(int userId, int userToBeRequestedId);
+        Task<List<FriendshipDto>> GetFriendshipRequests(int userId);
+        Task RejectFriendRequest(int userId, int requestId);
+        Task AcceptFriendRequest(int userId, int requestId);
+        Task<List<FriendDto>> GetFriends(int userId);
+        Task RemoveFriendship(int userId, int userToBeRemovedId);
+        Task<List<MatchingUserDto>> FindUsersWithPattern(string pattern);
     }
     public class FriendshipService : IFriendshipService
     {
@@ -24,21 +24,21 @@ namespace FitnessPortalAPI.Services
         {
             _context = context;
         }
-        public int SendFriendshipRequest(int userId, int userToBeRequestedId)
+        public async Task<int> SendFriendshipRequest(int userId, int userToBeRequestedId)
         {
             //checking if receiver is in db
-            var receiverUser = _context.Users.Find(userToBeRequestedId);
+            var receiverUser = await _context.Users.FindAsync(userToBeRequestedId);
             if (receiverUser == null)
                 throw new BadRequestException("Receiver user does not exist.");
 
             //checking if such friendship request has already been sent
-            var existingRequest = _context.FriendshipRequests.FirstOrDefault(fr => fr.SenderId == userId && fr.ReceiverId == userToBeRequestedId);
+            var existingRequest = await _context.FriendshipRequests.FirstOrDefaultAsync(fr => fr.SenderId == userId && fr.ReceiverId == userToBeRequestedId);
             if(existingRequest != null)
                 throw new BadRequestException("A friend request has already been sent between these users.");
 
             //checking if users are already friends
-            var areFriends = _context.Users
-                .Any(u => u.Id == userId && u.Friends.Any(f => f.Id == userToBeRequestedId));
+            var areFriends = await _context.Users
+                .AnyAsync(u => u.Id == userId && u.Friends.Any(f => f.Id == userToBeRequestedId));
             if (areFriends)
                 throw new BadRequestException("These users are already friends.");
 
@@ -50,18 +50,18 @@ namespace FitnessPortalAPI.Services
             };
 
             _context.FriendshipRequests.Add(friendRequest);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return friendRequest.Id;
         }
 
-        public List<FriendshipDto> GetFriendshipRequests(int userId)
+        public async Task<List<FriendshipDto>> GetFriendshipRequests(int userId)
         {
-            var friendshipRequests = _context.FriendshipRequests
+            var friendshipRequests = await _context.FriendshipRequests
                 .Include(fr => fr.Sender)
                 .Include(fr => fr.Receiver)
                 .Where(fr => fr.ReceiverId == userId)
-                .ToList();
+                .ToListAsync();
 
             var friendshipDtos = friendshipRequests.Select(fr => new FriendshipDto
             {
@@ -75,9 +75,9 @@ namespace FitnessPortalAPI.Services
             return friendshipDtos;
         }
 
-        public void RejectFriendRequest(int userId, int requestId)
+        public async Task RejectFriendRequest(int userId, int requestId)
         {
-            var friendRequest = _context.FriendshipRequests.Find(requestId);
+            var friendRequest = await _context.FriendshipRequests.FindAsync(requestId);
             if (friendRequest == null)
                 throw new BadRequestException("Friend request not found");
 
@@ -85,17 +85,17 @@ namespace FitnessPortalAPI.Services
                 throw new ForbiddenException("You are not allowed to remove someone else request!!!");
 
             _context.FriendshipRequests.Remove(friendRequest);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void AcceptFriendRequest(int userId, int requestId)
+        public async Task AcceptFriendRequest(int userId, int requestId)
         {
-            var friendRequest = _context.FriendshipRequests
+            var friendRequest = await _context.FriendshipRequests
                 .Include(fr => fr.Sender)
                     .ThenInclude(u => u.Friends)
                 .Include(fr => fr.Receiver)
                     .ThenInclude(u => u.Friends)
-                .FirstOrDefault(fr => fr.Id == requestId);
+                .FirstOrDefaultAsync(fr => fr.Id == requestId);
 
             if(friendRequest == null)
                 throw new BadRequestException("Friend request not found");
@@ -113,15 +113,15 @@ namespace FitnessPortalAPI.Services
             receiver.Friends.Add(sender);
 
             _context.FriendshipRequests.Remove(friendRequest);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<FriendDto> GetFriends(int userId)
+        public async Task<List<FriendDto>> GetFriends(int userId)
         {
             Thread.Sleep(500);//added to present loading spinner in client app
-            var user = _context.Users
+            var user = await _context.Users
                 .Include(u => u.Friends)
-                .FirstOrDefault(u => u.Id == userId);
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
                 throw new NotFoundException("User not found");
@@ -138,11 +138,11 @@ namespace FitnessPortalAPI.Services
             return friendDtos;
         }
 
-        public void RemoveFriendship(int userId, int userToBeRemovedId)
+        public async Task RemoveFriendship(int userId, int userToBeRemovedId)
         {
-            var user = _context.Users
+            var user = await _context.Users
                 .Include(u => u.Friends)
-                .FirstOrDefault(u => u.Id == userId);
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
                 throw new BadRequestException("User not found");
@@ -158,12 +158,12 @@ namespace FitnessPortalAPI.Services
             user.Friends.Remove(friendToBeRemoved);
             friendToBeRemoved.Friends.Remove(user);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<MatchingUserDto> FindUsersWithPattern(string pattern)
+        public async Task<List<MatchingUserDto>> FindUsersWithPattern(string pattern)
         {
-            var users = _context.Users
+            var users = await _context.Users
                 .Where(user => user.Email.Contains(pattern))
                 .Select(user => new MatchingUserDto
                 {
@@ -171,7 +171,7 @@ namespace FitnessPortalAPI.Services
                     Username = user.Username,
                     Email = user.Email,
                 })
-                .ToList();
+                .ToListAsync();
 
             return users;
         }

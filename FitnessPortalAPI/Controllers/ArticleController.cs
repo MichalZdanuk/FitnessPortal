@@ -15,48 +15,48 @@ namespace FitnessPortalAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateArticle([FromBody]CreateArticleDto dto)
+        public async Task<ActionResult> CreateArticle([FromBody]CreateArticleDto dto)
         {
-            var id = _articleService.Create(dto);
+            var id = await _articleService.CreateAsync(dto);
 
             return Created($"/api/article/{id}", null);
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ArticleDto>> GetAllPaginated([FromQuery]ArticleQuery query)
+        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetAllPaginated([FromQuery]ArticleQuery query)
         {
-            var result = _articleService.GetAllPaginated(query);
+            var result = await _articleService.GetAllPaginatedAsync(query);
             return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ArticleDto> Get([FromRoute]int id)
+        public async Task<ActionResult<ArticleDto>> Get([FromRoute]int id)
         {
-            var article = _articleService.GetById(id);
+            var article = await _articleService.GetByIdAsync(id);
 
             return Ok(article);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromBody]UpdateArticleDto dto, [FromRoute]int id)
+        public async Task<ActionResult> Update([FromBody]UpdateArticleDto dto, [FromRoute]int id)
         {
-            _articleService.Update(id, dto);
+            await _articleService.UpdateAsync(id, dto);
 
             return Ok();
         }
 
         [HttpDelete]
-        public ActionResult Delete()
+        public async Task<ActionResult> Delete()
         {
-            _articleService.RemoveAll();
+            await _articleService.RemoveAllAsync();
 
             return NoContent();
         }
 
         [HttpDelete("{articleId}")]
-        public ActionResult Delete([FromRoute]int articleId) 
+        public async Task<ActionResult> Delete([FromRoute]int articleId) 
         {
-            _articleService.Remove(articleId);
+            await _articleService.RemoveAsync(articleId);
 
             return NoContent();
         }
