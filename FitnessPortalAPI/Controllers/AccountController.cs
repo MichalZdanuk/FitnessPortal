@@ -47,5 +47,21 @@ namespace FitnessPortalAPI.Controllers
 
             return Ok(userInfo);
         }
+
+        [Authorize]
+        [HttpPost("update-profile")]
+        public async Task<ActionResult<string>> UpdateMyProfile([FromBody] UpdateUserDto dto)
+        {
+            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var previousToken = _contextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            string newToken = await _accountService.UpdateProfile(dto, userId, previousToken);
+            if(newToken == null) 
+            {
+                return BadRequest("Invalid user data");
+            }
+
+            return Ok(newToken);
+        }
     }
 }

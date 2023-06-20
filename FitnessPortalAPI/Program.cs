@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using static FitnessPortalAPI.Services.TokenStore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,10 +50,11 @@ builder.Services.AddScoped<IBodyFatCalculatorService, BodyFatCalculatorService>(
 builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
-
+builder.Services.AddSingleton<ITokenStore, TokenStore>(); // added to check if token is invalid (on blacklist)
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IValidator<ArticleQuery>, ArticleQueryValidator>();
+builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserDtoValidator>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddHttpContextAccessor();
 
