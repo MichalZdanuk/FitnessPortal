@@ -24,6 +24,7 @@ Link do projektu Figma:
 * JavaScript + Bootstrap
 ## Wymagania(wstępnie zdefiniowane funkcjonalności):
 * rejestracja/logowanie
+* uaktualnianie danych konta (wiąże się to z generowaniem nowego tokena JWT; zaimplementowana blacklist'a na stare token'y)
 * dodawanie własnych wpisów/przeglądanie wpisów innych
 * wysyłanie zaproszeń do znajomych, akceptacja/odrzucanie zaproszeń, usuwanie znajomych, przeglądanie profili znajomych
 * rejestracja swoich treningów (podsumowanie ile mamy aktywności fiz. w zadanym przedziale czas itp.)
@@ -35,7 +36,24 @@ Link do projektu Figma:
 * paginacja rezultatów **(zrobione)**
 * dwujęzyczność portalu - Angielski/Polski (w tym zapisanie po stronie backEnd'u preferencji użytkownika, by po zalogowaniu posiadał stan taki jaki zostawił wylogowując się z aplikacji)
 * dodanie analizy swoich treningów/wyników BMI poprzez przeglądanie wykresów prezentujących zmiany na przestrzeni czasu
- 
+
+## API
+
+### Autoryzacja poprzez token JWT:
+![autoryzacja](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/b750f1e4-5281-4668-b01a-248eed7fe2c0)
+
+### Account Controller (rejestracja, logowanie, aktualizacja profilu, przeglądanie profilu):
+![account](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/2d129cd5-a846-4023-a6d3-c3dc54ea4dde)
+
+### Article Controller (tworzenie, edycja, usuwanie, przeglądanie):
+![article](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/aa0bcee6-13d3-4f28-be3f-740c3364e3ad)
+
+### Calculator Controller (wyliczanie, przeglądanie zapisanych wyników):
+![calculator](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/6265fcd8-41c2-43c0-9633-6b340ea3cd58)
+
+### FriendShip Controller (wysyłanie/akceptowanie/odrzucanie zaproszeń, przeglądanie/usuwanie znajomych):
+ ![friendship](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/f5919bb0-e2f7-43fb-885b-4b4d34d57e4a)
+
 ## Demo:
 * rejestracja
 
