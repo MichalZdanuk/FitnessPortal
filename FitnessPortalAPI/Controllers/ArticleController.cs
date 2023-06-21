@@ -1,6 +1,7 @@
-﻿using FitnessPortalAPI.Models;
+﻿using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FitnessPortalAPI.Controllers
 {
@@ -9,15 +10,19 @@ namespace FitnessPortalAPI.Controllers
     public class ArticleController : ControllerBase
     {
         private readonly IArticleService _articleService;
-        public ArticleController(IArticleService articleService)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public ArticleController(IArticleService articleService, IHttpContextAccessor contextAccessor)
         {
             _articleService = articleService;
+            _contextAccessor = contextAccessor;
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateArticle([FromBody]CreateArticleDto dto)
         {
-            var id = await _articleService.CreateAsync(dto);
+            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var id = await _articleService.CreateAsync(dto, userId);
 
             return Created($"/api/article/{id}", null);
         }

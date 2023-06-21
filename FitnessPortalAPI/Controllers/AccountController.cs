@@ -1,4 +1,4 @@
-﻿using FitnessPortalAPI.Models;
+﻿using FitnessPortalAPI.Models.UserActions;
 using FitnessPortalAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

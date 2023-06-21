@@ -1,4 +1,4 @@
-﻿namespace FitnessPortalAPI.Models
+﻿namespace FitnessPortalAPI.Models.Friendship
 {
     public class FriendDto
     {

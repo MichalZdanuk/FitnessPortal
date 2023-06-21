@@ -11,11 +11,9 @@ namespace FitnessPortalAPI.Services
     public class BMRCalculatorService : IBMRCalculatorService
     {
         private readonly FitnessPortalDbContext _context;
-        private readonly IUserContextService _userContextService;
         private Calculator _calculator = new Calculator();
-        public BMRCalculatorService(FitnessPortalDbContext context, IUserContextService userContextService)
+        public BMRCalculatorService(FitnessPortalDbContext context)
         {
-            _userContextService = userContextService;
             _context = context;
         }
         public async Task<BMRDto> CalculateBMRForAnonymous(CreateBMRQuery bmrQuery)

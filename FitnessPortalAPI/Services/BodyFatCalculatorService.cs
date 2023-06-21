@@ -10,11 +10,9 @@ namespace FitnessPortalAPI.Services
     public class BodyFatCalculatorService : IBodyFatCalculatorService
     {
         private readonly FitnessPortalDbContext _context;
-        private readonly IUserContextService _userContextService;
         private Calculator _calculator = new Calculator();
-        public BodyFatCalculatorService(FitnessPortalDbContext context, IUserContextService userContextService)
+        public BodyFatCalculatorService(FitnessPortalDbContext context)
         {
-            _userContextService = userContextService;
             _context = context;
         }
         public async Task<BodyFatDto> CalculateBodyFatForAnonymous(CreateBodyFatQuery bodyFatQuery)

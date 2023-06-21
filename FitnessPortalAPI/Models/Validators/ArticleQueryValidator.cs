@@ -1,4 +1,5 @@
 ﻿using FitnessPortalAPI.Entities;
+using FitnessPortalAPI.Models.Articles;
 using FluentValidation;
 
 namespace FitnessPortalAPI.Models.Validators

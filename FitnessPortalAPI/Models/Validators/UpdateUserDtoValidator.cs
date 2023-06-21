@@ -1,4 +1,5 @@
 ﻿using FitnessPortalAPI.Entities;
+using FitnessPortalAPI.Models.UserActions;
 using FluentValidation;
 using System.Security.Claims;
 

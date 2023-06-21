@@ -1,7 +1,8 @@
 using FitnessPortalAPI;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Middleware;
-using FitnessPortalAPI.Models;
+using FitnessPortalAPI.Models.Articles;
+using FitnessPortalAPI.Models.UserActions;
 using FitnessPortalAPI.Models.Validators;
 using FitnessPortalAPI.Services;
 using FluentValidation;
@@ -55,14 +56,13 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IValidator<ArticleQuery>, ArticleQueryValidator>();
 builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserDtoValidator>();
-builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddHttpContextAccessor();
 
 
 //builder.Services.AddSwaggerGen(); // adding Swagger to proj
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "HealthyHabitHub_API", Version = "v1" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,

@@ -1,6 +1,4 @@
-﻿
-
-namespace FitnessPortalAPI.Models
+﻿namespace FitnessPortalAPI.Models.Articles
 {
     public class ArticleQuery
     {

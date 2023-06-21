@@ -1,6 +1,6 @@
 ﻿using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
-using FitnessPortalAPI.Models;
+using FitnessPortalAPI.Models.Friendship;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
 

@@ -1,6 +1,7 @@
 ﻿using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models;
+using FitnessPortalAPI.Models.Articles;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -8,7 +9,7 @@ namespace FitnessPortalAPI.Services
 {
     public interface IArticleService
     {
-        Task<int> CreateAsync(CreateArticleDto dto);
+        Task<int> CreateAsync(CreateArticleDto dto, int userId);
         Task<PageResult<ArticleDto>> GetAllPaginatedAsync(ArticleQuery query);
         Task<ArticleDto> GetByIdAsync(int id);
         Task UpdateAsync(int id, UpdateArticleDto dto);
@@ -19,13 +20,11 @@ namespace FitnessPortalAPI.Services
     public class ArticleService : IArticleService
     {
         private readonly FitnessPortalDbContext _context;
-        private readonly IUserContextService _userContextService;
-        public ArticleService(FitnessPortalDbContext context, IUserContextService userContextService)
+        public ArticleService(FitnessPortalDbContext context)
         {
             _context = context;
-            _userContextService = userContextService;
         }
-        public async Task<int> CreateAsync(CreateArticleDto dto)
+        public async Task<int> CreateAsync(CreateArticleDto dto, int userId)
         {
             var article = new Article()
             {
@@ -36,7 +35,7 @@ namespace FitnessPortalAPI.Services
                 DateOfPublication = DateTime.Now,
             };
 
-            article.CreatedById = (int)_userContextService.GetUserId;
+            article.CreatedById = userId;
             _context.Articles.Add(article);
             await _context.SaveChangesAsync();
 

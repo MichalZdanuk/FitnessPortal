@@ -1,4 +1,4 @@
-﻿namespace FitnessPortalAPI.Models
+﻿namespace FitnessPortalAPI.Models.UserActions
 {
     public class UpdateUserDto
     {
