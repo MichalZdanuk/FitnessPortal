@@ -32,7 +32,7 @@
 
 .motto-div {
   display: flex;
-  padding-bottom: 50px;
+  /* padding-bottom: 50px; */
 }
 
 .motto-text-div {
@@ -90,6 +90,11 @@
   flex-direction: column;
   width: 20vw;
   align-items: center;
+  transition: transform 0.4s;
+}
+
+.advantage-div:hover {
+  transform: scale(1.05);
 }
 
 .benefit-icon {
@@ -133,12 +138,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 45vw;
+  width: 40vw;
   background-color: #e6ebf3;
   padding: 10px;
   margin-bottom: 10vh;
   border-radius: 15px;
   box-shadow: 8px 8px 24px -5px rgba(66, 68, 90, 1);
+  transition: transform 0.4s;
+}
+
+.offer:hover {
+  transform: scale(1.05);
 }
 
 .offer-heading {
@@ -153,4 +163,9 @@
 
 .offer-img {
   width: 20%;
+}
+
+.numbers{
+  font-size: 1.6vw;
+  font-weight: 600;
 }
