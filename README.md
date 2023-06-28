@@ -55,10 +55,13 @@ Link do projektu Figma:
  ![friendship](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/f5919bb0-e2f7-43fb-885b-4b4d34d57e4a)
 
 ## Demo:
+* strona główna
+
+ ![main_page_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/0f1173c2-ab2d-4811-826b-e3948605c139)
+
 * rejestracja
 
 ![register_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/02b0b290-cfd1-4eb3-80c6-c50a678f8587)
-
 
 * logowanie
 
@@ -71,7 +74,6 @@ Link do projektu Figma:
 * kalkulator BMI
 
 ![bmi_calc_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/c6c7c293-5268-468a-981c-ad9d77aad10a)
-
 
 * kalkulator BMR
 
