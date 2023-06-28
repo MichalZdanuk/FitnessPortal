@@ -141,3 +141,21 @@ export const exercisesList = [
       description: "Start by getting into a push-up position with your forearms on the ground, elbows under your shoulders, and toes tucked under. Engage your core and glutes to keep your body in a straight line from head to toe. Hold this position for a desired duration, focusing on maintaining proper form and stability."
   }
 ];
+
+export const benefits = [
+  {
+    id: 0,
+    img: require('../assets/images/two_friends.png'),
+    content: "Immerse yourself in our thriving fitness community, where support, motivation, and like-minded individuals fuel your journey to wellness. Connect, share, and grow together, elevating your fitness experience in a purpose-built environment."
+  },
+  {
+    id: 1,
+    img: require('../assets/images/dumbbell.png'),
+    content: "Step into our exceptional training center, meticulously equipped to monitor and optimize your progress. With state-of-the-art facilities you'll have the tools and guidance to push your limits, achieve your goals, and unlock your full potential."
+  },
+  {
+    id: 2,
+    img: require('../assets/images/calculator.png'),
+    content: "Access a wealth of knowledge through our professional calculators, delivering precise measurements for vital health markers like BMI, body fat percentage, and more. Unleash valuable insights and empower your fitness endeavors with accuracy and comprehensive data."
+  },
+];
