@@ -49,6 +49,7 @@ builder.Services.AddScoped<IBMICalculatorService, BMICalculatorService>();
 builder.Services.AddScoped<IBMRCalculatorService, BMRCalculatorService>();
 builder.Services.AddScoped<IBodyFatCalculatorService, BodyFatCalculatorService>();
 builder.Services.AddScoped<IFriendshipService, FriendshipService>();
+builder.Services.AddScoped<ITrainingService, TrainingService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 builder.Services.AddSingleton<ITokenStore, TokenStore>(); // added to check if token is invalid (on blacklist)
