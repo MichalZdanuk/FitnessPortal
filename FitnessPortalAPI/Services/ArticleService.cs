@@ -120,7 +120,7 @@ namespace FitnessPortalAPI.Services
             if(dto.Category != "" && dto.Category != null) 
                 article.Category = dto.Category;
             
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
         public async Task RemoveAsync(int articleId)
         {
@@ -130,7 +130,7 @@ namespace FitnessPortalAPI.Services
                 throw new NotFoundException("Article not found");
 
             _context.Remove(article);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
         public async Task RemoveAllAsync()
         {
@@ -140,7 +140,7 @@ namespace FitnessPortalAPI.Services
                 throw new NotFoundException("Article not found");
 
             _context.RemoveRange(articles);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
         
     }
