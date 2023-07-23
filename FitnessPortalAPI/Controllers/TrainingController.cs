@@ -47,5 +47,15 @@ namespace FitnessPortalAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("filter")]
+        public async Task<ActionResult<IEnumerable<TrainingDto>>> GetFilteredTrainings([FromQuery] string period)
+        {
+            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var filteredTrainings = await _trainingService.GetFilteredTrainings(period, userId);
+
+            return Ok(filteredTrainings);
+        }
     }
 }

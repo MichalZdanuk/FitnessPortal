@@ -1,6 +1,7 @@
 ﻿using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models.Friendship;
+using FitnessPortalAPI.Models.Training;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
 
@@ -15,6 +16,7 @@ namespace FitnessPortalAPI.Services
         Task<List<FriendDto>> GetFriends(int userId);
         Task RemoveFriendship(int userId, int userToBeRemovedId);
         Task<List<MatchingUserDto>> FindUsersWithPattern(string pattern);
+        Task<IEnumerable<TrainingDto>> GetFriendTrainings(int userId, int friendId);
     }
     public class FriendshipService : IFriendshipService
     {
@@ -176,6 +178,35 @@ namespace FitnessPortalAPI.Services
             return users;
         }
 
+        public async Task<IEnumerable<TrainingDto>> GetFriendTrainings(int userId, int friendId)
+        {
+            var user = _context.Users
+                .Include(f => f.Friends)
+                .FirstOrDefault(user => user.Id == userId);
 
+            if (!user.Friends.Any(f => f.Id == friendId))
+                throw new ForbiddenException("You are not allowed to view trainings of this user");
+
+            var friendTrainings = await _context.Trainings
+                .Where(t => t.UserId == friendId)
+                .Include(t => t.Exercises)
+                .ToListAsync();
+
+            var trainingDtos = friendTrainings.Select(training => new TrainingDto()
+            {
+                Id = training.Id,
+                DateOfTraining = training.DateOfTraining,
+                NumberOfSeries = training.NumberOfSeries,
+                TotalPayload = training.TotalPayload,
+                Exercises = training.Exercises.Select(exercise => new ExerciseDto()
+                {
+                    Name = exercise.Name,
+                    NumberOfReps = exercise.NumberOfReps,
+                    Payload = exercise.Payload,
+                }).ToList()
+            }).ToList();
+
+            return trainingDtos;
+        }
     }
 }

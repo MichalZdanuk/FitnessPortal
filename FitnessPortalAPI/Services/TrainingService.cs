@@ -10,6 +10,7 @@ namespace FitnessPortalAPI.Services
         Task<int> AddTraining(CreateTrainingDto dto, int userId);
         Task DeleteTraining(int id, int userId);
         Task<IEnumerable<TrainingDto>> GetAllTrainings(int userId);
+        Task<IEnumerable<TrainingDto>> GetFilteredTrainings(string period, int userId);
     }
     public class TrainingService : ITrainingService
     {
@@ -100,6 +101,51 @@ namespace FitnessPortalAPI.Services
                     Name = exercise.Name,
                     NumberOfReps = exercise.NumberOfReps,
                     Payload = exercise.Payload
+                }).ToList()
+            }).ToList();
+
+            return trainingDtos;
+        }
+
+        public async Task<IEnumerable<TrainingDto>> GetFilteredTrainings(string period, int userId)
+        {
+            DateTime startDate;
+            DateTime endDate;
+
+            switch(period)
+            {
+                case "week":
+                    startDate = DateTime.Now.AddDays(-7);
+                    endDate = DateTime.Now;
+                    break;
+                case "month":
+                    startDate = DateTime.Now.AddMonths(-1);
+                    endDate = DateTime.Now;
+                    break;
+                case "quarter":
+                    startDate = DateTime.Now.AddMonths(-3);
+                    endDate = DateTime.Now;
+                    break;
+                default:
+                    throw new BadRequestException("Invalid period value. Supported values are 'week', 'month' and 'quarter'");
+            }
+
+            var trainings = await _context.Trainings
+                .Where(t => t.UserId == userId && t.DateOfTraining >= startDate && t.DateOfTraining <= endDate)
+                .Include(t => t.Exercises)
+                .ToListAsync();
+
+            var trainingDtos = trainings.Select(training => new TrainingDto()
+            {
+                Id = training.Id,
+                DateOfTraining = training.DateOfTraining,
+                NumberOfSeries = training.NumberOfSeries,
+                TotalPayload = training.TotalPayload,
+                Exercises = training.Exercises.Select(exercise => new ExerciseDto()
+                {
+                    Name = exercise.Name,
+                    NumberOfReps = exercise.NumberOfReps,
+                    Payload = exercise.Payload,
                 }).ToList()
             }).ToList();
 
