@@ -2,6 +2,7 @@ using FitnessPortalAPI;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Middleware;
 using FitnessPortalAPI.Models.Articles;
+using FitnessPortalAPI.Models.Training;
 using FitnessPortalAPI.Models.UserActions;
 using FitnessPortalAPI.Models.Validators;
 using FitnessPortalAPI.Services;
@@ -54,9 +55,20 @@ builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 builder.Services.AddSingleton<ITokenStore, TokenStore>(); // added to check if token is invalid (on blacklist)
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+/*user operations validators*/
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
-builder.Services.AddScoped<IValidator<ArticleQuery>, ArticleQueryValidator>();
+builder.Services.AddScoped<IValidator<LoginUserDto>, LoginUserDtoValidator>();
 builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserDtoValidator>();
+
+/*training validators*/
+builder.Services.AddScoped<IValidator<TrainingQuery>, TrainingQueryValidator>();
+builder.Services.AddScoped<IValidator<CreateTrainingDto>, CreateTrainingDtoValidator>();
+builder.Services.AddScoped<IValidator<ExerciseDto>, ExerciseDtoValidator>();
+
+/*article validators*/
+builder.Services.AddScoped<IValidator<ArticleQuery>, ArticleQueryValidator>();
+builder.Services.AddScoped<IValidator<CreateArticleDto>, CreateArticleDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateArticleDto>, UpdateArticleDtoValidator>();
 builder.Services.AddHttpContextAccessor();
 
 

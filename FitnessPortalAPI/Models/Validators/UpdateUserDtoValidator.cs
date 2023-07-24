@@ -15,8 +15,7 @@ namespace FitnessPortalAPI.Models.Validators
 
             RuleFor(x => x.Email)
                 .NotEmpty()
-                .EmailAddress()
-                .WithMessage("Email cannot be empty");
+                .EmailAddress();
 
             RuleFor(x => x.Email)
                 .Custom((value, context) =>
@@ -33,12 +32,10 @@ namespace FitnessPortalAPI.Models.Validators
                 });
 
             RuleFor(x => x.Username)
-                .NotEmpty()
-                .WithMessage("Username cannot be empty");
+                .NotEmpty();
 
             RuleFor(x => x.Username)
-                .Length(2, 30)
-                .WithMessage("Incorrect username length");
+                .Length(2, 30);
         }
     }
 }
