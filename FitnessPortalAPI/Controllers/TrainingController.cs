@@ -1,4 +1,5 @@
-﻿using FitnessPortalAPI.Models.Training;
+﻿using FitnessPortalAPI.Models;
+using FitnessPortalAPI.Models.Training;
 using FitnessPortalAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,11 +30,11 @@ namespace FitnessPortalAPI.Controllers
             return Created($"/api/training/{id}", null);
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TrainingDto>>> GetAllTrainings()
+        public async Task<ActionResult<PageResult<TrainingDto>>> GetAllTrainings([FromQuery] TrainingQuery query)
         {
             int userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var trainings = await _trainingService.GetAllTrainings(userId);
+            var trainings = await _trainingService.GetAllTrainingsPaginated(query, userId);
 
             return Ok(trainings);
         }

@@ -1,5 +1,6 @@
 ﻿using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
+using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Models.Training;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ namespace FitnessPortalAPI.Services
     {
         Task<int> AddTraining(CreateTrainingDto dto, int userId);
         Task DeleteTraining(int id, int userId);
-        Task<IEnumerable<TrainingDto>> GetAllTrainings(int userId);
+        Task<PageResult<TrainingDto>> GetAllTrainingsPaginated(TrainingQuery query, int userId);
         Task<IEnumerable<TrainingDto>> GetFilteredTrainings(string period, int userId);
     }
     public class TrainingService : ITrainingService
@@ -83,28 +84,41 @@ namespace FitnessPortalAPI.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TrainingDto>> GetAllTrainings(int userId)
+        public async Task<PageResult<TrainingDto>> GetAllTrainingsPaginated(TrainingQuery query, int userId)
         {
-            var trainings = await _context.Trainings
-                .Where(t => t.UserId == userId)
+            var baseQuery = _context.Trainings
                 .Include(t => t.Exercises)
+                .Where(t => t.UserId == userId)
+                .OrderByDescending(t => t.DateOfTraining);
+
+            var trainings = await baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
                 .ToListAsync();
 
-            var trainingDtos = trainings.Select(training => new TrainingDto
-            {
-                Id = training.Id,
-                DateOfTraining = training.DateOfTraining,
-                NumberOfSeries = training.NumberOfSeries,
-                TotalPayload = training.TotalPayload,
-                Exercises = training.Exercises.Select(exercise => new ExerciseDto
-                {
-                    Name = exercise.Name,
-                    NumberOfReps = exercise.NumberOfReps,
-                    Payload = exercise.Payload
-                }).ToList()
-            }).ToList();
+            var totalItemsCount = await baseQuery.CountAsync();
 
-            return trainingDtos;
+            var trainingsDtos = new List<TrainingDto>();
+            for (int i = 0; i < trainings.Count; i++)
+            {
+                trainingsDtos.Add(new TrainingDto()
+                {
+                    Id = trainings[i].Id,
+                    DateOfTraining = trainings[i].DateOfTraining,
+                    NumberOfSeries = trainings[i].NumberOfSeries,
+                    TotalPayload = trainings[i].TotalPayload,
+                    Exercises = trainings[i].Exercises.Select(exercise => new ExerciseDto()
+                    {
+                        Name = exercise.Name,
+                        NumberOfReps = exercise.NumberOfReps,
+                        Payload = exercise.Payload,
+                    }).ToList(),
+                });
+            }
+
+            var result = new PageResult<TrainingDto>(trainingsDtos, totalItemsCount, query.PageSize, query.PageNumber);
+
+            return result;
         }
 
         public async Task<IEnumerable<TrainingDto>> GetFilteredTrainings(string period, int userId)
