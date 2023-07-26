@@ -1,0 +1,25 @@
+.animated-text {
+  opacity: 0;
+  transform: translateX(-50vw);
+  transition: opacity 0.8s, transform 1.6s;
+}
+
+.slide-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.animated-v2 {
+  opacity: 0;
+  transition: opacity 0.8s, transform 1.6s;
+}
+
+.grow {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.grow-tiny{
+  opacity: 1;
+  transform: scale(1.02);
+}

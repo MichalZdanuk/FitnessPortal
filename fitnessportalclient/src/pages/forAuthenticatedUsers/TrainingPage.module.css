@@ -54,8 +54,7 @@
     background-color: #FFFFFF;
     border: 2px #00a896 solid ;
     border-radius: 15px;
-    margin-bottom: 5%;
-  transition: transform 0.25s;
+    transition: transform 0.25s;
 }
 
 .add-training-button:hover{

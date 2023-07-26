@@ -1,13 +1,27 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
   background-color: #F0F2F5;
   min-height: 100vh;
+  overflow: auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+::-webkit-scrollbar {
+  width: 10px; /* width of the scrollbar */
 }
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* color of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #02c39a; /* color of the scrollbar thumb */
+  border-radius: 5px; /* border radius of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #00a896; /* color of the scrollbar thumb on hover */
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

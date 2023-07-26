@@ -1,4 +1,5 @@
 ﻿using FitnessPortalAPI.Models.Friendship;
+using FitnessPortalAPI.Models.Training;
 using FitnessPortalAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -93,6 +94,17 @@ namespace FitnessPortalAPI.Controllers
             var users = await _friendshipService.FindUsersWithPattern(pattern);
 
             return Ok(users);
+        }
+
+        [HttpGet("friend/{friendId}/trainings")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TrainingDto>>> GetFriendTrainings([FromRoute] int friendId)
+        {
+            int userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var friendTrainings = await _friendshipService.GetFriendTrainings(userId, friendId);
+
+            return Ok(friendTrainings);
         }
     }
 }
