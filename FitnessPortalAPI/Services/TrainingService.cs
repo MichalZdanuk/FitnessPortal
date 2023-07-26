@@ -86,6 +86,8 @@ namespace FitnessPortalAPI.Services
 
         public async Task<PageResult<TrainingDto>> GetAllTrainingsPaginated(TrainingQuery query, int userId)
         {
+            Thread.Sleep(1000);//added to present loading spinner in client app
+
             var baseQuery = _context.Trainings
                 .Include(t => t.Exercises)
                 .Where(t => t.UserId == userId)
