@@ -91,6 +91,9 @@ const ArticlesPage = () => {
           pageNumber={pageNumber}
           totalItemsCount={totalItemsCount}
           totalPages={totalPages}
+          value1={3}
+          value2={5}
+          value3={10}
         />
       </div>
     </>

@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import {exercises} from "../../mocks/mockedData"
 import AuthContext, { RequiredAuth } from "../../store/authContext";
 import { useContext, useEffect, useState } from "react";
-import { InfinitySpin } from "react-loader-spinner";
 import axios from "axios";
 
+import TrainingCard from "../../components/training/TrainingCard";
+import MySpinner from "../../components/spinner/MySpinner";
 const TrainingsPage = () => {
   const navigate = useNavigate();
   return (
@@ -69,9 +70,7 @@ const TrainingHistory = (props) => {
 
   return (<div className={classes["training-history-div"]}>
     {loading ? (
-      <div className={classes["spinner"]}>
-        <InfinitySpin width="200" color="#02C39A" />
-      </div>
+      <MySpinner />
     ): data && data.length > 0 ? (
       <>
       {data.map((training) => {
@@ -93,35 +92,6 @@ const TrainingHistory = (props) => {
       
     ) : (<div className={classes["no-trainings-div"]}>No trainings yet.</div>)}
   </div>);
-};
-
-const TrainingCard = (props) => {
-  const middleIndex = Math.ceil(props.listOfExercises.length / 2);
-  
-  return (
-    <div className={classes["training-card-div"]}>
-      <p className={classes["training-title"]}>
-        Training: {props.date.substring(0,10)}
-      </p>
-      <p className={classes["num-of-series-label"]}>Number of series: {props.numOfSeries}</p>
-      <div className={classes["exercises-container"]}>
-      <div className={classes["column"]}>
-        {props.listOfExercises.slice(0, middleIndex).map((exercise, index) => (
-          <div key={index}>
-            <li className={classes["exercise-elem"]}>{exercise.name} reps: {exercise.numberOfReps} weight: {exercise.payload}</li>
-          </div>
-        ))}
-      </div>
-      <div className={classes["column"]}>
-        {props.listOfExercises.slice(middleIndex).map((exercise, index) => (
-          <div key={index}>
-            <li className={classes["exercise-elem"]}>{exercise.name} reps: {exercise.numberOfReps} weight: {exercise.payload}</li>
-          </div>
-        ))}
-      </div>
-    </div>
-    </div>
-  );
 };
 
 const MostFrequentExercisesTable = () => {
