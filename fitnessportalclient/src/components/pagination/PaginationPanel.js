@@ -37,7 +37,7 @@ const PaginationPanel = (props) => {
             <option value={props.value3}>{props.value3}</option>  
           </select> 
         </form>
-        {props.itemFrom}-{props.itemTo} of {props.totalItemsCount}
+        {props.itemFrom} - {props.itemTo} of {props.totalItemsCount}
         <KeyboardDoubleArrowLeftIcon className={classes["arrow-icon"]} onClick={handleFirstPage}/>
         <KeyboardArrowLeftIcon className={classes["arrow-icon"]} onClick={handlePreviousPage}/>
         <KeyboardArrowRightIcon className={classes["arrow-icon"]} onClick={handleNextPage}/>

@@ -12,11 +12,6 @@
   transform: scale(1.03);
 }
 
-.spinner {
-  display: flex;
-  justify-content: center;
-}
-
 .account-header {
   font-size: 2vw;
   font-weight: 650;

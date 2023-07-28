@@ -28,7 +28,7 @@
 .most-exercises-table {
   margin-top: 2vw;
   width: 70%;
-  background-color: #00a896;
+  background-color: #02c39a;
   border-radius: 20px;
   padding: 1% 7% 1% 7%;
   color: #ffffff;
@@ -45,23 +45,23 @@
 
 .most-exercises-label {
   font-size: 2vh;
-  color: #adb9c1;
+  color: #ccd0d3;
   text-decoration: underline;
 }
 
 .add-training-button {
   font-size: 4vh;
-  font-weight: 650;
+  font-weight: 600;
   cursor: pointer;
-  color: #00a896;
+  color: #02c39a;
   background-color: #ffffff;
-  border: 2px #00a896 solid;
+  border: 2px #02c39a solid;
   border-radius: 15px;
-  transition: transform 0.25s;
+  transition: transform 0.4s;
 }
 
 .add-training-button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .workout-img {
@@ -83,16 +83,16 @@
   font-size: 4vh;
   font-weight: 600;
   cursor: pointer;
-  color: #00a896;
+  color: #02c39a;
   background-color: #ffffff;
-  border: 2px #00a896 solid;
+  border: 2px #02c39a solid;
   border-radius: 15px;
 
-  transition: transform 0.25s;
+  transition: transform 0.4s;
 }
 
 .show-more-button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .no-trainings-div {

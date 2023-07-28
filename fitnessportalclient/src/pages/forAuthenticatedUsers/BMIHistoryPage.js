@@ -54,10 +54,12 @@ const BMIHistoryPage = () => {
   const handlePageSizeChange = (event) => {
     setPageSize(Number(event.target.value));
     setPageNumber(1);
+    setLoading(true);
   };
 
   const handlePageChange = (newPageNumber) => {
     setPageNumber(newPageNumber);
+    setLoading(true);
   };
 
   const getCategoryIcon = (categoryName) => {
@@ -131,6 +133,9 @@ const BMIHistoryPage = () => {
             pageNumber={pageNumber}
             totalItemsCount={totalItemsCount}
             totalPages={totalPages}
+            value1={3}
+            value2={5}
+            value3={10}
           />
           </div>
           </div>

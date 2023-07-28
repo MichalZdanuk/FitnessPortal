@@ -54,7 +54,7 @@ const MainPageContent = () => {
                 <Offer img={book} name="ARTICLES" content="Gain valuable knowledge about diet, regeneration, exercises, performance, and more through our extensive collection of articles on the fitness portal." />
                 <Offer img={two_dumbbells} name="EXERCISES" content="Explore our comprehensive exercises lexicon, offering concise instructions and guidance on how to perform various exercises effectively." />
                 <Offer img={friends} name="FRIENDS" content="Connect with friends, track their results, and compare profiles to stay motivated and inspired on your fitness journey." />
-                <Offer img={progress} name="PROGRESS" content="Monitor your progress, analyze workout data, and visualize your history through interactive diagrams, empowering you to achieve improvement and growth." />
+                <Offer img={progress} name="PROGRESS" content="Monitor your progress, analyze workout data, and visualize your history through interactive diagrams, empowering you to achieve improvement." />
             </div>
         </div>
     )

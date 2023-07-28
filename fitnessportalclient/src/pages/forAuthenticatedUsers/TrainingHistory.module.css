@@ -12,11 +12,7 @@
   font-weight: 650;
 }
 
-.red {
-  color: red;
-  font-weight: 800;
-}
-
-.training-title{
-  color: red;
+.pagination-panel-div{
+  display: flex;
+  justify-content: center;
 }

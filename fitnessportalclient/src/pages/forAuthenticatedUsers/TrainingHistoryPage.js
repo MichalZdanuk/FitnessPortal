@@ -3,7 +3,6 @@ import classes from "./TrainingHistory.module.css";
 import axios from "axios";
 import AuthContext from "../../store/authContext";
 import { useState } from "react";
-import { InfinitySpin } from "react-loader-spinner";
 
 import PaginationPanel from "../../components/pagination/PaginationPanel";
 import TrainingCard from "../../components/training/TrainingCard";
@@ -52,10 +51,12 @@ const TrainingHistoryPage = () => {
   const handlePageSizeChange = (event) => {
     setPageSize(Number(event.target.value));
     setPageNumber(1);
+    setLoading(true);
   };
 
   const handlePageChange = (newPageNumber) => {
     setPageNumber(newPageNumber);
+    setLoading(true);
   };
 
   let trainingList = null;
@@ -85,6 +86,7 @@ const TrainingHistoryPage = () => {
       <p className={classes["training-header"]}>Your Training History</p>
       <hr />
       {trainingList}
+      <div className={classes["pagination-panel-div"]}>
         <PaginationPanel 
           pageSize={pageSize} 
           itemName="Trainings" 
@@ -98,7 +100,8 @@ const TrainingHistoryPage = () => {
           value1={3}
           value2={5}
           value3={10}
-        />
+          />
+      </div>
     </div>
   );
 };

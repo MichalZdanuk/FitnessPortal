@@ -113,7 +113,7 @@ export const exercisesList = [
   {
       id: 3,
       name: "Pull-up",
-      description: "Grip an overhead bar with your palms facing away from you and hands slightly wider than shoulder-width apart. Hang with your arms fully extended, then pull your body up until your chin clears the bar. Lower yourself back down with control and repeat, engaging your back, shoulders, and biceps."
+      description: "Grip an overhead bar with palms facing away from you and hands slightly wider than shoulder-width apart. Hang with your arms fully extended, then pull your body up until your chin clears the bar. Lower yourself back down with control and repeat, engaging your back, shoulders, and biceps."
   },
   {
       id: 4,

@@ -2,10 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import classes from "./AccountPage.module.css";
 import axios from "axios";
 import AuthContext from "../../store/authContext";
-import { InfinitySpin } from "react-loader-spinner";
 
 import PersonalInfo from "../../components/profile/PersonalInfo";
 import TrainingInfo from "../../components/profile/TrainingInfo";
+import MySpinner from "../../components/spinner/MySpinner";
 
 const AccountPage = () => {
   const [data, setData] = useState(null);
@@ -39,9 +39,7 @@ const AccountPage = () => {
     <div className={classes["acount-main-div"]}>
       <p className={classes["account-header"]}>Account Panel</p>
       {loading ? (
-        <div className={classes["spinner"]}>
-          <InfinitySpin width="200" color="#02C39A" />
-        </div>
+        <MySpinner />
       ) : data ? (
         <div>
           <PersonalInfo data={data}/>
