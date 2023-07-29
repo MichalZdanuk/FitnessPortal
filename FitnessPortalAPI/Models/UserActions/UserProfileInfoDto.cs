@@ -7,5 +7,6 @@
         public DateTime? DateOfBirth { get; set; }
         public float Weight { get; set; }
         public float Height { get; set; }
+        public int NumberOfFriends { get; set; }
     }
 }

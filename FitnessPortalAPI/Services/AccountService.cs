@@ -106,6 +106,7 @@ namespace FitnessPortalAPI.Services
                 DateOfBirth = user.DateOfBirth,
                 Weight = user.Weight,
                 Height = user.Height,
+                NumberOfFriends = user.Friends.Count(),
             };
 
             return userInfo;

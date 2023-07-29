@@ -12,6 +12,7 @@ namespace FitnessPortalAPI.Services
         Task DeleteTraining(int id, int userId);
         Task<PageResult<TrainingDto>> GetAllTrainingsPaginated(TrainingQuery query, int userId);
         Task<IEnumerable<TrainingDto>> GetFilteredTrainings(string period, int userId);
+        Task<TrainingStatsDto> GetTrainingStats(int userId);
     }
     public class TrainingService : ITrainingService
     {
@@ -167,5 +168,58 @@ namespace FitnessPortalAPI.Services
 
             return trainingDtos;
         }
+        public async Task<TrainingStatsDto> GetTrainingStats(int userId)
+        {
+            Thread.Sleep(500); // Added to present loading spinner in the client app
+            var user = _context.Users
+                .Include(u => u.Trainings)
+                .ThenInclude(t => t.Exercises)
+                .FirstOrDefault(u => u.Id == userId);
+
+            if(user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            var userTrainingStats = new TrainingStatsDto()
+            {
+                NumberOfTrainings = user.Trainings.Count,
+                BestTraining = user.Trainings
+                    .OrderByDescending(t => t.TotalPayload)
+                    .Select(t => new TrainingDto()
+                    {
+                        Id = t.Id,
+                        DateOfTraining = t.DateOfTraining,
+                        NumberOfSeries = t.NumberOfSeries,
+                        TotalPayload = t.TotalPayload,
+                        Exercises = t.Exercises.Select(exercise => new ExerciseDto()
+                        {
+                            Name = exercise.Name,
+                            NumberOfReps = exercise.NumberOfReps,
+                            Payload = exercise.Payload,
+                        }).ToList()
+                    })
+                    .FirstOrDefault(),
+                MostRecentTraining = user.Trainings.
+                    OrderByDescending(t => t.DateOfTraining)
+                    .Select(t => new TrainingDto()
+                    {
+                        Id = t.Id,
+                        DateOfTraining = t.DateOfTraining,
+                        NumberOfSeries = t.NumberOfSeries,
+                        TotalPayload = t.TotalPayload,
+                        Exercises = t.Exercises.Select(exercise => new ExerciseDto()
+                        {
+                            Name = exercise.Name,
+                            NumberOfReps = exercise.NumberOfReps,
+                            Payload = exercise.Payload,
+                        }).ToList()
+                    })
+                    .FirstOrDefault()
+            };
+
+            return userTrainingStats;
+        }
+
     }
 }

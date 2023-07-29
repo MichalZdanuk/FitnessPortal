@@ -58,5 +58,15 @@ namespace FitnessPortalAPI.Controllers
 
             return Ok(filteredTrainings);
         }
+
+        [HttpGet("stats")]
+        public async Task<ActionResult<TrainingStatsDto>> GetTrainingStats()
+        {
+            int userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var trainingStats = await _trainingService.GetTrainingStats(userId);
+
+            return Ok(trainingStats);
+        }
     }
 }
