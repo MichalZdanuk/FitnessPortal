@@ -102,7 +102,7 @@ const RegisterForm = () => {
 
   return (<div>
       {step === "1" && <FirstStepRegisterForm  {...propsRegisterForm}/>}
-      {step === "2" && <SecondStepRegisterForm  {...propsRegisterForm}/>}
+      {step === "2" && <SecondStepRegisterForm  {...propsRegisterForm} setStep={setStep}/>}
       {registerError && (
         <div className={classes["alert-div"]}>
           <Alert variant={'danger'}>{registerError}</Alert>
@@ -174,7 +174,7 @@ const FirstStepRegisterForm = ({
         </div>
 
         <input
-          className={classes["submit-button"]}
+          className={`${classes["submit-button"]}`}
           type="submit"
           value="NEXT"
         />
@@ -193,7 +193,8 @@ const SecondStepRegisterForm = ({
   registerInput,
   handleRegister,
   onRegisterInputChange,
-  registerSuccess
+  registerSuccess,
+  setStep
 }) => {
     const navigate = useNavigate();
     return (
@@ -230,11 +231,14 @@ const SecondStepRegisterForm = ({
           ></input>
         </div>
 
-        <input
-          className={classes["submit-button"]}
+        <div className={classes["buttons-container"]}>
+          <input
+          className={`${classes["submit-button"]}`}
           type="submit"
           value="REGISTER"
-        />
+          />
+          <button className={classes["back-button"]} onClick={() => setStep("1")}>BACK</button>
+        </div>
       </form>
       {!registerSuccess && <p className={classes["bottom-text"]} onClick={(e) => {
                 navigate("/login");
