@@ -7,10 +7,10 @@
   text-align: left;
 }
 
-.acount-main-div:hover {
+/* .acount-main-div:hover {
   transition: transform 0.35s;
   transform: scale(1.03);
-}
+} */
 
 .account-header {
   font-size: 2vw;
@@ -37,5 +37,5 @@
 }
 
 .update-profile-button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }

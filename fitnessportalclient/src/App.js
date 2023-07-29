@@ -25,6 +25,7 @@ import NotFoundPage from "./pages/forEveryone/NotFoundPage";
 import AccountPageLayout from "./pages/forAuthenticatedUsers/AccountPageLayout";
 import TrainingHistoryPage from "./pages/forAuthenticatedUsers/TrainingHistoryPage";
 import BMIHistoryPage from "./pages/forAuthenticatedUsers/BMIHistoryPage";
+import UpdateProfilePage from "./pages/forAuthenticatedUsers/UpdateProfilePage";
 
 import AuthContext from "./store/authContext";
 import { useContext, useEffect } from "react";
@@ -98,6 +99,7 @@ function App() {
                 <Route path="friends/:friendEmail" element={<FriendProfilePage/>}/>, */}
                 <Route path="account" element={<AccountPageLayout/>}>
                   <Route path ="" element={<AccountPage/>}/>
+                  <Route path="updateProfile" element={<UpdateProfilePage/>}/>
                   <Route path="friendlist" element={<FriendsPage/>}/>
                   <Route path="friendlist/:friendEmail" element={<FriendProfilePage/>}/>
                   <Route path="traininghistory" element={<TrainingHistoryPage/>}/>
