@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import ArticleThumbnail from "../../components/articlePage/ArticleThumbnail";
 import classes from "./ArticlesPage.module.css";
-import { InfinitySpin } from "react-loader-spinner";
 import axios from "axios";
 
 import PaginationPanel from "../../components/pagination/PaginationPanel";
+import MySpinner from "../../components/spinner/MySpinner";
 
 const ArticlesPage = () => {
   const [data, setData] = useState(null);
@@ -44,19 +44,19 @@ const ArticlesPage = () => {
   const handlePageSizeChange = (event) => {
     setPageSize(Number(event.target.value));
     setPageNumber(1);
+    setLoading(true);
   };
 
   const handlePageChange = (newPageNumber) => {
     setPageNumber(newPageNumber);
+    setLoading(true);
   };
 
   let articleThumbnailList = null;
 
   if (loading) {
     articleThumbnailList = (
-      <div className={classes["spinner-div"]}>
-        <InfinitySpin width="200" color="#02C39A" />
-      </div>
+      <MySpinner />
     );
   } else if (data && data.length > 0) {
     
@@ -91,6 +91,9 @@ const ArticlesPage = () => {
           pageNumber={pageNumber}
           totalItemsCount={totalItemsCount}
           totalPages={totalPages}
+          value1={3}
+          value2={5}
+          value3={10}
         />
       </div>
     </>

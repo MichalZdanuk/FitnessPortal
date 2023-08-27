@@ -8,10 +8,10 @@ import { useContext, useEffect } from "react";
 import { useState } from "react";
 import AuthContext from "../../store/authContext";
 import axios from "axios";
-import { InfinitySpin } from "react-loader-spinner";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Alert } from "react-bootstrap";
 
+import MySpinner from "../../components/spinner/MySpinner";
 
 const FriendsPage = () => {
   const location = useLocation();
@@ -180,9 +180,7 @@ const FriendRequests = (props) => {
     <div>
         <p className={classes["friend-request-motto"]}>Expand your social circle, accept new connections!</p>
         { loading ? (
-          <div className={classes["spinner"]}>
-          <InfinitySpin width="200" color="#02C39A" />
-            </div>
+          <MySpinner />
         ) : friendRequestsList && friendRequestsList.length > 0 ? (
           friendRequestsList.map((request) => {
             return (
@@ -258,9 +256,7 @@ const FriendsList = (props) => {
     <div>
       <ul>
         {loading ? (
-          <div className={classes["spinner"]}>
-            <InfinitySpin width="200" color="#02C39A" />
-          </div>
+          <MySpinner />
         ) : friendList && friendList.length > 0 ? (
         friendList.map((friend) => {
           return (

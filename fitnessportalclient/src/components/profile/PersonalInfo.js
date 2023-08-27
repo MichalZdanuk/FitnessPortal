@@ -11,7 +11,7 @@ const PersonalInfo = (props) => {
           <div className={classes["column"]}>
             <ul className={classes["no-bullet-points"]}>
               <li><ChevronRightIcon/>Date of birth: {props.data.dateOfBirth.substring(0,10)}</li>
-              <li><ChevronRightIcon/>Number of friends: YY</li>
+              <li><ChevronRightIcon/>Number of friends: {props.data.numberOfFriends}</li>
             </ul>
           </div>
           <div className={classes["column"]}>

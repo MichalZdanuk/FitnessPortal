@@ -32,12 +32,12 @@ const PaginationPanel = (props) => {
         {props.itemName} per page: 
         <form>
           <select value={props.pageSize} onChange={props.handlePageSizeChange}>
-            <option value={3}>3</option>
-            <option value={5}>5</option>  
-            <option value={10}>10</option>  
+            <option value={props.value1}>{props.value1}</option>
+            <option value={props.value2}>{props.value2}</option>  
+            <option value={props.value3}>{props.value3}</option>  
           </select> 
         </form>
-        {props.itemFrom}-{props.itemTo} of {props.totalItemsCount}
+        {props.itemFrom} - {props.itemTo} of {props.totalItemsCount}
         <KeyboardDoubleArrowLeftIcon className={classes["arrow-icon"]} onClick={handleFirstPage}/>
         <KeyboardArrowLeftIcon className={classes["arrow-icon"]} onClick={handlePreviousPage}/>
         <KeyboardArrowRightIcon className={classes["arrow-icon"]} onClick={handleNextPage}/>

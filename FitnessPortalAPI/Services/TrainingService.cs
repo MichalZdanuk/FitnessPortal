@@ -11,7 +11,9 @@ namespace FitnessPortalAPI.Services
         Task<int> AddTraining(CreateTrainingDto dto, int userId);
         Task DeleteTraining(int id, int userId);
         Task<PageResult<TrainingDto>> GetAllTrainingsPaginated(TrainingQuery query, int userId);
+        Task<FavouriteExercisesDto> GetFavouriteExercises(int userId);
         Task<IEnumerable<TrainingDto>> GetFilteredTrainings(string period, int userId);
+        Task<TrainingStatsDto> GetTrainingStats(int userId);
     }
     public class TrainingService : ITrainingService
     {
@@ -86,6 +88,8 @@ namespace FitnessPortalAPI.Services
 
         public async Task<PageResult<TrainingDto>> GetAllTrainingsPaginated(TrainingQuery query, int userId)
         {
+            Thread.Sleep(1000);//added to present loading spinner in client app
+
             var baseQuery = _context.Trainings
                 .Include(t => t.Exercises)
                 .Where(t => t.UserId == userId)
@@ -165,5 +169,107 @@ namespace FitnessPortalAPI.Services
 
             return trainingDtos;
         }
+        public async Task<TrainingStatsDto> GetTrainingStats(int userId)
+        {
+            Thread.Sleep(500); // Added to present loading spinner in the client app
+            var user = _context.Users
+                .Include(u => u.Trainings)
+                .ThenInclude(t => t.Exercises)
+                .FirstOrDefault(u => u.Id == userId);
+
+            if(user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            var userTrainingStats = new TrainingStatsDto()
+            {
+                NumberOfTrainings = user.Trainings.Count,
+                BestTraining = user.Trainings
+                    .OrderByDescending(t => t.TotalPayload)
+                    .Select(t => new TrainingDto()
+                    {
+                        Id = t.Id,
+                        DateOfTraining = t.DateOfTraining,
+                        NumberOfSeries = t.NumberOfSeries,
+                        TotalPayload = t.TotalPayload,
+                        Exercises = t.Exercises.Select(exercise => new ExerciseDto()
+                        {
+                            Name = exercise.Name,
+                            NumberOfReps = exercise.NumberOfReps,
+                            Payload = exercise.Payload,
+                        }).ToList()
+                    })
+                    .FirstOrDefault(),
+                MostRecentTraining = user.Trainings.
+                    OrderByDescending(t => t.DateOfTraining)
+                    .Select(t => new TrainingDto()
+                    {
+                        Id = t.Id,
+                        DateOfTraining = t.DateOfTraining,
+                        NumberOfSeries = t.NumberOfSeries,
+                        TotalPayload = t.TotalPayload,
+                        Exercises = t.Exercises.Select(exercise => new ExerciseDto()
+                        {
+                            Name = exercise.Name,
+                            NumberOfReps = exercise.NumberOfReps,
+                            Payload = exercise.Payload,
+                        }).ToList()
+                    })
+                    .FirstOrDefault()
+            };
+
+            return userTrainingStats;
+        }
+
+        public async Task<FavouriteExercisesDto> GetFavouriteExercises(int userId)
+        {
+            Thread.Sleep(500); // Added to present loading spinner in the client app
+
+            var userTrainings = await _context.Trainings
+                .Where(training => training.UserId == userId)
+                .Include(training => training.Exercises)
+                .OrderByDescending(training => training.DateOfTraining)
+                .Take(3)
+                .ToListAsync();
+
+            if(userTrainings.Count < 3) 
+            {
+                return new FavouriteExercisesDto
+                {
+                    Exercises = new List<ExerciseDto>()
+                };
+            }
+
+            var exerciseTotals = new Dictionary<string, int>();
+            foreach(var training in userTrainings)
+            {
+                foreach(var exercise in training.Exercises)
+                {
+                    if (!exerciseTotals.ContainsKey(exercise.Name))
+                    {
+                        exerciseTotals[exercise.Name] = 0;
+                    }
+                    exerciseTotals[exercise.Name] += exercise.NumberOfReps;
+                }
+            }
+
+            var topExercises = exerciseTotals.OrderByDescending(kv => kv.Value)
+                .Take(3)
+                .Select(kv => kv.Key)
+                .ToList();
+
+            var favouriteDto = new FavouriteExercisesDto
+            {
+                Exercises = topExercises.Select(exerciseName => new ExerciseDto
+                {
+                    Name = exerciseName,
+                    NumberOfReps = exerciseTotals[exerciseName]
+                }).ToList()
+            };
+
+            return favouriteDto;
+        }
+
     }
 }

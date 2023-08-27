@@ -1,196 +1,100 @@
-
 .container {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
 }
 
-.left-side{
-    width: 50%;
-    display: flex;
+.left-side {
+  width: 50%;
+  display: flex;
   flex-direction: column;
   /* justify-content: center; */
   align-items: center;
 }
 
 .right-side {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* Align content to the top */
-    background-color: #F0F3BD;
-  align-items: center;
-    flex: 1; /* Take up remaining vertical space */
-}
-
-.most-exercises-table{
-    width: 70%;
-    background-color: #00a896;
-    border-radius: 20px;
-    padding: 1% 7% 1% 7%;
-    color: #FFFFFF;
-}
-
-.most-exercises-title{
-    font-size: 3.2vh;
-    font-weight: 650;
-}
-
-.most-exercise-single-exercise{
-    font-size: 2.2vh;
-}
-
-.most-exercises-label{
-    font-size: 2vh;
-    color: #ADB9C1;
-    text-decoration: underline;
-}
-
-.add-training-button{
-    font-size: 4vh;
-    font-weight: 650;
-    cursor: pointer;
-    color:#00a896;
-    background-color: #FFFFFF;
-    border: 2px #00a896 solid ;
-    border-radius: 15px;
-    transition: transform 0.25s;
-}
-
-.add-training-button:hover{
-  transform: scale(1.1);
-}
-
-.workout-img{
-  width: 20vw;
-}
-
-.training-div{
-    width: 80%;
-    background-color: #00a896;
-    padding: 1% 3% 3% 3%;
-    margin-bottom: 4%;
-    border-radius: 15px;
-  transition: transform 0.25s;
-}
-
-.training-div:hover{
-    transform: scale(1.1);
-}
-
-.training-title{
-    text-align: center;
-    font-size: 4.2vh;
-    font-weight: 650;
-    color: #000000;
-}
-
-.num-of-series-label{
-    font-size: 2.6vh;
-    font-weight: 700;
-    color: #ADB9C1;
-}
-
-.training-history-label{
-    font-size: 7vh;
-    font-weight: 700;
-    color: #000000;
-}
-
-.show-more-button{
-    width: 30%;
-    font-size: 4vh;
-    font-weight: 600;
-    cursor: pointer;
-    color:#00a896;
-    background-color: #FFFFFF;
-    border: 2px #00a896 solid ;
-    border-radius: 15px;
-    margin-bottom: 5%;
-  transition: transform 0.25s;
-}
-
-.show-more-button:hover{
-    transform: scale(1.1);
-}
-
-.exercises-container{
-    color: #FFFFFF;
-    display: flex;
-    flex-direction: row;
-}
-
-.column{
-    width: 50%;
-}
-
-.exercise-elem{
-    font-size: 1.7vh;
-    font-weight: 600;
-}
-
-/*before changes*/
-/*
-
-.container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.left-side{
-    width: 50%;
-    display: flex;
-  flex-direction: column;
-
-  align-items: center;
-}
-
-.right-side{
   width: 50%;
-  justify-content: center;
-    background-color: #F0F3BD;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content to the top */
+  background-color: #f0f3bd;
+  align-items: center;
 }
 
-.most-exercises-table{
-    width: 70%;
-    background-color: #00a896;
-    border-radius: 20px;
-    padding: 1% 7% 1% 7%;
-    color: #FFFFFF;
+.training-history-div {
+  width: 80%;
 }
 
-.most-exercises-title{
-    font-size: 3.2vh;
-    font-weight: 650;
+.most-exercises-table {
+  margin-top: 2vw;
+  width: 70%;
+  background-color: #02c39a;
+  border-radius: 20px;
+  padding: 1% 7% 1% 7%;
+  color: #ffffff;
 }
 
-.most-exercise-single-exercise{
-    font-size: 2.2vh;
+.most-exercises-title {
+  font-size: 3.2vh;
+  font-weight: 650;
 }
 
-.most-exercises-label{
-    font-size: 2vh;
-    color: #ccc7c7;
-    text-decoration: underline;
+.most-exercise-single-exercise {
+  font-size: 2.2vh;
 }
 
-.add-training-button{
-    font-size: 4vh;
-    font-weight: 650;
-    cursor: pointer;
-    color:#00a896;
-    background-color: #FFFFFF;
-    border: 2px #00a896 solid ;
-    border-radius: 15px;
-    margin-bottom: 5%;
-  transition: transform 0.25s;
+.most-exercises-label {
+  font-size: 2vh;
+  color: #ccd0d3;
+  text-decoration: underline;
 }
 
-.add-training-button:hover{
-  transform: scale(1.1);
+.add-training-button {
+  font-size: 4vh;
+  font-weight: 600;
+  cursor: pointer;
+  color: #02c39a;
+  background-color: #ffffff;
+  border: 2px #02c39a solid;
+  border-radius: 15px;
+  transition: transform 0.4s;
 }
 
-.workout-img{
+.add-training-button:hover {
+  transform: scale(1.05);
+}
+
+.workout-img {
   width: 20vw;
-}*/
+}
+
+.training-history-label {
+  font-size: 7vh;
+  font-weight: 700;
+  color: #000000;
+}
+.show-more-div {
+  text-align: center;
+  margin-bottom: 2vw;
+}
+
+.show-more-button {
+  width: 40%;
+  font-size: 4vh;
+  font-weight: 600;
+  cursor: pointer;
+  color: #02c39a;
+  background-color: #ffffff;
+  border: 2px #02c39a solid;
+  border-radius: 15px;
+
+  transition: transform 0.4s;
+}
+
+.show-more-button:hover {
+  transform: scale(1.05);
+}
+
+.no-trainings-div {
+  text-align: center;
+}

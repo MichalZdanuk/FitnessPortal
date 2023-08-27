@@ -64,6 +64,8 @@ namespace FitnessPortalAPI.Services
         }
         public async Task<PageResult<BMIDto>> GetAllBMIsForUserPaginated(BMIQuery query, int userId)
         {
+            Thread.Sleep(500);//added to present loading spinner in client app
+
             var baseQuery = _context
                 .BMIs
                 .Where(b => b.UserId == userId);

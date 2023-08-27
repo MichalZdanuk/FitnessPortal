@@ -24,3 +24,13 @@
 .no-bullet-points {
   list-style-type: none;
 }
+
+.ex-item{
+  list-style-type:circle;
+  margin-left: 4vw;
+}
+
+.number-of-trainings{
+  font-size: 1.3vw;
+  font-weight: 650;
+}

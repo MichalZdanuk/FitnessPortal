@@ -2,16 +2,18 @@ import { useContext, useEffect, useState } from "react";
 import classes from "./AccountPage.module.css";
 import axios from "axios";
 import AuthContext from "../../store/authContext";
-import { InfinitySpin } from "react-loader-spinner";
 
 import PersonalInfo from "../../components/profile/PersonalInfo";
 import TrainingInfo from "../../components/profile/TrainingInfo";
+import MySpinner from "../../components/spinner/MySpinner";
+import { useNavigate } from "react-router-dom";
 
 const AccountPage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const authCtx = useContext(AuthContext);
   const token = authCtx.tokenJWT;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,9 +41,7 @@ const AccountPage = () => {
     <div className={classes["acount-main-div"]}>
       <p className={classes["account-header"]}>Account Panel</p>
       {loading ? (
-        <div className={classes["spinner"]}>
-          <InfinitySpin width="200" color="#02C39A" />
-        </div>
+        <MySpinner />
       ) : data ? (
         <div>
           <PersonalInfo data={data}/>
@@ -51,7 +51,7 @@ const AccountPage = () => {
         <p>Error: Failed to fetch data</p>
       )}
       <div className={classes["button-center"]}>
-        <button className={classes["update-profile-button"]}>Update Profile</button>
+        <button className={classes["update-profile-button"]} onClick={() => {navigate("/account/updateProfile")}}>Update Profile</button>
       </div>
     </div>
   );

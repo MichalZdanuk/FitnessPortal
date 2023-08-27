@@ -12,7 +12,7 @@
   font-weight: 650;
 }
 
-.red {
-  color: red;
-  font-weight: 800;
+.pagination-panel-div{
+  display: flex;
+  justify-content: center;
 }
