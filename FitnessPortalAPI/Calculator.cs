@@ -23,8 +23,9 @@
         public float CalculateBMR(float weight, float height, float age, string sex)
         {
             float bmrResult = 0.0f;
+            string lowerCaseSex = sex.ToLower();
 
-            switch (sex)
+            switch (lowerCaseSex)
             {
                 case "male":
                     bmrResult = 88.362f + (13.397f * weight) + (4.799f * height) - (5.677f * age);
@@ -42,8 +43,9 @@
         public float CalculateBodyFat(float height, float waist, float neck, float hip, string sex)
         {
             float bodyFatResult = 0.0f;
+            string lowerCaseSex = sex.ToLower();
 
-            switch (sex)
+            switch (lowerCaseSex)
             {
                 case "male":
                     bodyFatResult = (float)(495.0f /(1.0324f-0.19077f*Math.Log10(waist-neck)+0.15456f*Math.Log10(height)) - 450.0f);
