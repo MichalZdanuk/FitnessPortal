@@ -68,5 +68,15 @@ namespace FitnessPortalAPI.Controllers
 
             return Ok(trainingStats);
         }
+
+        [HttpGet("favourite")]
+        public async Task<ActionResult<FavouriteExercisesDto>> GetFavouriteExercises()
+        {
+            int userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var favouriteExercises = await _trainingService.GetFavouriteExercises(userId);
+
+            return Ok(favouriteExercises);
+        }
     }
 }
