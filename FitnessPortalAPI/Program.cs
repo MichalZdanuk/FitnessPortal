@@ -2,9 +2,11 @@ using FitnessPortalAPI;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Middleware;
 using FitnessPortalAPI.Models.Articles;
+using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Models.Training;
 using FitnessPortalAPI.Models.UserActions;
 using FitnessPortalAPI.Models.Validators;
+using FitnessPortalAPI.Models.Validators.Calculators;
 using FitnessPortalAPI.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -59,6 +61,11 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IValidator<LoginUserDto>, LoginUserDtoValidator>();
 builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserDtoValidator>();
+
+/*calculators validators*/
+builder.Services.AddScoped<IValidator<CreateBMIQuery>, CreateBMIQueryValidator>();
+builder.Services.AddScoped<IValidator<CreateBMRQuery>, CreateBMRQueryValidator>();
+builder.Services.AddScoped<IValidator<CreateBodyFatQuery>, CreateBodyFatQueryValidator>();
 
 /*training validators*/
 builder.Services.AddScoped<IValidator<TrainingQuery>, TrainingQueryValidator>();

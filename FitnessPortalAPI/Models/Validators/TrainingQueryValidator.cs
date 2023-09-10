@@ -6,7 +6,7 @@ namespace FitnessPortalAPI.Models.Validators
 {
     public class TrainingQueryValidator : AbstractValidator<TrainingQuery>
     {
-        private int[] allowedPageSizes = new[] { 3, 5, 10, 15 };
+        private int[] allowedPageSizes = new[] { 1, 3, 5, 10, 15 };
         public TrainingQueryValidator()
         {
             RuleFor(a => a.PageNumber).GreaterThanOrEqualTo(1)
