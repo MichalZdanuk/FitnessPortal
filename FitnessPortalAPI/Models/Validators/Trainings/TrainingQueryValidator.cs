@@ -2,7 +2,7 @@
 using FitnessPortalAPI.Models.Training;
 using FluentValidation;
 
-namespace FitnessPortalAPI.Models.Validators
+namespace FitnessPortalAPI.Models.Validators.Trainings
 {
     public class TrainingQueryValidator : AbstractValidator<TrainingQuery>
     {

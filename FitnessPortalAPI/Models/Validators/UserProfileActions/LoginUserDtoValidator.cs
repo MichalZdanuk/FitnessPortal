@@ -1,7 +1,7 @@
 ﻿using FitnessPortalAPI.Models.UserActions;
 using FluentValidation;
 
-namespace FitnessPortalAPI.Models.Validators
+namespace FitnessPortalAPI.Models.Validators.UserProfileActions
 {
     public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
     {

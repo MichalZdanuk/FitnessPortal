@@ -2,9 +2,9 @@
 using FitnessPortalAPI.Models.UserActions;
 using FluentValidation;
 
-namespace FitnessPortalAPI.Models.Validators
+namespace FitnessPortalAPI.Models.Validators.UserProfileActions
 {
-    public class RegisterUserDtoValidator: AbstractValidator<RegisterUserDto>
+    public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
     {
         private readonly HashSet<string> commonPasswords;
         public RegisterUserDtoValidator(FitnessPortalDbContext dbContext)
@@ -39,14 +39,14 @@ namespace FitnessPortalAPI.Models.Validators
             RuleFor(x => x.Password)
                 .MinimumLength(3)
                 .Must(NotBeCommonPassword).WithMessage("Password is too common. Please choose a stronger password.");
-                /*.Matches("[A-Z]").WithMessage("'{PropertyName}' must contain one or more capital letters.")
-                .Matches("[a-z]").WithMessage("'{PropertyName}' must contain one or more lowercase letters.");*/
+            /*.Matches("[A-Z]").WithMessage("'{PropertyName}' must contain one or more capital letters.")
+            .Matches("[a-z]").WithMessage("'{PropertyName}' must contain one or more lowercase letters.");*/
 
             RuleFor(x => x.ConfirmPassword)
                 .Equal(e => e.Password)
                 .WithMessage("'Password' must be same as 'ConfirmPassword'");
 
-            
+
         }
         private bool NotBeCommonPassword(string password)
         {

@@ -1,11 +1,11 @@
 ﻿using FitnessPortalAPI.Models.Training;
 using FluentValidation;
 
-namespace FitnessPortalAPI.Models.Validators
+namespace FitnessPortalAPI.Models.Validators.Trainings
 {
     public class ExerciseDtoValidator : AbstractValidator<ExerciseDto>
     {
-        public ExerciseDtoValidator() 
+        public ExerciseDtoValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()

@@ -2,11 +2,11 @@
 using FitnessPortalAPI.Models.Articles;
 using FluentValidation;
 
-namespace FitnessPortalAPI.Models.Validators
+namespace FitnessPortalAPI.Models.Validators.Articles
 {
-    public class UpdateArticleDtoValidator : AbstractValidator<UpdateArticleDto>
+    public class CreateArticleDtoValidator : AbstractValidator<CreateArticleDto>
     {
-        public UpdateArticleDtoValidator(FitnessPortalDbContext dbContext)
+        public CreateArticleDtoValidator(FitnessPortalDbContext dbContext)
         {
             RuleFor(x => x.Title)
                 .NotEmpty()

@@ -2,12 +2,12 @@
 using FitnessPortalAPI.Models.Articles;
 using FluentValidation;
 
-namespace FitnessPortalAPI.Models.Validators
+namespace FitnessPortalAPI.Models.Validators.Articles
 {
     public class ArticleQueryValidator : AbstractValidator<ArticleQuery>
     {
         private int[] allowedPageSizes = new[] { 3, 5, 10 };
-        public ArticleQueryValidator() 
+        public ArticleQueryValidator()
         {
             RuleFor(a => a.PageNumber).GreaterThanOrEqualTo(1)
                 .WithMessage("PageNumber must be greater than or equal to 1");

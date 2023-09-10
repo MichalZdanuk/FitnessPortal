@@ -3,13 +3,13 @@ using FitnessPortalAPI.Models.UserActions;
 using FluentValidation;
 using System.Security.Claims;
 
-namespace FitnessPortalAPI.Models.Validators
+namespace FitnessPortalAPI.Models.Validators.UserProfileActions
 {
     public class UpdateUserDtoValidator : AbstractValidator<UpdateUserDto>
     {
         private readonly IHttpContextAccessor _contextAccessor;
-        
-        public UpdateUserDtoValidator(FitnessPortalDbContext dbContext, IHttpContextAccessor contextAccessor) 
+
+        public UpdateUserDtoValidator(FitnessPortalDbContext dbContext, IHttpContextAccessor contextAccessor)
         {
             _contextAccessor = contextAccessor;
 
