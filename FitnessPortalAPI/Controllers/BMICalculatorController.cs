@@ -19,7 +19,7 @@ namespace FitnessPortalAPI.Controllers
             _calculatorService= calculatorService;
         }
         [HttpPost]
-        public async Task<ActionResult<BMIDto>> CalculateBmi([FromBody]CreateBMIQuery dto)
+        public async Task<ActionResult<BMIDto>> CalculateBmi([FromQuery]CreateBMIQuery dto)
         {
             var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 

@@ -43,7 +43,7 @@ namespace FitnessPortalAPI.Services
         }
         public async Task<PageResult<ArticleDto>> GetAllPaginatedAsync(ArticleQuery query)
         {
-            Thread.Sleep(500);//added to present loading spinner in client app
+            Thread.Sleep(1000);//added to present loading spinner in client app
 
             var baseQuery = _context
                 .Articles
@@ -79,6 +79,8 @@ namespace FitnessPortalAPI.Services
 
         public async Task<ArticleDto> GetByIdAsync(int id)
         {
+            Thread.Sleep(1000);//added to present loading spinner in client app
+
             var article = await _context
                 .Articles
                 .Include(a => a.CreatedBy)

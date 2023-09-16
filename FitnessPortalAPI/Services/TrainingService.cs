@@ -171,7 +171,7 @@ namespace FitnessPortalAPI.Services
         }
         public async Task<TrainingStatsDto> GetTrainingStats(int userId)
         {
-            Thread.Sleep(500); // Added to present loading spinner in the client app
+            Thread.Sleep(1000); // Added to present loading spinner in the client app
             var user = _context.Users
                 .Include(u => u.Trainings)
                 .ThenInclude(t => t.Exercises)
@@ -224,7 +224,7 @@ namespace FitnessPortalAPI.Services
 
         public async Task<FavouriteExercisesDto> GetFavouriteExercises(int userId)
         {
-            Thread.Sleep(500); // Added to present loading spinner in the client app
+            Thread.Sleep(1000); // Added to present loading spinner in the client app
 
             var userTrainings = await _context.Trainings
                 .Where(training => training.UserId == userId)

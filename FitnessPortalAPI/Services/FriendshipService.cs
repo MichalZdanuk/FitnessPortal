@@ -120,7 +120,7 @@ namespace FitnessPortalAPI.Services
 
         public async Task<List<FriendDto>> GetFriends(int userId)
         {
-            Thread.Sleep(500);//added to present loading spinner in client app
+            Thread.Sleep(1000);//added to present loading spinner in client app
             var user = await _context.Users
                 .Include(u => u.Friends)
                 .FirstOrDefaultAsync(u => u.Id == userId);
