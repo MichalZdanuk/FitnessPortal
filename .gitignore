@@ -1,4 +1,7 @@
-/FitnessPortalAPI/.vs
-/FitnessPortalAPI/bin
-/FitnessPortalAPI/obj
+/FitnessPortalBACKEND/FitnessPortalAPI/.vs
+/FitnessPortalBACKEND/FitnessPortalAPI/bin
+/FitnessPortalBACKEND/FitnessPortalAPI/obj
+/FitnessPortalBACKEND/FitnessPortalAPI.Tests/.vs
+/FitnessPortalBACKEND/FitnessPortalAPI.Tests/bin
+/FitnessPortalBACKEND/FitnessPortalAPI.Tests/obj
 /fitnessportalclient/node_modules
