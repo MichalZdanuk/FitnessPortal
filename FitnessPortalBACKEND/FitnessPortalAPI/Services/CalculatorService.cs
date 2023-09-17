@@ -20,7 +20,7 @@ namespace FitnessPortalAPI.Services
         {
             var bmiIndex = 0.0f;
             var bmiCategory = BMICategory.Normalweight;
-            _calculator.CalculateBmi(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
+            _calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
             var bmiDto = new BMIDto()
             {
                 Date = DateTime.Now,
@@ -47,7 +47,7 @@ namespace FitnessPortalAPI.Services
         {
             var bmiIndex = 0.0f;
             var bmiCategory = BMICategory.Normalweight;
-            _calculator.CalculateBmi(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
+            _calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
             var bmiDto = new BMIDto()
             {
                 Date = DateTime.Now,

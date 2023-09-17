@@ -4,8 +4,23 @@ namespace FitnessPortalAPI
 {
     public class Calculator
     {
-        public void CalculateBmi(float height, float weight, out float bmiIndex, out BMICategory bmiCategory)
+        public void CalculateBMI(float height, float weight, out float bmiIndex, out BMICategory bmiCategory)
         {
+            if (height <= 0 || weight <= 0)
+            {
+                throw new ArgumentException("Height and weight must be positive values.");
+            }
+
+            float maxHeight = 250; // Maximum valid height in centimeters
+            float minHeight = 100; // Minimum valid height in centimeters
+            float maxWeight = 300; // Maximum valid weight in kilograms
+            float minWeight = 20;  // Minimum valid weight in kilograms
+
+            if (height > maxHeight || height < minHeight || weight > maxWeight || weight < minWeight)
+            {
+                throw new ArgumentException("Height and weight values are out of valid range.");
+            }
+
             bmiIndex = weight / (height * height / 10000);
             if (bmiIndex < 18.5)
             {
