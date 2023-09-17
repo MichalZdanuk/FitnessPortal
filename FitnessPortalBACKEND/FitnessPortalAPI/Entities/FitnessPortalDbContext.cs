@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FitnessPortalAPI.Constants;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessPortalAPI.Entities
 {
@@ -40,7 +41,12 @@ namespace FitnessPortalAPI.Entities
                 .HasForeignKey(fr => fr.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict); // Choose the appropriate delete behavior
 
-
+            modelBuilder.Entity<BMI>()
+                .Property(b => b.BMICategory)
+                .HasConversion(
+                    v => v.ToString(),    // Convert enum to string
+                    v => (BMICategory)Enum.Parse(typeof(BMICategory), v) // Convert string to enum
+                );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -3,6 +3,7 @@ using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using FitnessPortalAPI.Constants;
 
 namespace FitnessPortalAPI.Services
 {
@@ -18,7 +19,7 @@ namespace FitnessPortalAPI.Services
         public async Task<BMIDto> CalculateBMI(CreateBMIQuery dto, int userId)
         {
             var bmiIndex = 0.0f;
-            var bmiCategory = "";
+            var bmiCategory = BMICategory.Normalweight;
             _calculator.CalculateBmi(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
             var bmiDto = new BMIDto()
             {
@@ -45,7 +46,7 @@ namespace FitnessPortalAPI.Services
         public async Task<BMIDto> CalculateBMIForAnonymous(CreateBMIQuery dto)
         {
             var bmiIndex = 0.0f;
-            var bmiCategory = "";
+            var bmiCategory = BMICategory.Normalweight;
             _calculator.CalculateBmi(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
             var bmiDto = new BMIDto()
             {
@@ -84,7 +85,6 @@ namespace FitnessPortalAPI.Services
             }
 
             var result = new PageResult<BMIDto>(bmiDtos, totalItemsCount, query.PageSize, query.PageNumber);
-
 
             return result;
         }

@@ -1,26 +1,28 @@
-﻿namespace FitnessPortalAPI
+﻿using FitnessPortalAPI.Constants;
+
+namespace FitnessPortalAPI
 {
     public class Calculator
     {
-        public void CalculateBmi(float height, float weight, out float bmiIndex, out string bmiCategory)
+        public void CalculateBmi(float height, float weight, out float bmiIndex, out BMICategory bmiCategory)
         {
             bmiIndex = weight / (height * height / 10000);
             if (bmiIndex < 18.5)
             {
-                bmiCategory = "underweight";
+                bmiCategory = BMICategory.Underweight;
             }
             else if (18.5 <= bmiIndex && bmiIndex < 25)
             {
-                bmiCategory = "normalweight";
+                bmiCategory = BMICategory.Normalweight;
             }
             else if (25 <= bmiIndex && bmiIndex < 30)
             {
-                bmiCategory = "overweight";
+                bmiCategory = BMICategory.Overweight;
 
             }
             else
             {
-                bmiCategory = "obesity";
+                bmiCategory = BMICategory.Obesity;
             }
         }
         public float CalculateBMR(float weight, float height, float age, string sex)
