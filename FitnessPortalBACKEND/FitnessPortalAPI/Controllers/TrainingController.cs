@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Utilities;
+using FitnessPortalAPI.Constants;
 
 namespace FitnessPortalAPI.Controllers
 {
@@ -52,7 +53,7 @@ namespace FitnessPortalAPI.Controllers
         }
 
         [HttpGet("filter")]
-        public async Task<ActionResult<IEnumerable<TrainingDto>>> GetFilteredTrainings([FromQuery] string period)
+        public async Task<ActionResult<IEnumerable<TrainingDto>>> GetFilteredTrainings([FromQuery] TrainingPeriod period)
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 

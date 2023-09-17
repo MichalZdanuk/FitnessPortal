@@ -4,6 +4,7 @@ using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using FitnessPortalAPI.Constants;
 
 namespace FitnessPortalAPI.Services
 {
@@ -24,13 +25,14 @@ namespace FitnessPortalAPI.Services
                     {
                         DateOfTraining = DateTime.Now,
                         NumberOfSeries = dto.NumberOfSeries,
-                        TotalPayload = dto.TotalPayload,
+                        TotalPayload = 0.0f,
                         UserId = userId,
                     };
 
                     _context.Trainings.Add(training);
                     await _context.SaveChangesAsync();
 
+                    float totalPayload = 0.0f;
                     foreach (var exerciseDto in dto.Exercises)
                     {
                         var exercise = new Exercise()
@@ -41,9 +43,13 @@ namespace FitnessPortalAPI.Services
                             TrainingId = training.Id
                         };
 
+                        float exercisePayload = dto.NumberOfSeries*exercise.NumberOfReps*exercise.Payload;
+                        totalPayload += exercisePayload;
+
                         _context.Exercises.Add(exercise);
 
                     }
+                    training.TotalPayload = totalPayload;
                     await _context.SaveChangesAsync();
 
                     transaction.Commit();
@@ -114,22 +120,22 @@ namespace FitnessPortalAPI.Services
             return result;
         }
 
-        public async Task<IEnumerable<TrainingDto>> GetFilteredTrainings(string period, int userId)
+        public async Task<IEnumerable<TrainingDto>> GetFilteredTrainings(TrainingPeriod period, int userId)
         {
             DateTime startDate;
             DateTime endDate;
 
             switch (period)
             {
-                case "week":
+                case TrainingPeriod.Week:
                     startDate = DateTime.Now.AddDays(-7);
                     endDate = DateTime.Now;
                     break;
-                case "month":
+                case TrainingPeriod.Month:
                     startDate = DateTime.Now.AddMonths(-1);
                     endDate = DateTime.Now;
                     break;
-                case "quarter":
+                case TrainingPeriod.Quarter:
                     startDate = DateTime.Now.AddMonths(-3);
                     endDate = DateTime.Now;
                     break;

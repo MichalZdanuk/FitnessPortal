@@ -1,5 +1,6 @@
 ﻿using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Models;
+using FitnessPortalAPI.Constants;
 
 namespace FitnessPortalAPI.Services.Interfaces
 {
@@ -9,7 +10,7 @@ namespace FitnessPortalAPI.Services.Interfaces
         Task DeleteTraining(int id, int userId);
         Task<PageResult<TrainingDto>> GetAllTrainingsPaginated(TrainingQuery query, int userId);
         Task<FavouriteExercisesDto> GetFavouriteExercises(int userId);
-        Task<IEnumerable<TrainingDto>> GetFilteredTrainings(string period, int userId);
+        Task<IEnumerable<TrainingDto>> GetFilteredTrainings(TrainingPeriod period, int userId);
         Task<TrainingStatsDto> GetTrainingStats(int userId);
         Task<IEnumerable<TrainingDto>> GetFriendTrainings(int userId, int friendId);
     }
