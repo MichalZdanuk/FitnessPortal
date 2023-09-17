@@ -9,20 +9,16 @@ namespace FitnessPortalAPI.Validators.Articles
         public CreateArticleDtoValidator(FitnessPortalDbContext dbContext)
         {
             RuleFor(x => x.Title)
-                .NotEmpty()
-                .MaximumLength(150);
+                .Length(5, 150);
 
             RuleFor(x => x.ShortDescription)
-                .NotEmpty()
-                .MaximumLength(400);
+                .Length(10, 400);
 
             RuleFor(x => x.Content)
-                .NotEmpty()
-                .MaximumLength(5000);
+                .Length(10, 5000);
 
             RuleFor(x => x.Category)
-                .NotEmpty()
-                .MaximumLength(30);
+                .Length(3, 30);
         }
     }
 }

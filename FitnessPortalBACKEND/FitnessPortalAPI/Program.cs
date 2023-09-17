@@ -108,12 +108,13 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 /*added CORS*/
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Value ?? ""; // Provide a default empty string if it's null
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontEndClient", builderCors =>
         builderCors.AllowAnyMethod()
             .AllowAnyHeader()
-            .WithOrigins(builder.Configuration.GetSection("AllowedOrigins").Value)
+            .WithOrigins(allowedOrigins.Split(",", StringSplitOptions.RemoveEmptyEntries)) // No null reference warning here
     );
 });
 

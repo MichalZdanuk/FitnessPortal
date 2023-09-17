@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using FitnessPortalAPI.Services;
+using FitnessPortalAPI.Utilities;
 
 namespace FitnessPortalAPI.Controllers
 {
@@ -24,7 +25,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> AddTraining([FromBody] CreateTrainingDto dto)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var id = await _trainingService.AddTraining(dto, userId);
 
@@ -33,7 +34,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<PageResult<TrainingDto>>> GetAllTrainings([FromQuery] TrainingQuery query)
         {
-            int userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var trainings = await _trainingService.GetAllTrainingsPaginated(query, userId);
 
@@ -43,7 +44,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTraining([FromRoute] int id)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             await _trainingService.DeleteTraining(id, userId);
 
@@ -53,7 +54,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("filter")]
         public async Task<ActionResult<IEnumerable<TrainingDto>>> GetFilteredTrainings([FromQuery] string period)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var filteredTrainings = await _trainingService.GetFilteredTrainings(period, userId);
 
@@ -63,7 +64,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("stats")]
         public async Task<ActionResult<TrainingStatsDto>> GetTrainingStats()
         {
-            int userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var trainingStats = await _trainingService.GetTrainingStats(userId);
 
@@ -73,7 +74,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("favourite")]
         public async Task<ActionResult<FavouriteExercisesDto>> GetFavouriteExercises()
         {
-            int userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var favouriteExercises = await _trainingService.GetFavouriteExercises(userId);
 
@@ -84,7 +85,7 @@ namespace FitnessPortalAPI.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<TrainingDto>>> GetFriendTrainings([FromRoute] int friendId)
         {
-            int userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var friendTrainings = await _trainingService.GetFriendTrainings(userId, friendId);
 

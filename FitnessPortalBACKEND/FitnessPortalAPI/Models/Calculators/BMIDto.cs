@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public float BMIScore { get; set; }
-        public string BMICategory { get; set; }
+        public string BMICategory { get; set; } = string.Empty;
     }
 }

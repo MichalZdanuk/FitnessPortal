@@ -1,6 +1,7 @@
 ﻿using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Services.Interfaces;
+using FitnessPortalAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -22,7 +23,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpPost("bmi")]
         public async Task<ActionResult<BMIDto>> CalculateBmi([FromQuery] CreateBMIQuery dto)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var calculatedBMI = await _calculatorService.CalculateBMI(dto, userId);
 
@@ -40,7 +41,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("bmi")]
         public async Task<ActionResult<IEnumerable<BMIDto>>> GetAllBMIsPaginated([FromQuery] BMIQuery query)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var bmis = await _calculatorService.GetAllBMIsForUserPaginated(query, userId);
 

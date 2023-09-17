@@ -1,5 +1,6 @@
 ﻿using FitnessPortalAPI.Models.UserProfileActions;
 using FitnessPortalAPI.Services.Interfaces;
+using FitnessPortalAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -41,7 +42,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("profile-info")]
         public ActionResult<UserProfileInfoDto> GetMyProfileInfo()
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var userInfo = _accountService.GetProfileInfo(userId);
 
@@ -52,8 +53,8 @@ namespace FitnessPortalAPI.Controllers
         [HttpPut("update-profile")]
         public async Task<ActionResult<string>> UpdateMyProfile([FromBody] UpdateUserDto dto)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var previousToken = _contextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
+            var previousToken = _contextAccessor.HttpContext!.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
             string newToken = await _accountService.UpdateProfile(dto, userId, previousToken);
             if (newToken == null)

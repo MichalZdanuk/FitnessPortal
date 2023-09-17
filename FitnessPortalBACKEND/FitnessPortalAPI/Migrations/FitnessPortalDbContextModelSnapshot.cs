@@ -56,7 +56,7 @@ namespace FitnessPortalAPI.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.ToTable("Articles");
+                    b.ToTable("Articles", (string)null);
                 });
 
             modelBuilder.Entity("FitnessPortalAPI.Entities.BMI", b =>
@@ -90,7 +90,7 @@ namespace FitnessPortalAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BMIs");
+                    b.ToTable("BMIs", (string)null);
                 });
 
             modelBuilder.Entity("FitnessPortalAPI.Entities.Exercise", b =>
@@ -118,7 +118,7 @@ namespace FitnessPortalAPI.Migrations
 
                     b.HasIndex("TrainingId");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Exercises", (string)null);
                 });
 
             modelBuilder.Entity("FitnessPortalAPI.Entities.FriendshipRequest", b =>
@@ -144,7 +144,7 @@ namespace FitnessPortalAPI.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("FriendshipRequests");
+                    b.ToTable("FriendshipRequests", (string)null);
                 });
 
             modelBuilder.Entity("FitnessPortalAPI.Entities.Role", b =>
@@ -161,7 +161,7 @@ namespace FitnessPortalAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("FitnessPortalAPI.Entities.Training", b =>
@@ -188,7 +188,7 @@ namespace FitnessPortalAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Trainings");
+                    b.ToTable("Trainings", (string)null);
                 });
 
             modelBuilder.Entity("FitnessPortalAPI.Entities.User", b =>
@@ -233,7 +233,7 @@ namespace FitnessPortalAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("FitnessPortalAPI.Entities.Article", b =>

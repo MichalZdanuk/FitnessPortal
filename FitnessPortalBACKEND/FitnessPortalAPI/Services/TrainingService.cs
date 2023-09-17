@@ -50,16 +50,13 @@ namespace FitnessPortalAPI.Services
 
                     return training.Id;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transaction.Rollback();
-                    throw ex;
+                    throw new Exception("An error occurred while adding the training."); 
                 }
 
             }
-
-
-            throw new NotImplementedException();
         }
 
         public async Task DeleteTraining(int id, int userId)
@@ -269,7 +266,7 @@ namespace FitnessPortalAPI.Services
                 .Include(f => f.Friends)
                 .FirstOrDefault(user => user.Id == userId);
 
-            if (!user.Friends.Any(f => f.Id == friendId))
+            if (!user!.Friends.Any(f => f.Id == friendId))
                 throw new ForbiddenException("You are not allowed to view trainings of this user");
 
             var friendTrainings = await _context.Trainings

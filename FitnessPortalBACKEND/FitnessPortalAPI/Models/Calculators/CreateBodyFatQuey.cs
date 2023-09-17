@@ -2,7 +2,7 @@
 {
     public class CreateBodyFatQuery
     {
-        public string Sex { get; set; }
+        public string Sex { get; set; } = string.Empty;
         public float Height { get; set; }
         public float Waist { get; set; }
         public float Hip { get; set; }
