@@ -24,13 +24,8 @@ namespace FitnessPortalAPI.Validators.Calculators
                 .NotEmpty()
                 .InclusiveBetween(10.0f, 100.0f);
 
-            RuleFor(x => x.Sex).Custom((value, context) =>
-            {
-                if (!genders.Contains(value.ToLower()))
-                {
-                    context.AddFailure("Sex", $"Sex must be in [{string.Join(",", genders)}]");
-                }
-            });
+            RuleFor(x => x.Sex)
+                .IsInEnum();
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿namespace FitnessPortalAPI.Models.Calculators
+﻿using FitnessPortalAPI.Constants;
+
+namespace FitnessPortalAPI.Models.Calculators
 {
     public class CreateBodyFatQuery
     {
-        public string Sex { get; set; } = string.Empty;
+        public Sex Sex { get; set; }
         public float Height { get; set; }
         public float Waist { get; set; }
         public float Hip { get; set; }
