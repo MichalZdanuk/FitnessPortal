@@ -5,6 +5,7 @@ using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Models.UserProfileActions;
+using FitnessPortalAPI.Seeding;
 using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Services.Interfaces;
 using FitnessPortalAPI.Validators.Articles;

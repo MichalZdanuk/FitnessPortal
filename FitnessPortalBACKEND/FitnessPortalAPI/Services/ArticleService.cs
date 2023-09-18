@@ -37,7 +37,8 @@ namespace FitnessPortalAPI.Services
 
             var baseQuery = _context
                 .Articles
-                .Include(a => a.CreatedBy);
+                .Include(a => a.CreatedBy)
+                .OrderByDescending(a => a.DateOfPublication);
 
             var articles = await baseQuery
                 .Skip(query.PageSize * (query.PageNumber - 1))
