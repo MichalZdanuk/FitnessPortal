@@ -7,6 +7,6 @@ namespace FitnessPortalAPI.Models.Calculators
         public Sex Sex { get; set; }
         public float Height { get; set; }
         public float Weight { get; set; }
-        public float Age { get; set; }
+        public int Age { get; set; }
     }
 }

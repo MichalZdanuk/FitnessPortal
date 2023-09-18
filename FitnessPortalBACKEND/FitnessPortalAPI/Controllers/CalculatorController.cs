@@ -49,7 +49,7 @@ namespace FitnessPortalAPI.Controllers
         }
 
         [HttpGet("bmr/anonymous")]
-        public async Task<ActionResult<BMRDto>> CalculateBmiForNotLogged([FromQuery] CreateBMRQuery bmrQuery)
+        public async Task<ActionResult<BMRDto>> CalculateBMRForNotLogged([FromQuery] CreateBMRQuery bmrQuery)
         {
             var calcualtedBMR = await _calculatorService.CalculateBMRForAnonymous(bmrQuery);
 
@@ -57,7 +57,7 @@ namespace FitnessPortalAPI.Controllers
         }
 
         [HttpGet("bodyFat/anonymous")]
-        public async Task<ActionResult<BodyFatDto>> CalculateBmiForNotLogged([FromQuery] CreateBodyFatQuery bodyFatQuery)
+        public async Task<ActionResult<BodyFatDto>> CalculateBodyFatForNotLogged([FromQuery] CreateBodyFatQuery bodyFatQuery)
         {
             var calcualtedBodyFat = await _calculatorService.CalculateBodyFatForAnonymous(bodyFatQuery);
 

@@ -40,8 +40,18 @@ namespace FitnessPortalAPI
                 bmiCategory = BMICategory.Obesity;
             }
         }
-        public float CalculateBMR(float weight, float height, float age, Sex sex)
+        public float CalculateBMR(float height, float weight, int age, Sex sex)
         {
+            if (weight <= 0 || height <= 0 || age <= 0)
+            {
+                throw new ArgumentException("Weight, height, and age must be positive values.");
+            }
+
+            if (!Enum.IsDefined(typeof(Sex), sex))
+            {
+                throw new ArgumentException("Invalid value for 'sex' parameter.");
+            }
+
             float bmrResult = 0.0f;
 
             switch (sex)
@@ -61,6 +71,16 @@ namespace FitnessPortalAPI
 
         public float CalculateBodyFat(float height, float waist, float neck, float hip, Sex sex)
         {
+            if (height <= 0 || waist <= 0 || neck <= 0 || hip <= 0)
+            {
+                throw new ArgumentException("Height, waist, neck, and hip measurements must be positive values.");
+            }
+
+            if (!Enum.IsDefined(typeof(Sex), sex))
+            {
+                throw new ArgumentException("Invalid value for 'sex' parameter.");
+            }
+
             float bodyFatResult = 0.0f;
 
             switch (sex)

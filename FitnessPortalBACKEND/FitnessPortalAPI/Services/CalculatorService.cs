@@ -91,7 +91,7 @@ namespace FitnessPortalAPI.Services
 
         public async Task<BMRDto> CalculateBMRForAnonymous(CreateBMRQuery bmrQuery)
         {
-            var bmrResult = _calculator.CalculateBMR(bmrQuery.Weight, bmrQuery.Height, bmrQuery.Age, bmrQuery.Sex);
+            var bmrResult = _calculator.CalculateBMR(bmrQuery.Height, bmrQuery.Weight, bmrQuery.Age, bmrQuery.Sex);
             var bmrDto = new BMRDto()
             {
                 BMRScore = bmrResult,
