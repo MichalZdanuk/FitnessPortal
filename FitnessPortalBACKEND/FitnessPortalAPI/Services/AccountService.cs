@@ -34,7 +34,7 @@ namespace FitnessPortalAPI.Services
                 DateOfBirth = dto.DateOfBirth,
                 Weight = dto.Weight,
                 Height = dto.Height,
-                RoleId = dto.RoleId,
+                RoleId = 1,
             };
             var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
             newUser.PasswordHash = hashedPassword;
