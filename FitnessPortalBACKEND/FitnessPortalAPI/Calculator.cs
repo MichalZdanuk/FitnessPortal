@@ -40,7 +40,7 @@ namespace FitnessPortalAPI
                 bmiCategory = BMICategory.Obesity;
             }
         }
-        public float CalculateBMR(float height, float weight, int age, Sex sex)
+        public float CalculateBMR(float height, float weight, int age, Sex? sex)
         {
             if (weight <= 0 || height <= 0 || age <= 0)
             {
@@ -69,7 +69,7 @@ namespace FitnessPortalAPI
             return bmrResult;
         }
 
-        public float CalculateBodyFat(float height, float waist, float neck, float hip, Sex sex)
+        public float CalculateBodyFat(float height, float waist, float neck, float hip, Sex? sex)
         {
             if (height <= 0 || waist <= 0 || neck <= 0 || hip <= 0)
             {

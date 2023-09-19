@@ -5,7 +5,6 @@ namespace FitnessPortalAPI.Validators.Calculators
 {
     public class CreateBMRQueryValidator : AbstractValidator<CreateBMRQuery>
     {
-        private string[] genders = new[] { "male", "female" };
         public CreateBMRQueryValidator()
         {
             RuleFor(x => x.Height)
@@ -21,6 +20,7 @@ namespace FitnessPortalAPI.Validators.Calculators
                 .InclusiveBetween(1, 100);
 
             RuleFor(x => x.Sex)
+                .NotEmpty()
                 .IsInEnum();
         }
     }

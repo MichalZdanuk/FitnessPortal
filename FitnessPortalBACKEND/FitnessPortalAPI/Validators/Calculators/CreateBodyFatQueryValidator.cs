@@ -5,7 +5,6 @@ namespace FitnessPortalAPI.Validators.Calculators
 {
     public class CreateBodyFatQueryValidator : AbstractValidator<CreateBodyFatQuery>
     {
-        private string[] genders = new[] { "male", "female" };
         public CreateBodyFatQueryValidator()
         {
             RuleFor(x => x.Height)
@@ -14,17 +13,18 @@ namespace FitnessPortalAPI.Validators.Calculators
 
             RuleFor(x => x.Waist)
                 .NotEmpty()
-                .InclusiveBetween(30.0f, 200.0f);
+                .InclusiveBetween(30.0f, 150.0f);
 
             RuleFor(x => x.Hip)
                 .NotEmpty()
-                .InclusiveBetween(30.0f, 200.0f);
+                .InclusiveBetween(30.0f, 100.0f);
 
             RuleFor(x => x.Neck)
                 .NotEmpty()
-                .InclusiveBetween(10.0f, 100.0f);
+                .InclusiveBetween(10.0f, 70.0f);
 
             RuleFor(x => x.Sex)
+                .NotEmpty()
                 .IsInEnum();
         }
     }
