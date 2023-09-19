@@ -3,6 +3,6 @@
     public class CreateTrainingDto
     {
         public int NumberOfSeries { get; set; }
-        public List<ExerciseDto> Exercises { get; set; }
+        public List<CreateExerciseDto> Exercises { get; set; }
     }
 }

@@ -72,7 +72,7 @@ builder.Services.AddScoped<IValidator<CreateBodyFatQuery>, CreateBodyFatQueryVal
 /*training validators*/
 builder.Services.AddScoped<IValidator<TrainingQuery>, TrainingQueryValidator>();
 builder.Services.AddScoped<IValidator<CreateTrainingDto>, CreateTrainingDtoValidator>();
-builder.Services.AddScoped<IValidator<ExerciseDto>, ExerciseDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateExerciseDto>, CreateExerciseDtoValidator>();
 
 /*article validators*/
 builder.Services.AddScoped<IValidator<ArticleQuery>, ArticleQueryValidator>();

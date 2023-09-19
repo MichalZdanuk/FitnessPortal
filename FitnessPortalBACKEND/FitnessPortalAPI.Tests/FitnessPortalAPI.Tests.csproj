@@ -21,8 +21,4 @@
     <ProjectReference Include="..\FitnessPortalAPI\FitnessPortalAPI.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators\Trainings\" />
-  </ItemGroup>
-
 </Project>

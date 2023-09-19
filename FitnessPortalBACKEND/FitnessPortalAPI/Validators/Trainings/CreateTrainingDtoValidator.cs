@@ -8,10 +8,12 @@ namespace FitnessPortalAPI.Validators.Trainings
         public CreateTrainingDtoValidator()
         {
             RuleFor(x => x.NumberOfSeries)
+                .NotEmpty()
                 .InclusiveBetween(1, 12);
 
             RuleFor(x => x.Exercises)
-                .NotEmpty();
+                .NotEmpty()
+                .ForEach(exercise => exercise.SetValidator(new CreateExerciseDtoValidator()));
         }
     }
 }
