@@ -35,6 +35,7 @@ namespace FitnessPortalAPI.Tests.Validators.Articles
 
             // assert
             testResult.IsValid.ShouldBeTrue();
+            testResult.Errors.Count.ShouldBe(0);
         }
 
         [TestMethod]
@@ -50,6 +51,7 @@ namespace FitnessPortalAPI.Tests.Validators.Articles
 
             // assert
             testResult.IsValid.ShouldBeFalse();
+            testResult.Errors.Count.ShouldBe(1);
         }
 
         [TestMethod]
@@ -65,6 +67,7 @@ namespace FitnessPortalAPI.Tests.Validators.Articles
 
             // assert
             testResult.IsValid.ShouldBeFalse();
+            testResult.Errors.Count.ShouldBe(1);
         }
     }
 }

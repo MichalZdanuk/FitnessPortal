@@ -37,6 +37,7 @@ namespace FitnessPortalAPI.Tests.Validators.Articles
 
             // assert
             testResult.IsValid.ShouldBeTrue();
+            testResult.Errors.Count.ShouldBe(0);
         }
 
         [TestMethod]
@@ -72,6 +73,7 @@ namespace FitnessPortalAPI.Tests.Validators.Articles
 
             // assert
             testResult.IsValid.ShouldBeFalse();
+            testResult.Errors.Count.ShouldBe(1);
             testResult.Errors.ShouldContain(x => x.PropertyName == nameof(CreateArticleDto.Title));
         }
 
@@ -92,6 +94,7 @@ namespace FitnessPortalAPI.Tests.Validators.Articles
 
             // assert
             testResult.IsValid.ShouldBeFalse();
+            testResult.Errors.Count.ShouldBe(1);
             testResult.Errors.ShouldContain(x => x.PropertyName == nameof(CreateArticleDto.ShortDescription));
         }
 
@@ -112,6 +115,7 @@ namespace FitnessPortalAPI.Tests.Validators.Articles
 
             // assert
             testResult.IsValid.ShouldBeFalse();
+            testResult.Errors.Count.ShouldBe(1);
             testResult.Errors.ShouldContain(x => x.PropertyName == nameof(CreateArticleDto.Content));
         }
 
@@ -132,6 +136,7 @@ namespace FitnessPortalAPI.Tests.Validators.Articles
 
             // assert
             testResult.IsValid.ShouldBeFalse();
+            testResult.Errors.Count.ShouldBe(1);
             testResult.Errors.ShouldContain(x => x.PropertyName == nameof(CreateArticleDto.Category));
         }
     }
