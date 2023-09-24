@@ -236,31 +236,36 @@ namespace FitnessPortalAPI.Services
                 };
             }
 
-            var exerciseTotals = new Dictionary<string, int>();
+            var exerciseTotals = new Dictionary<string, (int NumberOfReps, float Payload)>();
             foreach (var training in userTrainings)
             {
                 foreach (var exercise in training.Exercises)
                 {
                     if (!exerciseTotals.ContainsKey(exercise.Name))
                     {
-                        exerciseTotals[exercise.Name] = 0;
+                        exerciseTotals[exercise.Name] = (0, 0);
                     }
-                    exerciseTotals[exercise.Name] += exercise.NumberOfReps;
+                    var currentTuple = exerciseTotals[exercise.Name];
+                    exerciseTotals[exercise.Name] = (
+                        currentTuple.NumberOfReps += exercise.NumberOfReps*training.NumberOfSeries,
+                        currentTuple.Payload += exercise.Payload* exercise.NumberOfReps * training.NumberOfSeries
+                    );
                 }
             }
 
-            var topExercises = exerciseTotals.OrderByDescending(kv => kv.Value)
+            var topExercises = exerciseTotals.OrderByDescending(kv => kv.Value.NumberOfReps)
                 .Take(3)
-                .Select(kv => kv.Key)
+                .Select(kv => new ExerciseDto()
+                {
+                    Name = kv.Key,
+                    NumberOfReps = kv.Value.NumberOfReps,
+                    Payload = kv.Value.Payload,
+                })
                 .ToList();
 
             var favouriteDto = new FavouriteExercisesDto
             {
-                Exercises = topExercises.Select(exerciseName => new ExerciseDto
-                {
-                    Name = exerciseName,
-                    NumberOfReps = exerciseTotals[exerciseName]
-                }).ToList()
+                Exercises = topExercises,
             };
 
             return favouriteDto;
