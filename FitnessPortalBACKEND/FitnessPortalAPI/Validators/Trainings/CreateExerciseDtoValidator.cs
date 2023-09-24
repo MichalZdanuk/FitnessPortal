@@ -17,7 +17,7 @@ namespace FitnessPortalAPI.Validators.Trainings
 
             RuleFor(x => x.Payload)
                 .NotEmpty()
-                .InclusiveBetween(1.0f, 400f);
+                .InclusiveBetween(0.5f, 200f);
         }
     }
 }

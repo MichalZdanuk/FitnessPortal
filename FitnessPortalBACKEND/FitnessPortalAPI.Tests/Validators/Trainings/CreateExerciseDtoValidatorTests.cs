@@ -93,7 +93,7 @@ namespace FitnessPortalAPI.Tests.Validators.Trainings
         }
 
         [TestMethod]
-        [DataRow(0.5f)]
+        [DataRow(0.1f)]
         [DataRow(500f)]
         public void CreateExerciseDtoValidator_PayloadValueNotInRange_ShouldBeInvalid(float payload)
         {
