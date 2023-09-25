@@ -4,15 +4,17 @@ using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using FitnessPortalAPI.DAL;
+using FitnessPortalAPI.Repositories;
 
 namespace FitnessPortalAPI.Services
 {
     public class ArticleService : IArticleService
     {
-        private readonly FitnessPortalDbContext _context;
-        public ArticleService(FitnessPortalDbContext context)
+        private readonly IArticleRepository _articleRepository;
+        public ArticleService(IArticleRepository articleRepository)
         {
-            _context = context;
+            _articleRepository = articleRepository;
         }
         public async Task<int> CreateAsync(CreateArticleDto dto, int userId)
         {
@@ -23,11 +25,10 @@ namespace FitnessPortalAPI.Services
                 Content = dto.Content,
                 Category = dto.Category,
                 DateOfPublication = DateTime.Now,
-            };
+                CreatedById = userId
+        };
 
-            article.CreatedById = userId;
-            _context.Articles.Add(article);
-            await _context.SaveChangesAsync();
+            var articleId = await _articleRepository.CreateAsync(article);
 
             return article.Id;
         }
@@ -35,35 +36,21 @@ namespace FitnessPortalAPI.Services
         {
             Thread.Sleep(1000);//added to present loading spinner in client app
 
-            var baseQuery = _context
-                .Articles
-                .Include(a => a.CreatedBy)
-                .OrderByDescending(a => a.DateOfPublication);
+            var articles = await _articleRepository.GetAllAsync(query.PageNumber, query.PageSize);
+            var totalItemsCount = await _articleRepository.GetTotalCountAsync();
 
-            var articles = await baseQuery
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .ToListAsync();
-
-            var totalItemsCount = await baseQuery.CountAsync();
-
-            var articlesDtos = new List<ArticleDto>();
-            for (int i = 0; i < articles.Count; i++)
+            var articlesDtos = articles.Select(article => new ArticleDto
             {
-                articlesDtos.Add(new ArticleDto()
-                {
-                    Id = articles[i].Id,
-                    Author = articles[i].CreatedBy.Username,
-                    Title = articles[i].Title,
-                    ShortDescription = articles[i].ShortDescription,
-                    Content = articles[i].Content,
-                    Category = articles[i].Category,
-                    DateOfPublication = articles[i].DateOfPublication,
-                });
-            }
+                Id = article.Id,
+                Author = article.CreatedBy.Username,
+                Title = article.Title,
+                ShortDescription = article.ShortDescription,
+                Content = article.Content,
+                Category = article.Category,
+                DateOfPublication = article.DateOfPublication,
+            }).ToList();
 
             var result = new PageResult<ArticleDto>(articlesDtos, totalItemsCount, query.PageSize, query.PageNumber);
-
 
             return result;
         }
@@ -72,10 +59,7 @@ namespace FitnessPortalAPI.Services
         {
             Thread.Sleep(1000);//added to present loading spinner in client app
 
-            var article = await _context
-                .Articles
-                .Include(a => a.CreatedBy)
-                .FirstOrDefaultAsync(a => a.Id == id);
+            var article = await _articleRepository.GetByIdAsync(id);
 
             if (article is null)
                 throw new NotFoundException("Article not found");
@@ -96,9 +80,7 @@ namespace FitnessPortalAPI.Services
 
         public async Task UpdateAsync(int articleId, UpdateArticleDto dto)
         {
-            var article = await _context
-                .Articles
-                .FirstOrDefaultAsync(a => a.Id == articleId);
+            var article = await _articleRepository.GetByIdAsync(articleId);
 
             if (article == null)
                 throw new NotFoundException("Article not found");
@@ -115,17 +97,16 @@ namespace FitnessPortalAPI.Services
             if (dto.Category != "" && dto.Category != null)
                 article.Category = dto.Category;
 
-            await _context.SaveChangesAsync();
+            await _articleRepository.UpdateAsync(article);
         }
         public async Task RemoveAsync(int articleId)
         {
-            var article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == articleId);
+            var article = await _articleRepository.GetByIdAsync(articleId);
 
             if (article is null)
                 throw new NotFoundException("Article not found");
 
-            _context.Remove(article);
-            await _context.SaveChangesAsync();
+            await _articleRepository.DeleteAsync(article.Id);
         }
     }
 }

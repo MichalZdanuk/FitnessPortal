@@ -1,7 +1,8 @@
 ﻿using FitnessPortalAPI.Constants;
+using FitnessPortalAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FitnessPortalAPI.Entities
+namespace FitnessPortalAPI.DAL
 {
     public class FitnessPortalDbContext : DbContext
     {

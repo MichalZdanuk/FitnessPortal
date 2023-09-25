@@ -1,10 +1,13 @@
 using FitnessPortalAPI;
+using FitnessPortalAPI.DAL;
+using FitnessPortalAPI.DAL.Repositories;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Middleware;
 using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Models.UserProfileActions;
+using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Seeding;
 using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Services.Interfaces;
@@ -49,6 +52,9 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddDbContext<FitnessPortalDbContext>();
 builder.Services.AddScoped<FitnessPortalSeeder>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+
+/* Add repositories */
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 
 /* Add services for controllers*/
 builder.Services.AddScoped<IAccountService, AccountService>();

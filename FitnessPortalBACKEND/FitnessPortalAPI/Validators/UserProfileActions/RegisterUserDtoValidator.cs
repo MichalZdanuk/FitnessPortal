@@ -1,4 +1,4 @@
-﻿using FitnessPortalAPI.Entities;
+﻿using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.Models.UserProfileActions;
 using FluentValidation;
 

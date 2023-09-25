@@ -1,4 +1,5 @@
-﻿using FitnessPortalAPI.Entities;
+﻿using FitnessPortalAPI.DAL;
+using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models.UserProfileActions;
 using FitnessPortalAPI.Services.Interfaces;

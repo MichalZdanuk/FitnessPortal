@@ -4,6 +4,7 @@ using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using FitnessPortalAPI.Constants;
+using FitnessPortalAPI.DAL;
 
 namespace FitnessPortalAPI.Services
 {

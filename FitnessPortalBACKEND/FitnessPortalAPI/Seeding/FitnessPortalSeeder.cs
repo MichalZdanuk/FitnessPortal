@@ -1,4 +1,5 @@
 ﻿using FitnessPortalAPI.Constants;
+using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.Entities;
 using Microsoft.AspNetCore.Identity;
 
