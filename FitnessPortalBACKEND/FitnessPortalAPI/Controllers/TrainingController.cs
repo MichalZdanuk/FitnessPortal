@@ -52,12 +52,12 @@ namespace FitnessPortalAPI.Controllers
             return NoContent();
         }
 
-        [HttpGet("filter")]
-        public async Task<ActionResult<IEnumerable<TrainingDto>>> GetFilteredTrainings([FromQuery] TrainingPeriod period)
+        [HttpGet("chartData")]
+        public async Task<ActionResult<IEnumerable<TrainingChartDataDto>>> GetTrainingChartData([FromQuery] TrainingPeriod period)
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
-            var filteredTrainings = await _trainingService.GetFilteredTrainings(period, userId);
+            var filteredTrainings = await _trainingService.GetTrainingChartData(period, userId);
 
             return Ok(filteredTrainings);
         }

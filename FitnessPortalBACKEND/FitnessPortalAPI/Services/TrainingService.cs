@@ -37,7 +37,7 @@ namespace FitnessPortalAPI.Services
                     {
                         var exercise = new Exercise()
                         {
-                            Name = exerciseDto.Name,
+                            Name = exerciseDto.Name.ToLower(),
                             NumberOfReps = exerciseDto.NumberOfReps,
                             Payload = exerciseDto.Payload,
                             TrainingId = training.Id
@@ -120,17 +120,13 @@ namespace FitnessPortalAPI.Services
             return result;
         }
 
-        public async Task<IEnumerable<TrainingDto>> GetFilteredTrainings(TrainingPeriod period, int userId)
+        public async Task<IEnumerable<TrainingChartDataDto>> GetTrainingChartData(TrainingPeriod period, int userId)
         {
             DateTime startDate;
             DateTime endDate;
 
             switch (period)
             {
-                case TrainingPeriod.Week:
-                    startDate = DateTime.Now.AddDays(-7);
-                    endDate = DateTime.Now;
-                    break;
                 case TrainingPeriod.Month:
                     startDate = DateTime.Now.AddMonths(-1);
                     endDate = DateTime.Now;
@@ -139,8 +135,12 @@ namespace FitnessPortalAPI.Services
                     startDate = DateTime.Now.AddMonths(-3);
                     endDate = DateTime.Now;
                     break;
+                case TrainingPeriod.HalfYear:
+                    startDate = DateTime.Now.AddMonths(-6);
+                    endDate = DateTime.Now;
+                    break;
                 default:
-                    throw new BadRequestException("Invalid period value. Supported values are 'week', 'month' and 'quarter'");
+                    throw new BadRequestException("Invalid period value. Supported values are 'month', 'quarter' and 'halfyear'");
             }
 
             var trainings = await _context.Trainings
@@ -148,21 +148,15 @@ namespace FitnessPortalAPI.Services
                 .Include(t => t.Exercises)
                 .ToListAsync();
 
-            var trainingDtos = trainings.Select(training => new TrainingDto()
+            var trainingChartData = trainings
+                .OrderBy(training => training.DateOfTraining)
+                .Select(training => new TrainingChartDataDto()
             {
-                Id = training.Id,
-                DateOfTraining = training.DateOfTraining,
-                NumberOfSeries = training.NumberOfSeries,
-                TotalPayload = training.TotalPayload,
-                Exercises = training.Exercises.Select(exercise => new ExerciseDto()
-                {
-                    Name = exercise.Name,
-                    NumberOfReps = exercise.NumberOfReps,
-                    Payload = exercise.Payload,
-                }).ToList()
+                Date = training.DateOfTraining.ToString("yyyy-MM-dd"),
+                Payload = training.TotalPayload
             }).ToList();
 
-            return trainingDtos;
+            return trainingChartData;
         }
         public async Task<TrainingStatsDto> GetTrainingStats(int userId)
         {

@@ -5,8 +5,8 @@ namespace FitnessPortalAPI.Constants
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum TrainingPeriod
     {
-        Week,
         Month,
-        Quarter
+        Quarter,
+        HalfYear
     }
 }
