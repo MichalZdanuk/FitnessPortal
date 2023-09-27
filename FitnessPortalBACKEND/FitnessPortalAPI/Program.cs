@@ -20,6 +20,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,6 +49,7 @@ builder.Services.AddAuthentication(option =>
 
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddDbContext<FitnessPortalDbContext>();
 builder.Services.AddScoped<FitnessPortalSeeder>();

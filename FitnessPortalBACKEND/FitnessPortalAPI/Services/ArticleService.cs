@@ -6,27 +6,24 @@ using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.Repositories;
+using AutoMapper;
 
 namespace FitnessPortalAPI.Services
 {
     public class ArticleService : IArticleService
     {
         private readonly IArticleRepository _articleRepository;
-        public ArticleService(IArticleRepository articleRepository)
+        private readonly IMapper _mapper;
+        public ArticleService(IArticleRepository articleRepository, IMapper mapper)
         {
             _articleRepository = articleRepository;
+            _mapper = mapper;
         }
         public async Task<int> CreateAsync(CreateArticleDto dto, int userId)
         {
-            var article = new Article()
-            {
-                Title = dto.Title,
-                ShortDescription = dto.ShortDescription,
-                Content = dto.Content,
-                Category = dto.Category,
-                DateOfPublication = DateTime.Now,
-                CreatedById = userId
-        };
+            var article = _mapper.Map<Article>(dto);
+            article.DateOfPublication = DateTime.Now;
+            article.CreatedById = userId;
 
             var articleId = await _articleRepository.CreateAsync(article);
 
@@ -39,16 +36,7 @@ namespace FitnessPortalAPI.Services
             var articles = await _articleRepository.GetAllAsync(query.PageNumber, query.PageSize);
             var totalItemsCount = await _articleRepository.GetTotalCountAsync();
 
-            var articlesDtos = articles.Select(article => new ArticleDto
-            {
-                Id = article.Id,
-                Author = article.CreatedBy.Username,
-                Title = article.Title,
-                ShortDescription = article.ShortDescription,
-                Content = article.Content,
-                Category = article.Category,
-                DateOfPublication = article.DateOfPublication,
-            }).ToList();
+            var articlesDtos = _mapper.Map<List<ArticleDto>>(articles);
 
             var result = new PageResult<ArticleDto>(articlesDtos, totalItemsCount, query.PageSize, query.PageNumber);
 
@@ -64,16 +52,7 @@ namespace FitnessPortalAPI.Services
             if (article is null)
                 throw new NotFoundException("Article not found");
 
-            var result = new ArticleDto()
-            {
-                Id = article.Id,
-                Author = article.CreatedBy.Username,
-                Title = article.Title,
-                ShortDescription = article.ShortDescription,
-                Content = article.Content,
-                Category = article.Category,
-                DateOfPublication = article.DateOfPublication,
-            };
+            var result = _mapper.Map<ArticleDto>(article);
 
             return result;
         }
@@ -85,17 +64,7 @@ namespace FitnessPortalAPI.Services
             if (article == null)
                 throw new NotFoundException("Article not found");
 
-            if (dto.Title != "" && dto.Title != null)
-                article.Title = dto.Title;
-
-            if (dto.ShortDescription != "" && dto.ShortDescription != null)
-                article.ShortDescription = dto.ShortDescription;
-
-            if (dto.Content != "" && dto.Content != null)
-                article.Content = dto.Content;
-
-            if (dto.Category != "" && dto.Category != null)
-                article.Category = dto.Category;
+            _mapper.Map(dto, article);
 
             await _articleRepository.UpdateAsync(article);
         }
