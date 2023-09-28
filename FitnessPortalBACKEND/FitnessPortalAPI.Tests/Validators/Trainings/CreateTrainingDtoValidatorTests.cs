@@ -1,11 +1,6 @@
 ﻿using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Validators.Trainings;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessPortalAPI.Tests.Validators.Trainings
 {

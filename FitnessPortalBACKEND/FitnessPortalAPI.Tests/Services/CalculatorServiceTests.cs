@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using FitnessPortalAPI.Constants;
-using FitnessPortalAPI.DAL.Repositories;
 using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;

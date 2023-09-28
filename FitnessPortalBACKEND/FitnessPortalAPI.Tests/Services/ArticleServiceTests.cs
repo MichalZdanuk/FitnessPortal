@@ -6,11 +6,6 @@ using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;
 using NSubstitute;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessPortalAPI.Tests.Services
 {

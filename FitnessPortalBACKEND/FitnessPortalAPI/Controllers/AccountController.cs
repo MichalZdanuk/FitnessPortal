@@ -3,7 +3,6 @@ using FitnessPortalAPI.Services.Interfaces;
 using FitnessPortalAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace FitnessPortalAPI.Controllers
 {

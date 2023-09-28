@@ -3,8 +3,6 @@ using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Utilities;
 using FitnessPortalAPI.Constants;
 

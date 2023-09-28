@@ -1,5 +1,4 @@
 ﻿using FitnessPortalAPI.Models.Friendship;
-using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

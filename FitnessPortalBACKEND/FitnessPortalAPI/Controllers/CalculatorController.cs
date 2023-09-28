@@ -1,9 +1,7 @@
 ﻿using FitnessPortalAPI.Models.Calculators;
-using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Services.Interfaces;
 using FitnessPortalAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace FitnessPortalAPI.Controllers
 {
