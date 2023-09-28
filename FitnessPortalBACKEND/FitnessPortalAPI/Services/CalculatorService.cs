@@ -5,29 +5,27 @@ using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using FitnessPortalAPI.Constants;
 using FitnessPortalAPI.DAL;
+using FitnessPortalAPI.Repositories;
+using AutoMapper;
 
 namespace FitnessPortalAPI.Services
 {
     public class CalculatorService : ICalculatorService
     {
-        private readonly FitnessPortalDbContext _context;
+        private readonly ICalculatorRepository _calculatorRepository;
+        private readonly IMapper _mapper;
         private Calculator _calculator = new Calculator();
 
-        public CalculatorService(FitnessPortalDbContext context)
+        public CalculatorService(ICalculatorRepository calculatorRepository, IMapper mapper)
         {
-            _context = context;
+            _calculatorRepository = calculatorRepository;
+            _mapper = mapper;
         }
         public async Task<BMIDto> CalculateBMI(CreateBMIQuery dto, int userId)
         {
             var bmiIndex = 0.0f;
             var bmiCategory = BMICategory.Normalweight;
             _calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
-            var bmiDto = new BMIDto()
-            {
-                Date = DateTime.Now,
-                BMIScore = bmiIndex,
-                BMICategory = bmiCategory,
-            };
 
             var bmi = new BMI()
             {
@@ -36,11 +34,12 @@ namespace FitnessPortalAPI.Services
                 BMICategory = bmiCategory,
                 Height = dto.Height,
                 Weight = dto.Weight,
+                UserId = userId,
             };
 
-            bmi.UserId = userId;
-            _context.BMIs.Add(bmi);
-            await _context.SaveChangesAsync();
+            await _calculatorRepository.AddBmiAsync(bmi);
+
+            var bmiDto = _mapper.Map<BMIDto>(bmi);
 
             return bmiDto;
         }
@@ -62,28 +61,10 @@ namespace FitnessPortalAPI.Services
         {
             Thread.Sleep(1000);//added to present loading spinner in client app
 
-            var baseQuery = _context
-                .BMIs
-                .Where(b => b.UserId == userId);
+            var bmis = await _calculatorRepository.GetBMIsForUserPaginated(userId, query.PageNumber, query.PageSize);
+            var totalItemsCount = await _calculatorRepository.GetTotalBMIsCountForUser(userId);
 
-            var bmis = await baseQuery
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .ToListAsync();
-
-            var totalItemsCount = baseQuery.Count();
-
-            var bmiDtos = new List<BMIDto>();
-            for (int i = 0; i < bmis.Count; i++)
-            {
-                bmiDtos.Add(new BMIDto()
-                {
-                    Id = bmis[i].Id,
-                    Date = bmis[i].Date,
-                    BMIScore = bmis[i].BMIScore,
-                    BMICategory = bmis[i].BMICategory,
-                });
-            }
+            var bmiDtos = _mapper.Map<List<BMIDto>>(bmis);
 
             var result = new PageResult<BMIDto>(bmiDtos, totalItemsCount, query.PageSize, query.PageNumber);
 
