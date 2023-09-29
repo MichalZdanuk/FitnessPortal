@@ -155,6 +155,9 @@ namespace FitnessPortalAPI.Services
                     throw new BadRequestException("Invalid period value. Supported values are 'month', 'quarter', and 'halfyear'");
             }
 
+            startDate = startDate.Date;
+            endDate = endDate.Date;
+
             return (startDate, endDate);
         }
     }
