@@ -59,6 +59,7 @@ builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ICalculatorRepository, CalculatorRepository>();
 builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 /* Add services for controllers*/
 builder.Services.AddScoped<IAccountService, AccountService>();

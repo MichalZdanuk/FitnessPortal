@@ -4,6 +4,7 @@ using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models.UserProfileActions;
+using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,37 +17,34 @@ namespace FitnessPortalAPI.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly FitnessPortalDbContext _context;
+        private readonly IAccountRepository _accountRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly AuthenticationSettings _authenticationSettings;
         private readonly ITokenStore _tokenStore;
         private readonly IMapper _mapper;
 
-        public AccountService(FitnessPortalDbContext context, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings, ITokenStore tokenStore, IMapper mapper)
+        public AccountService(IAccountRepository accountRepository, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings, ITokenStore tokenStore, IMapper mapper)
         {
-            _context = context;
+            _accountRepository = accountRepository;
             _passwordHasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
             _tokenStore = tokenStore;
             _mapper = mapper;
         }
 
-        public void RegisterUser(RegisterUserDto dto)
+        public async Task RegisterUserAsync(RegisterUserDto dto)
         {
             var newUser = _mapper.Map<User>(dto);
             newUser.RoleId = (int)Roles.User;
             var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
             newUser.PasswordHash = hashedPassword;
 
-            _context.Users.Add(newUser);
-            _context.SaveChanges();
+            await _accountRepository.CreateUserAsync(newUser);
         }
 
-        public string GenerateJwt(LoginUserDto dto)
+        public async Task<string> GenerateJwtAsync(LoginUserDto dto)
         {
-            var user = _context.Users
-                .Include(u => u.Role)
-                .FirstOrDefault(u => u.Email == dto.Email);
+            var user = await _accountRepository.GetUserByEmailAsync(dto.Email);
 
             if (user == null)
                 throw new BadRequestException("Invalid username or password");
@@ -59,11 +57,9 @@ namespace FitnessPortalAPI.Services
             return GenerateJwtToken(user);
         }
 
-        public UserProfileInfoDto GetProfileInfo(int userId)
+        public async  Task<UserProfileInfoDto> GetProfileInfoAsync(int userId)
         {
-            var user = _context.Users
-                .Include(u => u.Friends)
-                .FirstOrDefault(u => u.Id == userId);
+            var user = await _accountRepository.GetUserByIdAsync(userId);
 
             if (user == null)
                 throw new NotFoundException("User not found");
@@ -71,17 +67,16 @@ namespace FitnessPortalAPI.Services
             return _mapper.Map<UserProfileInfoDto>(user);
         }
 
-        public async Task<string> UpdateProfile(UpdateUserDto dto, int userId, string previousToken)
+        public async Task<string> UpdateProfileAsync(UpdateUserDto dto, int userId, string previousToken)
         {
-            var userToBeUpdated = _context.Users
-                                        .Include(u => u.Role)                    
-                                        .FirstOrDefault(u => u.Id == userId);
+            var userToBeUpdated = await _accountRepository.GetUserByIdAsync(userId);
+
             if (userToBeUpdated == null)
                 throw new ForbiddenException("You are not allowed to update profile");
 
             await _tokenStore.BlacklistTokenAsync(previousToken);
             _mapper.Map(dto, userToBeUpdated);
-            _context.SaveChanges();
+            await _accountRepository.UpdateUserAsync(userToBeUpdated);
 
             return GenerateJwtToken(userToBeUpdated);
         }

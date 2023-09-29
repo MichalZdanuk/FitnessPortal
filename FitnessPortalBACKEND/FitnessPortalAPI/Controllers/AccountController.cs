@@ -20,16 +20,16 @@ namespace FitnessPortalAPI.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult RegisterUser([FromBody] RegisterUserDto dto)
+        public async Task<ActionResult> RegisterUser([FromBody] RegisterUserDto dto)
         {
-            _accountService.RegisterUser(dto);
+            await _accountService.RegisterUserAsync(dto);
             return Ok();
         }
 
         [HttpPost("login")]
-        public ActionResult LoginUser([FromBody] LoginUserDto dto)
+        public async Task<ActionResult<string>> LoginUser([FromBody] LoginUserDto dto)
         {
-            string token = _accountService.GenerateJwt(dto);
+            string token = await _accountService.GenerateJwtAsync(dto);
 
             if (token == null)
             {
@@ -41,11 +41,11 @@ namespace FitnessPortalAPI.Controllers
 
         [Authorize]
         [HttpGet("profile-info")]
-        public ActionResult<UserProfileInfoDto> GetMyProfileInfo()
+        public async Task<ActionResult<UserProfileInfoDto>> GetMyProfileInfo()
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
-            var userInfo = _accountService.GetProfileInfo(userId);
+            var userInfo = await _accountService.GetProfileInfoAsync(userId);
 
             return Ok(userInfo);
         }
@@ -57,7 +57,7 @@ namespace FitnessPortalAPI.Controllers
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
             var previousToken = _contextAccessor.HttpContext!.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
-            string newToken = await _accountService.UpdateProfile(dto, userId, previousToken);
+            string newToken = await _accountService.UpdateProfileAsync(dto, userId, previousToken);
             if (newToken == null)
             {
                 return BadRequest("Invalid user data");
