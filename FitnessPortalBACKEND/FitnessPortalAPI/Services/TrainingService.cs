@@ -46,8 +46,6 @@ namespace FitnessPortalAPI.Services
 
         public async Task<PageResult<TrainingDto>> GetTrainingsPaginated(TrainingQuery query, int userId)
         {
-            Thread.Sleep(1000);//added to present loading spinner in client app
-
             var trainings = await _trainingRepository.GetPaginatedTrainingsForUserAsync(userId, query);
             var totalItemsCount = await _trainingRepository.GetTotalTrainingsCountForUserAsync(userId);
             var trainingsDtos = _mapper.Map<List<TrainingDto>>(trainings);
@@ -68,7 +66,6 @@ namespace FitnessPortalAPI.Services
 
         public async Task<TrainingStatsDto> GetTrainingStats(int userId)
         {
-            Thread.Sleep(1000); // Added to present loading spinner in the client app
             var user = await _trainingRepository.GetUserWithTrainings(userId);
 
             if (user == null)
@@ -92,8 +89,6 @@ namespace FitnessPortalAPI.Services
 
         public async Task<FavouriteExercisesDto> GetFavouriteExercises(int userId)
         {
-            Thread.Sleep(1000); // Added to present loading spinner in the client app
-
             var userTrainings = await _trainingRepository.GetRecentTrainingsForUserAsync(userId, 3);
             var trainingsList = userTrainings.ToList();
 

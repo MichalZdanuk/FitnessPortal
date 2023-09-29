@@ -32,8 +32,6 @@ namespace FitnessPortalAPI.Services
 
         public async Task<PageResult<ArticleDto>> GetPaginatedAsync(ArticleQuery query)
         {
-            Thread.Sleep(1000);//added to present loading spinner in client app
-
             var articles = await _articleRepository.GetAllAsync(query.PageNumber, query.PageSize);
             var totalItemsCount = await _articleRepository.GetTotalCountAsync();
 
@@ -46,8 +44,6 @@ namespace FitnessPortalAPI.Services
 
         public async Task<ArticleDto> GetByIdAsync(int id)
         {
-            Thread.Sleep(1000);//added to present loading spinner in client app
-
             var article = await _articleRepository.GetByIdAsync(id);
 
             if (article is null)

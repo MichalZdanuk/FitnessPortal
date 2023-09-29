@@ -84,7 +84,6 @@ namespace FitnessPortalAPI.Services
 
         public UserProfileInfoDto GetProfileInfo(int userId)
         {
-            Thread.Sleep(1000);//added to present loading spinner in client app
             var user = _context.Users
                 .Include(u => u.Friends)
                 .FirstOrDefault(u => u.Id == userId);

@@ -77,6 +77,7 @@ namespace FitnessPortalAPI.DAL.Repositories
             return await _dbContext.Trainings
                                     .Where(t => t.UserId == userId && t.DateOfTraining >= startDate && t.DateOfTraining <= endDate)
                                     .Include(t => t.Exercises)
+                                    .OrderBy(t => t.DateOfTraining)
                                     .ToListAsync();
         }
 

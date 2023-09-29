@@ -59,8 +59,6 @@ namespace FitnessPortalAPI.Services
 
         public async Task<PageResult<BMIDto>> GetAllBMIsForUserPaginated(BMIQuery query, int userId)
         {
-            Thread.Sleep(1000);//added to present loading spinner in client app
-
             var bmis = await _calculatorRepository.GetBMIsForUserPaginated(userId, query.PageNumber, query.PageSize);
             var totalItemsCount = await _calculatorRepository.GetTotalBMIsCountForUser(userId);
 
