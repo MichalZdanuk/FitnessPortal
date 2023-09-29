@@ -3,6 +3,7 @@ using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Models.Trainings;
+using FitnessPortalAPI.Models.UserProfileActions;
 
 namespace FitnessPortalAPI
 {
@@ -24,6 +25,12 @@ namespace FitnessPortalAPI
             CreateMap<Training, TrainingChartDataDto>()
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.DateOfTraining.ToString("yyyy-MM-dd")))
                 .ForMember(dest => dest.Payload, opt => opt.MapFrom(src => src.TotalPayload));
+
+            CreateMap<RegisterUserDto, User>()
+                .ForMember(dest => dest.RoleId, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
+            CreateMap<User, UserProfileInfoDto>();
+            CreateMap<UpdateUserDto, User>();
         }
     }
 }
