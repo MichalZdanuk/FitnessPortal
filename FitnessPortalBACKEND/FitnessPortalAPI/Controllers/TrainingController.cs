@@ -31,11 +31,11 @@ namespace FitnessPortalAPI.Controllers
             return Created($"/api/training/{id}", null);
         }
         [HttpGet]
-        public async Task<ActionResult<PageResult<TrainingDto>>> GetAllTrainings([FromQuery] TrainingQuery query)
+        public async Task<ActionResult<PageResult<TrainingDto>>> GetTrainingsPaginated([FromQuery] TrainingQuery query)
         {
             int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
-            var trainings = await _trainingService.GetAllTrainingsPaginated(query, userId);
+            var trainings = await _trainingService.GetTrainingsPaginated(query, userId);
 
             return Ok(trainings);
         }
@@ -78,17 +78,6 @@ namespace FitnessPortalAPI.Controllers
             var favouriteExercises = await _trainingService.GetFavouriteExercises(userId);
 
             return Ok(favouriteExercises);
-        }
-
-        [HttpGet("friend/{friendId}")]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<TrainingDto>>> GetFriendTrainings([FromRoute] int friendId)
-        {
-            int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
-
-            var friendTrainings = await _trainingService.GetFriendTrainings(userId, friendId);
-
-            return Ok(friendTrainings);
         }
     }
 }
