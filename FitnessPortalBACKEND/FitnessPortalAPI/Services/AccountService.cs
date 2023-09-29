@@ -18,6 +18,7 @@ namespace FitnessPortalAPI.Services
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly AuthenticationSettings _authenticationSettings;
         private readonly ITokenStore _tokenStore;
+
         public AccountService(FitnessPortalDbContext context, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings, ITokenStore tokenStore)
         {
             _context = context;
@@ -52,12 +53,10 @@ namespace FitnessPortalAPI.Services
             if (user == null)
                 throw new BadRequestException("Invalid username or password");
 
-
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
 
             if (result == PasswordVerificationResult.Failed)
                 throw new BadRequestException("Invalid username or password");
-
 
             var claims = new List<Claim>()
             {

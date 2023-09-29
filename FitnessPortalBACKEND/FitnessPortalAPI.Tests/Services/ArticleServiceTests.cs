@@ -50,7 +50,7 @@ namespace FitnessPortalAPI.Tests.Services
         }
 
         [TestMethod]
-        public async Task GetAllPaginatedAsync_ValidQuery_ShouldReturnPageResult()
+        public async Task GetPaginatedAsync_ValidQuery_ShouldReturnPageResult()
         {
             // arrange
             var query = new ArticleQuery()
@@ -65,7 +65,7 @@ namespace FitnessPortalAPI.Tests.Services
             _articleRepository.GetTotalCountAsync().Returns(totalItemsCount);
 
             // act
-            var result = await _articleService.GetAllPaginatedAsync(query);
+            var result = await _articleService.GetPaginatedAsync(query);
 
             // assert
             result.ShouldNotBeNull();

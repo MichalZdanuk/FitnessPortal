@@ -1,8 +1,8 @@
 ﻿using FitnessPortalAPI.Models.Friendship;
 using FitnessPortalAPI.Services.Interfaces;
+using FitnessPortalAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace FitnessPortalAPI.Controllers
 {
@@ -13,6 +13,7 @@ namespace FitnessPortalAPI.Controllers
     {
         private readonly IFriendshipService _friendshipService;
         private readonly IHttpContextAccessor _contextAccessor;
+
         public FriendshipController(IFriendshipService friendshipService, IHttpContextAccessor contextAccessor)
         {
             _friendshipService = friendshipService;
@@ -22,7 +23,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpPost("request/{userToBeRequestedId}")]
         public async Task<ActionResult> SendFriendshipRequest([FromRoute] int userToBeRequestedId)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var requestId = await _friendshipService.SendFriendshipRequest(userId, userToBeRequestedId);
 
@@ -32,7 +33,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("friendship-requests")]
         public async Task<ActionResult<IEnumerable<FriendshipDto>>> GetFriendshipRequests()
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var friendshipRequests = await _friendshipService.GetFriendshipRequests(userId);
 
@@ -42,7 +43,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpPost("accept/{requestId}")]
         public async Task<ActionResult> AcceptFriendRequest([FromRoute] int requestId)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             await _friendshipService.AcceptFriendRequest(userId, requestId);
 
@@ -52,7 +53,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpDelete("reject/{requestId}")]
         public async Task<ActionResult> RejectFriendRequest([FromRoute] int requestId)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             await _friendshipService.RejectFriendRequest(userId, requestId);
 
@@ -62,7 +63,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("friends")]
         public async Task<ActionResult<IEnumerable<FriendDto>>> GetFriends()
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var friends = await _friendshipService.GetFriends(userId);
 
@@ -72,7 +73,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpDelete("remove/{userToBeRemovedId}")]
         public async Task<ActionResult> RemoveFriendship([FromRoute] int userToBeRemovedId)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             await _friendshipService.RemoveFriendship(userId, userToBeRemovedId);
 

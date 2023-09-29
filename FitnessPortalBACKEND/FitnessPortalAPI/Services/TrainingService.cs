@@ -13,11 +13,13 @@ namespace FitnessPortalAPI.Services
     {
         private readonly ITrainingRepository _trainingRepository;
         private readonly IMapper _mapper;
+
         public TrainingService(ITrainingRepository trainingRepository, IMapper mapper)
         {
             _trainingRepository = trainingRepository;
             _mapper = mapper;
         }
+
         public async Task<int> AddTraining(CreateTrainingDto dto, int userId)
         {
             var training = _mapper.Map<Training>(dto);
@@ -63,6 +65,7 @@ namespace FitnessPortalAPI.Services
 
             return trainingChartData;
         }
+
         public async Task<TrainingStatsDto> GetTrainingStats(int userId)
         {
             Thread.Sleep(1000); // Added to present loading spinner in the client app

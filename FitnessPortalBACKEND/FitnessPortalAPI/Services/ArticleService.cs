@@ -12,11 +12,13 @@ namespace FitnessPortalAPI.Services
     {
         private readonly IArticleRepository _articleRepository;
         private readonly IMapper _mapper;
+
         public ArticleService(IArticleRepository articleRepository, IMapper mapper)
         {
             _articleRepository = articleRepository;
             _mapper = mapper;
         }
+
         public async Task<int> CreateAsync(CreateArticleDto dto, int userId)
         {
             var article = _mapper.Map<Article>(dto);
@@ -27,7 +29,8 @@ namespace FitnessPortalAPI.Services
 
             return article.Id;
         }
-        public async Task<PageResult<ArticleDto>> GetAllPaginatedAsync(ArticleQuery query)
+
+        public async Task<PageResult<ArticleDto>> GetPaginatedAsync(ArticleQuery query)
         {
             Thread.Sleep(1000);//added to present loading spinner in client app
 

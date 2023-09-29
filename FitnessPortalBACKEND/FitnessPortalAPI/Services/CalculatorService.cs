@@ -19,6 +19,7 @@ namespace FitnessPortalAPI.Services
             _calculatorRepository = calculatorRepository;
             _mapper = mapper;
         }
+
         public async Task<BMIDto> CalculateBMI(CreateBMIQuery dto, int userId)
         {
             var bmiIndex = 0.0f;
@@ -36,11 +37,11 @@ namespace FitnessPortalAPI.Services
             };
 
             await _calculatorRepository.AddBmiAsync(bmi);
-
             var bmiDto = _mapper.Map<BMIDto>(bmi);
 
             return bmiDto;
         }
+
         public async Task<BMIDto> CalculateBMIForAnonymous(CreateBMIQuery dto)
         {
             var bmiIndex = 0.0f;
@@ -55,6 +56,7 @@ namespace FitnessPortalAPI.Services
 
             return await Task.FromResult(bmiDto);
         }
+
         public async Task<PageResult<BMIDto>> GetAllBMIsForUserPaginated(BMIQuery query, int userId)
         {
             Thread.Sleep(1000);//added to present loading spinner in client app

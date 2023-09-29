@@ -1,7 +1,7 @@
 ﻿using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Services.Interfaces;
+using FitnessPortalAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace FitnessPortalAPI.Controllers
 {
@@ -11,6 +11,7 @@ namespace FitnessPortalAPI.Controllers
     {
         private readonly IArticleService _articleService;
         private readonly IHttpContextAccessor _contextAccessor;
+
         public ArticleController(IArticleService articleService, IHttpContextAccessor contextAccessor)
         {
             _articleService = articleService;
@@ -20,7 +21,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateArticle([FromBody] CreateArticleDto dto)
         {
-            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
             var id = await _articleService.CreateAsync(dto, userId);
 
@@ -28,24 +29,24 @@ namespace FitnessPortalAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetAllPaginated([FromQuery] ArticleQuery query)
+        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetArticlesPaginated([FromQuery] ArticleQuery query)
         {
-            var result = await _articleService.GetAllPaginatedAsync(query);
+            var result = await _articleService.GetPaginatedAsync(query);
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ArticleDto>> Get([FromRoute] int id)
+        [HttpGet("{articleId}")]
+        public async Task<ActionResult<ArticleDto>> GetById([FromRoute] int articleId)
         {
-            var article = await _articleService.GetByIdAsync(id);
+            var article = await _articleService.GetByIdAsync(articleId);
 
             return Ok(article);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Update([FromBody] UpdateArticleDto dto, [FromRoute] int id)
+        [HttpPut("{articleId}")]
+        public async Task<ActionResult> Update([FromBody] UpdateArticleDto dto, [FromRoute] int articleId)
         {
-            await _articleService.UpdateAsync(id, dto);
+            await _articleService.UpdateAsync(articleId, dto);
 
             return Ok();
         }

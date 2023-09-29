@@ -15,6 +15,7 @@ namespace FitnessPortalAPI.Controllers
     {
         private readonly ITrainingService _trainingService;
         private readonly IHttpContextAccessor _contextAccessor;
+
         public TrainingController(ITrainingService trainingService, IHttpContextAccessor contextAccessor)
         {
             _trainingService = trainingService;
@@ -30,6 +31,7 @@ namespace FitnessPortalAPI.Controllers
 
             return Created($"/api/training/{id}", null);
         }
+
         [HttpGet]
         public async Task<ActionResult<PageResult<TrainingDto>>> GetTrainingsPaginated([FromQuery] TrainingQuery query)
         {
@@ -40,17 +42,17 @@ namespace FitnessPortalAPI.Controllers
             return Ok(trainings);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTraining([FromRoute] int id)
+        [HttpDelete("{trainingId}")]
+        public async Task<ActionResult> DeleteTraining([FromRoute] int trainingId)
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
-            await _trainingService.DeleteTraining(id, userId);
+            await _trainingService.DeleteTraining(trainingId, userId);
 
             return NoContent();
         }
 
-        [HttpGet("chartData")]
+        [HttpGet("chart-data")]
         public async Task<ActionResult<IEnumerable<TrainingChartDataDto>>> GetTrainingChartData([FromQuery] TrainingPeriod period)
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);

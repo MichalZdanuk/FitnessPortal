@@ -12,6 +12,7 @@ namespace FitnessPortalAPI.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IHttpContextAccessor _contextAccessor;
+
         public AccountController(IAccountService accountService, IHttpContextAccessor contextAccessor)
         {
             _accountService = accountService;
@@ -37,6 +38,7 @@ namespace FitnessPortalAPI.Controllers
 
             return Ok(token);
         }
+
         [Authorize]
         [HttpGet("profile-info")]
         public ActionResult<UserProfileInfoDto> GetMyProfileInfo()
