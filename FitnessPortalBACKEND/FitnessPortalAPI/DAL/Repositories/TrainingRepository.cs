@@ -55,7 +55,7 @@ namespace FitnessPortalAPI.DAL.Repositories
         {
             var baseQuery = _dbContext.Trainings
                                 .Include(t => t.Exercises)
-                                .Where(t => t.UserId != userId)
+                                .Where(t => t.UserId == userId)
                                 .OrderByDescending(t => t.DateOfTraining);
 
             var trainings = await baseQuery
@@ -75,7 +75,7 @@ namespace FitnessPortalAPI.DAL.Repositories
         public async Task<IEnumerable<Training>> GetChartDataAsync(int userId, DateTime startDate, DateTime endDate)
         {
             return await _dbContext.Trainings
-                                    .Where(t => t.UserId == userId && t.DateOfTraining >= startDate && t.DateOfTraining <= endDate)
+                                    .Where(t => t.UserId == userId && t.DateOfTraining >= startDate.AddDays(-1) && t.DateOfTraining <= endDate.AddDays(1))
                                     .Include(t => t.Exercises)
                                     .OrderBy(t => t.DateOfTraining)
                                     .ToListAsync();

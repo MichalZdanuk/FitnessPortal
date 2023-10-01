@@ -28,6 +28,15 @@ namespace FitnessPortalAPI.Services
 
             var exercises = dto.Exercises.Select(exerciseDto => _mapper.Map<Exercise>(exerciseDto)).ToList();
 
+            float totalPayload = 0;
+
+            foreach (var exercise in exercises)
+            {
+                totalPayload += exercise.NumberOfReps * exercise.Payload;
+            }
+
+            training.TotalPayload = totalPayload*dto.NumberOfSeries;
+
             return await _trainingRepository.CreateTrainingAsync(training, exercises);
         }
 
