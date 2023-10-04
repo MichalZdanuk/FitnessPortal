@@ -45,7 +45,7 @@ namespace FitnessPortalAPI.Controllers
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
-            await _friendshipService.AcceptFriendRequest(userId, requestId);
+            await _friendshipService.AcceptFriendshipRequest(userId, requestId);
 
             return NoContent();
         }
@@ -55,7 +55,7 @@ namespace FitnessPortalAPI.Controllers
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
-            await _friendshipService.RejectFriendRequest(userId, requestId);
+            await _friendshipService.RejectFriendshipRequest(userId, requestId);
 
             return NoContent();
         }
@@ -65,7 +65,7 @@ namespace FitnessPortalAPI.Controllers
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
-            var friends = await _friendshipService.GetFriends(userId);
+            var friends = await _friendshipService.GetFriendsForUser(userId);
 
             return Ok(friends);
         }
@@ -83,8 +83,6 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("matching-users")]
         public async Task<ActionResult<IEnumerable<MatchingUserDto>>> FindMatchingUsers([FromQuery] string pattern)
         {
-            //var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
             var users = await _friendshipService.FindUsersWithPattern(pattern);
 
             return Ok(users);

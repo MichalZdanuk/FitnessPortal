@@ -2,6 +2,7 @@
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models.Friendship;
+using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,50 +10,41 @@ namespace FitnessPortalAPI.Services
 {
     public class FriendshipService : IFriendshipService
     {
-        private readonly FitnessPortalDbContext _context;
+        private readonly IFriendshipRepository _friendshipRepository;
 
-        public FriendshipService(FitnessPortalDbContext context)
+        public FriendshipService(IFriendshipRepository friendshipRepository)
         {
-            _context = context;
+            _friendshipRepository = friendshipRepository;
         }
         public async Task<int> SendFriendshipRequest(int userId, int userToBeRequestedId)
         {
-            //checking if receiver is in db
-            var receiverUser = await _context.Users.FindAsync(userToBeRequestedId);
+            var receiverUser = await _friendshipRepository.GetUserByIdAsync(userToBeRequestedId);
             if (receiverUser == null)
                 throw new BadRequestException("Receiver user does not exist.");
 
-            //checking if such friendship request has already been sent
-            var existingRequest = await _context.FriendshipRequests.FirstOrDefaultAsync(fr => fr.SenderId == userId && fr.ReceiverId == userToBeRequestedId);
-            if (existingRequest != null)
+            var existingRequest = await _friendshipRepository.FriendshipRequestExistsAsync(userId, userToBeRequestedId);
+            if (!existingRequest)
                 throw new BadRequestException("A friend request has already been sent between these users.");
 
-            //checking if users are already friends
-            var areFriends = await _context.Users
-                .AnyAsync(u => u.Id == userId && u.Friends.Any(f => f.Id == userToBeRequestedId));
-            if (areFriends)
+            var usersAreFriends = await _friendshipRepository.AreUsersFriendsAsync(userId, userToBeRequestedId);
+            if (usersAreFriends)
                 throw new BadRequestException("These users are already friends.");
 
-            var friendRequest = new FriendshipRequest
+            var friendshipRequest = new FriendshipRequest
             {
                 SenderId = userId,
                 ReceiverId = userToBeRequestedId,
                 SendDate = DateTime.Now,
             };
 
-            _context.FriendshipRequests.Add(friendRequest);
-            await _context.SaveChangesAsync();
+            await _friendshipRepository.CreateFriendshipRequestAsync(friendshipRequest);
 
-            return friendRequest.Id;
+            return friendshipRequest.Id;
         }
 
-        public async Task<List<FriendshipDto>> GetFriendshipRequests(int userId)
+        public async Task<IEnumerable<FriendshipDto>> GetFriendshipRequests(int userId)
         {
-            var friendshipRequests = await _context.FriendshipRequests
-                .Include(fr => fr.Sender)
-                .Include(fr => fr.Receiver)
-                .Where(fr => fr.ReceiverId == userId)
-                .ToListAsync();
+            var friendshipRequests = await _friendshipRepository.GetFriendshipRequestsForUserAsync(userId);
 
             var friendshipDtos = friendshipRequests.Select(fr => new FriendshipDto
             {
@@ -66,55 +58,44 @@ namespace FitnessPortalAPI.Services
             return friendshipDtos;
         }
 
-        public async Task RejectFriendRequest(int userId, int requestId)
+        public async Task RejectFriendshipRequest(int userId, int requestId)
         {
-            var friendRequest = await _context.FriendshipRequests.FindAsync(requestId);
+            var friendRequest = await _friendshipRepository.GetFriendshipRequestAsync(requestId);
             if (friendRequest == null)
-                throw new BadRequestException("Friend request not found");
+                throw new BadRequestException("Friend request not found.");
 
             if (friendRequest.ReceiverId != userId)
                 throw new ForbiddenException("You are not allowed to remove someone else request!!!");
 
-            _context.FriendshipRequests.Remove(friendRequest);
-            await _context.SaveChangesAsync();
+            await _friendshipRepository.RemoveFriendshipRequest(friendRequest);
         }
 
-        public async Task AcceptFriendRequest(int userId, int requestId)
+        public async Task AcceptFriendshipRequest(int userId, int requestId)
         {
-            var friendRequest = await _context.FriendshipRequests
-                .Include(fr => fr.Sender)
-                    .ThenInclude(u => u.Friends)
-                .Include(fr => fr.Receiver)
-                    .ThenInclude(u => u.Friends)
-                .FirstOrDefaultAsync(fr => fr.Id == requestId);
+            var friendshipRequest = await _friendshipRepository.GetFriendshipRequestAsync(requestId);
 
-            if (friendRequest == null)
-                throw new BadRequestException("Friend request not found");
+            if (friendshipRequest == null)
+                throw new BadRequestException("Friendship request not found.");
 
-            var sender = friendRequest.Sender;
-            var receiver = friendRequest.Receiver;
+            var sender = friendshipRequest.Sender;
+            var receiver = friendshipRequest.Receiver;
 
             if (sender == null || receiver == null)
-                throw new BadRequestException("Invalid sender or receiver");
+                throw new BadRequestException("Invalid sender or receiver.");
 
-            if (friendRequest.ReceiverId != userId)
+            if (friendshipRequest.ReceiverId != userId)
                 throw new ForbiddenException("You are not allowed to accept someone else request!!!");
 
-            sender.Friends.Add(receiver);
-            receiver.Friends.Add(sender);
-
-            _context.FriendshipRequests.Remove(friendRequest);
-            await _context.SaveChangesAsync();
+            await _friendshipRepository.AddFriendAsync(sender, receiver);
+            await _friendshipRepository.RemoveFriendshipRequest(friendshipRequest);
         }
 
-        public async Task<List<FriendDto>> GetFriends(int userId)
+        public async Task<IEnumerable<FriendDto>> GetFriendsForUser(int userId)
         {
-            var user = await _context.Users
-                .Include(u => u.Friends)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _friendshipRepository.GetUserByIdAsync(userId);
 
             if (user == null)
-                throw new NotFoundException("User not found");
+                throw new NotFoundException("User not found.");
 
             var friends = user.Friends;
 
@@ -130,40 +111,31 @@ namespace FitnessPortalAPI.Services
 
         public async Task RemoveFriendship(int userId, int userToBeRemovedId)
         {
-            var user = await _context.Users
-                .Include(u => u.Friends)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _friendshipRepository.GetUserByIdAsync(userId);
 
             if (user == null)
-                throw new BadRequestException("User not found");
+                throw new BadRequestException("User not found.");
 
-            var friendToBeRemoved = _context.Users
-                .Include(f => f.Friends)
-                .FirstOrDefault(f => f.Id == userToBeRemovedId);
-
+            var friendToBeRemoved = await _friendshipRepository.GetUserByIdAsync(userToBeRemovedId);
 
             if (friendToBeRemoved == null)
-                throw new BadRequestException("Friend not found");
+                throw new BadRequestException("Friend not found.");
 
-            user.Friends.Remove(friendToBeRemoved);
-            friendToBeRemoved.Friends.Remove(user);
-
-            await _context.SaveChangesAsync();
+            await _friendshipRepository.RemoveFriendAsync(user, friendToBeRemoved);
         }
 
-        public async Task<List<MatchingUserDto>> FindUsersWithPattern(string pattern)
+        public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(string pattern)
         {
-            var users = await _context.Users
-                .Where(user => user.Email.Contains(pattern))
-                .Select(user => new MatchingUserDto
-                {
-                    Id = user.Id,
-                    Username = user.Username,
-                    Email = user.Email,
-                })
-                .ToListAsync();
+            var users = await _friendshipRepository.FindUsersWithPattern(pattern);
 
-            return users;
+            var matchingUserDtos = users.Select(user => new MatchingUserDto()
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+            }).ToList();
+
+            return matchingUserDtos;
         }
     }
 }
