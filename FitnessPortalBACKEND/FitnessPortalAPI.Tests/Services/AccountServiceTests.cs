@@ -164,6 +164,7 @@ namespace FitnessPortalAPI.Tests.Services
                 DateOfBirth = new DateTime(2000, 1, 1),
                 Weight = 70f,
                 Height = 175.2f,
+                Friends = new List<User> { },
             };
 
             _accountRepository.GetUserByIdAsync(userId).Returns(user);

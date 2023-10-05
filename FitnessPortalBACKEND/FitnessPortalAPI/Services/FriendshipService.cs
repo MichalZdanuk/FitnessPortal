@@ -56,7 +56,7 @@ namespace FitnessPortalAPI.Services
         {
             var friendRequest = await _friendshipRepository.GetFriendshipRequestAsync(requestId);
             if (friendRequest == null)
-                throw new BadRequestException("Friend request not found.");
+                throw new BadRequestException("Friendship request not found.");
 
             if (friendRequest.ReceiverId != userId)
                 throw new ForbiddenException("You are not allowed to remove someone else request!!!");
