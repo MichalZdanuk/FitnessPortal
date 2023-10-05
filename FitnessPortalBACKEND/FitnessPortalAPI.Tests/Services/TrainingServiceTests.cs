@@ -5,14 +5,8 @@ using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;
-using FitnessPortalAPI.Services.Interfaces;
 using NSubstitute;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessPortalAPI.Tests.Services
 {
