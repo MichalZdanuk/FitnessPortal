@@ -29,6 +29,7 @@ namespace FitnessPortalAPI.DAL.Repositories
         {
             return await _dbContext.Users
                                 .Include(u => u.Role)
+                                .Include(u => u.Friends)
                                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
 

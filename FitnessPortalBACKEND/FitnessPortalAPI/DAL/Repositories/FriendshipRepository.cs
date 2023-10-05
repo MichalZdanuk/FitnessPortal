@@ -36,13 +36,17 @@ namespace FitnessPortalAPI.DAL.Repositories
         {
             return await _dbContext.FriendshipRequests
                             .Include(fr => fr.Sender)
+                            .ThenInclude(u => u.Friends)
                             .Include(fr => fr.Receiver)
+                            .ThenInclude(u => u.Friends)
                             .FirstOrDefaultAsync(fr => fr.Id== requestId);
         }
 
         public async Task<IEnumerable<FriendshipRequest>> GetFriendshipRequestsForUserAsync(int userId)
         {
             return await _dbContext.FriendshipRequests
+                            .Include(fr => fr.Sender)
+                            .Include(fr => fr.Receiver)
                             .Where(fr => fr.ReceiverId == userId)
                             .ToListAsync();
         }

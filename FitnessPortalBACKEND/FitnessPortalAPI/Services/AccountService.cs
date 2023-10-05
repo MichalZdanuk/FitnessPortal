@@ -64,7 +64,10 @@ namespace FitnessPortalAPI.Services
             if (user == null)
                 throw new NotFoundException("User not found");
 
-            return _mapper.Map<UserProfileInfoDto>(user);
+            var userProfileInfoDto = _mapper.Map<UserProfileInfoDto>(user);
+            userProfileInfoDto.NumberOfFriends = user.Friends.Count();
+
+            return userProfileInfoDto;
         }
 
         public async Task<string> UpdateProfileAsync(UpdateUserDto dto, int userId, string previousToken)

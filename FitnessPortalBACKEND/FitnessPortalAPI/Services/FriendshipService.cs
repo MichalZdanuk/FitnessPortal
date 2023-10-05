@@ -1,20 +1,21 @@
-﻿using FitnessPortalAPI.DAL;
+﻿using AutoMapper;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models.Friendship;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace FitnessPortalAPI.Services
 {
     public class FriendshipService : IFriendshipService
     {
         private readonly IFriendshipRepository _friendshipRepository;
+        private readonly IMapper _mapper;
 
-        public FriendshipService(IFriendshipRepository friendshipRepository)
+        public FriendshipService(IFriendshipRepository friendshipRepository, IMapper mapper)
         {
             _friendshipRepository = friendshipRepository;
+            _mapper = mapper;
         }
         public async Task<int> SendFriendshipRequest(int userId, int userToBeRequestedId)
         {
@@ -23,8 +24,8 @@ namespace FitnessPortalAPI.Services
                 throw new BadRequestException("Receiver user does not exist.");
 
             var existingRequest = await _friendshipRepository.FriendshipRequestExistsAsync(userId, userToBeRequestedId);
-            if (!existingRequest)
-                throw new BadRequestException("A friend request has already been sent between these users.");
+            if (existingRequest)
+                throw new BadRequestException("Frienship request has already been sent between these users.");
 
             var usersAreFriends = await _friendshipRepository.AreUsersFriendsAsync(userId, userToBeRequestedId);
             if (usersAreFriends)
@@ -46,14 +47,7 @@ namespace FitnessPortalAPI.Services
         {
             var friendshipRequests = await _friendshipRepository.GetFriendshipRequestsForUserAsync(userId);
 
-            var friendshipDtos = friendshipRequests.Select(fr => new FriendshipDto
-            {
-                Id = fr.Id,
-                SenderId = fr.SenderId,
-                ReceiverId = fr.ReceiverId,
-                SenderName = fr.Sender.Username,
-                SendDate = fr.SendDate
-            }).ToList();
+            var friendshipDtos = _mapper.Map<List<FriendshipDto>>(friendshipRequests);
 
             return friendshipDtos;
         }
@@ -99,14 +93,9 @@ namespace FitnessPortalAPI.Services
 
             var friends = user.Friends;
 
-            var friendDtos = friends.Select(friend => new FriendDto
-            {
-                Id = friend.Id,
-                Username = friend.Username,
-                Email = friend.Email,
-            }).ToList();
+            var friendsDtos = _mapper.Map<IEnumerable<FriendDto>>(friends);
 
-            return friendDtos;
+            return friendsDtos;
         }
 
         public async Task RemoveFriendship(int userId, int userToBeRemovedId)
@@ -121,6 +110,13 @@ namespace FitnessPortalAPI.Services
             if (friendToBeRemoved == null)
                 throw new BadRequestException("Friend not found.");
 
+            var usersAreFriends = await _friendshipRepository.AreUsersFriendsAsync(userId, userToBeRemovedId);
+
+            if (!usersAreFriends)
+            {
+                throw new BadRequestException("You are not friend with this user.");
+            }
+
             await _friendshipRepository.RemoveFriendAsync(user, friendToBeRemoved);
         }
 
@@ -128,14 +124,9 @@ namespace FitnessPortalAPI.Services
         {
             var users = await _friendshipRepository.FindUsersWithPattern(pattern);
 
-            var matchingUserDtos = users.Select(user => new MatchingUserDto()
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-            }).ToList();
+            var matchingUsersDtos = _mapper.Map<IEnumerable<MatchingUserDto>>(users);
 
-            return matchingUserDtos;
+            return matchingUsersDtos;
         }
     }
 }

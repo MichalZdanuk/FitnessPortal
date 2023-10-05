@@ -2,6 +2,7 @@
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models.Calculators;
+using FitnessPortalAPI.Models.Friendship;
 using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Models.UserProfileActions;
 
@@ -31,6 +32,11 @@ namespace FitnessPortalAPI
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
             CreateMap<User, UserProfileInfoDto>();
             CreateMap<UpdateUserDto, User>();
+
+            CreateMap<FriendshipRequest, FriendshipDto>()
+                .ForMember(dest => dest.SenderName, opt => opt.MapFrom(src => src.Sender.Username));
+            CreateMap<User, FriendDto>();
+            CreateMap<User, MatchingUserDto>();
         }
     }
 }
