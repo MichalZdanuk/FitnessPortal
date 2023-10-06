@@ -14,6 +14,7 @@ namespace FitnessPortalAPI.Middleware
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            Thread.Sleep(600); // added globally delay, only for preseting loading in client app!!!
             try
             {
                 //var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");

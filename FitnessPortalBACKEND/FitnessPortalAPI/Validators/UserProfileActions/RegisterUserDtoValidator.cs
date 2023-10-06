@@ -1,4 +1,4 @@
-﻿using FitnessPortalAPI.Entities;
+﻿using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.Models.UserProfileActions;
 using FluentValidation;
 
@@ -32,9 +32,9 @@ namespace FitnessPortalAPI.Validators.UserProfileActions
             RuleFor(x => x.Username)
                 .Length(2, 30);
 
-            RuleFor(x => x.Password)
-                .MinimumLength(3)
-                .Must(NotBeCommonPassword).WithMessage("Password is too common. Please choose a stronger password.");
+            //RuleFor(x => x.Password)
+            //    .MinimumLength(3)
+            //    .Must(NotBeCommonPassword).WithMessage("Password is too common. Please choose a stronger password.");
             /*.Matches("[A-Z]").WithMessage("'{PropertyName}' must contain one or more capital letters.")
             .Matches("[a-z]").WithMessage("'{PropertyName}' must contain one or more lowercase letters.");*/
 

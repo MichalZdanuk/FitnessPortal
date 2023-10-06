@@ -1,10 +1,13 @@
 using FitnessPortalAPI;
+using FitnessPortalAPI.DAL;
+using FitnessPortalAPI.DAL.Repositories;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Middleware;
 using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Models.UserProfileActions;
+using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Seeding;
 using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Services.Interfaces;
@@ -17,6 +20,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,10 +49,18 @@ builder.Services.AddAuthentication(option =>
 
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddDbContext<FitnessPortalDbContext>();
 builder.Services.AddScoped<FitnessPortalSeeder>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+
+/* Add repositories */
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+builder.Services.AddScoped<ICalculatorRepository, CalculatorRepository>();
+builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
 
 /* Add services for controllers*/
 builder.Services.AddScoped<IAccountService, AccountService>();

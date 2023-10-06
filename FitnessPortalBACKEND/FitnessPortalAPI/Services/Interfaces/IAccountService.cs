@@ -4,9 +4,9 @@ namespace FitnessPortalAPI.Services.Interfaces
 {
     public interface IAccountService
     {
-        string GenerateJwt(LoginUserDto dto);
-        void RegisterUser(RegisterUserDto dto);
-        UserProfileInfoDto GetProfileInfo(int userId);
-        Task<string> UpdateProfile(UpdateUserDto dto, int userId, string previousToken);
+        Task<string> GenerateJwtAsync(LoginUserDto dto);
+        Task RegisterUserAsync(RegisterUserDto dto);
+        Task<UserProfileInfoDto> GetProfileInfoAsync(int userId);
+        Task<string> UpdateProfileAsync(UpdateUserDto dto, int userId, string previousToken);
     }
 }

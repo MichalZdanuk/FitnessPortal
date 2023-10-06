@@ -3,8 +3,6 @@ using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Utilities;
 using FitnessPortalAPI.Constants;
 
@@ -17,6 +15,7 @@ namespace FitnessPortalAPI.Controllers
     {
         private readonly ITrainingService _trainingService;
         private readonly IHttpContextAccessor _contextAccessor;
+
         public TrainingController(ITrainingService trainingService, IHttpContextAccessor contextAccessor)
         {
             _trainingService = trainingService;
@@ -32,27 +31,28 @@ namespace FitnessPortalAPI.Controllers
 
             return Created($"/api/training/{id}", null);
         }
+
         [HttpGet]
-        public async Task<ActionResult<PageResult<TrainingDto>>> GetAllTrainings([FromQuery] TrainingQuery query)
+        public async Task<ActionResult<PageResult<TrainingDto>>> GetTrainingsPaginated([FromQuery] TrainingQuery query)
         {
             int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
-            var trainings = await _trainingService.GetAllTrainingsPaginated(query, userId);
+            var trainings = await _trainingService.GetTrainingsPaginated(query, userId);
 
             return Ok(trainings);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTraining([FromRoute] int id)
+        [HttpDelete("{trainingId}")]
+        public async Task<ActionResult> DeleteTraining([FromRoute] int trainingId)
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
 
-            await _trainingService.DeleteTraining(id, userId);
+            await _trainingService.DeleteTraining(trainingId, userId);
 
             return NoContent();
         }
 
-        [HttpGet("chartData")]
+        [HttpGet("chart-data")]
         public async Task<ActionResult<IEnumerable<TrainingChartDataDto>>> GetTrainingChartData([FromQuery] TrainingPeriod period)
         {
             var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
@@ -80,17 +80,6 @@ namespace FitnessPortalAPI.Controllers
             var favouriteExercises = await _trainingService.GetFavouriteExercises(userId);
 
             return Ok(favouriteExercises);
-        }
-
-        [HttpGet("friend/{friendId}")]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<TrainingDto>>> GetFriendTrainings([FromRoute] int friendId)
-        {
-            int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
-
-            var friendTrainings = await _trainingService.GetFriendTrainings(userId, friendId);
-
-            return Ok(friendTrainings);
         }
     }
 }

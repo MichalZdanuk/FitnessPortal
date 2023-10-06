@@ -3,73 +3,46 @@ using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using FitnessPortalAPI.Constants;
+using FitnessPortalAPI.Repositories;
+using AutoMapper;
 
 namespace FitnessPortalAPI.Services
 {
     public class TrainingService : ITrainingService
     {
-        private readonly FitnessPortalDbContext _context;
-        public TrainingService(FitnessPortalDbContext context)
+        private readonly ITrainingRepository _trainingRepository;
+        private readonly IMapper _mapper;
+
+        public TrainingService(ITrainingRepository trainingRepository, IMapper mapper)
         {
-            _context = context;
+            _trainingRepository = trainingRepository;
+            _mapper = mapper;
         }
+
         public async Task<int> AddTraining(CreateTrainingDto dto, int userId)
         {
-            using (var transaction = await _context.Database.BeginTransactionAsync())
+            var training = _mapper.Map<Training>(dto);
+            training.DateOfTraining = DateTime.Now;
+            training.UserId = userId;
+
+            var exercises = dto.Exercises.Select(exerciseDto => _mapper.Map<Exercise>(exerciseDto)).ToList();
+
+            float totalPayload = 0;
+
+            foreach (var exercise in exercises)
             {
-                try
-                {
-                    var training = new Training()
-                    {
-                        DateOfTraining = DateTime.Now,
-                        NumberOfSeries = dto.NumberOfSeries,
-                        TotalPayload = 0.0f,
-                        UserId = userId,
-                    };
-
-                    _context.Trainings.Add(training);
-                    await _context.SaveChangesAsync();
-
-                    float totalPayload = 0.0f;
-                    foreach (var exerciseDto in dto.Exercises)
-                    {
-                        var exercise = new Exercise()
-                        {
-                            Name = exerciseDto.Name.ToLower(),
-                            NumberOfReps = exerciseDto.NumberOfReps,
-                            Payload = exerciseDto.Payload,
-                            TrainingId = training.Id
-                        };
-
-                        float exercisePayload = dto.NumberOfSeries*exercise.NumberOfReps*exercise.Payload;
-                        totalPayload += exercisePayload;
-
-                        _context.Exercises.Add(exercise);
-
-                    }
-                    training.TotalPayload = totalPayload;
-                    await _context.SaveChangesAsync();
-
-                    transaction.Commit();
-
-                    return training.Id;
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                    throw new Exception("An error occurred while adding the training."); 
-                }
-
+                totalPayload += exercise.NumberOfReps * exercise.Payload;
             }
+
+            training.TotalPayload = totalPayload*dto.NumberOfSeries;
+
+            return await _trainingRepository.CreateTrainingAsync(training, exercises);
         }
 
         public async Task DeleteTraining(int id, int userId)
         {
-            var training = await _context.Trainings
-                .Where(t => t.Id == id)
-                .FirstOrDefaultAsync();
+            var training = await _trainingRepository.GetTrainingByIdAsync(id);
 
             if (training == null)
                 throw new BadRequestException("Training not found");
@@ -77,44 +50,14 @@ namespace FitnessPortalAPI.Services
             if (training.UserId != userId)
                 throw new ForbiddenException("You are not allowed to delete this training");
 
-            _context.Trainings.Remove(training);
-            await _context.SaveChangesAsync();
+            await _trainingRepository.DeleteTraining(id);
         }
 
-        public async Task<PageResult<TrainingDto>> GetAllTrainingsPaginated(TrainingQuery query, int userId)
+        public async Task<PageResult<TrainingDto>> GetTrainingsPaginated(TrainingQuery query, int userId)
         {
-            Thread.Sleep(1000);//added to present loading spinner in client app
-
-            var baseQuery = _context.Trainings
-                .Include(t => t.Exercises)
-                .Where(t => t.UserId == userId)
-                .OrderByDescending(t => t.DateOfTraining);
-
-            var trainings = await baseQuery
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .ToListAsync();
-
-            var totalItemsCount = await baseQuery.CountAsync();
-
-            var trainingsDtos = new List<TrainingDto>();
-            for (int i = 0; i < trainings.Count; i++)
-            {
-                trainingsDtos.Add(new TrainingDto()
-                {
-                    Id = trainings[i].Id,
-                    DateOfTraining = trainings[i].DateOfTraining,
-                    NumberOfSeries = trainings[i].NumberOfSeries,
-                    TotalPayload = trainings[i].TotalPayload,
-                    Exercises = trainings[i].Exercises.Select(exercise => new ExerciseDto()
-                    {
-                        Name = exercise.Name,
-                        NumberOfReps = exercise.NumberOfReps,
-                        Payload = exercise.Payload,
-                    }).ToList(),
-                });
-            }
-
+            var trainings = await _trainingRepository.GetPaginatedTrainingsForUserAsync(userId, query);
+            var totalItemsCount = await _trainingRepository.GetTotalTrainingsCountForUserAsync(userId);
+            var trainingsDtos = _mapper.Map<List<TrainingDto>>(trainings);
             var result = new PageResult<TrainingDto>(trainingsDtos, totalItemsCount, query.PageSize, query.PageNumber);
 
             return result;
@@ -122,90 +65,32 @@ namespace FitnessPortalAPI.Services
 
         public async Task<IEnumerable<TrainingChartDataDto>> GetTrainingChartData(TrainingPeriod period, int userId)
         {
-            DateTime startDate;
-            DateTime endDate;
+            (DateTime startDate, DateTime endDate) = CalculateDateRange(period);
 
-            switch (period)
-            {
-                case TrainingPeriod.Month:
-                    startDate = DateTime.Now.AddMonths(-1);
-                    endDate = DateTime.Now;
-                    break;
-                case TrainingPeriod.Quarter:
-                    startDate = DateTime.Now.AddMonths(-3);
-                    endDate = DateTime.Now;
-                    break;
-                case TrainingPeriod.HalfYear:
-                    startDate = DateTime.Now.AddMonths(-6);
-                    endDate = DateTime.Now;
-                    break;
-                default:
-                    throw new BadRequestException("Invalid period value. Supported values are 'month', 'quarter' and 'halfyear'");
-            }
-
-            var trainings = await _context.Trainings
-                .Where(t => t.UserId == userId && t.DateOfTraining >= startDate && t.DateOfTraining <= endDate)
-                .Include(t => t.Exercises)
-                .ToListAsync();
-
-            var trainingChartData = trainings
-                .OrderBy(training => training.DateOfTraining)
-                .Select(training => new TrainingChartDataDto()
-            {
-                Date = training.DateOfTraining.ToString("yyyy-MM-dd"),
-                Payload = training.TotalPayload
-            }).ToList();
+            var trainings = await _trainingRepository.GetChartDataAsync(userId, startDate, endDate);
+            var trainingChartData = _mapper.Map<IEnumerable<TrainingChartDataDto>>(trainings);
 
             return trainingChartData;
         }
+
         public async Task<TrainingStatsDto> GetTrainingStats(int userId)
         {
-            Thread.Sleep(1000); // Added to present loading spinner in the client app
-            var user = await _context.Users
-                .Include(u => u.Trainings)
-                .ThenInclude(t => t.Exercises)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _trainingRepository.GetUserWithTrainings(userId);
 
             if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
 
+            var bestTraining = await _trainingRepository.GetBestTrainingAsync(userId);
+            var mostRecentTraining = await _trainingRepository.GetMostRecentTrainingAsync(userId);
+            var numberOfTrainings = await _trainingRepository.GetTotalTrainingsCountForUserAsync(userId);
+
             var userTrainingStats = new TrainingStatsDto()
             {
-                NumberOfTrainings = user.Trainings.Count,
-                BestTraining = user.Trainings
-                    .OrderByDescending(t => t.TotalPayload)
-                    .Select(t => new TrainingDto()
-                    {
-                        Id = t.Id,
-                        DateOfTraining = t.DateOfTraining,
-                        NumberOfSeries = t.NumberOfSeries,
-                        TotalPayload = t.TotalPayload,
-                        Exercises = t.Exercises.Select(exercise => new ExerciseDto()
-                        {
-                            Name = exercise.Name,
-                            NumberOfReps = exercise.NumberOfReps,
-                            Payload = exercise.Payload,
-                        }).ToList()
-                    })
-                    .FirstOrDefault(),
-                MostRecentTraining = user.Trainings.
-                    OrderByDescending(t => t.DateOfTraining)
-                    .Select(t => new TrainingDto()
-                    {
-                        Id = t.Id,
-                        DateOfTraining = t.DateOfTraining,
-                        NumberOfSeries = t.NumberOfSeries,
-                        TotalPayload = t.TotalPayload,
-                        Exercises = t.Exercises.Select(exercise => new ExerciseDto()
-                        {
-                            Name = exercise.Name,
-                            NumberOfReps = exercise.NumberOfReps,
-                            Payload = exercise.Payload,
-                        }).ToList()
-                    })
-                    .FirstOrDefault()
+                NumberOfTrainings = numberOfTrainings,
+                BestTraining = _mapper.Map<TrainingDto>(bestTraining),
+                MostRecentTraining = _mapper.Map<TrainingDto>(mostRecentTraining),
             };
 
             return userTrainingStats;
@@ -213,16 +98,10 @@ namespace FitnessPortalAPI.Services
 
         public async Task<FavouriteExercisesDto> GetFavouriteExercises(int userId)
         {
-            Thread.Sleep(1000); // Added to present loading spinner in the client app
+            var userTrainings = await _trainingRepository.GetRecentTrainingsForUserAsync(userId, 3);
+            var trainingsList = userTrainings.ToList();
 
-            var userTrainings = await _context.Trainings
-                .Where(training => training.UserId == userId)
-                .Include(training => training.Exercises)
-                .OrderByDescending(training => training.DateOfTraining)
-                .Take(3)
-                .ToListAsync();
-
-            if (userTrainings.Count < 3)
+            if (trainingsList.Count < 3)
             {
                 return new FavouriteExercisesDto
                 {
@@ -265,35 +144,30 @@ namespace FitnessPortalAPI.Services
             return favouriteDto;
         }
 
-        public async Task<IEnumerable<TrainingDto>> GetFriendTrainings(int userId, int friendId)
+        private (DateTime startDate, DateTime endDate) CalculateDateRange(TrainingPeriod period)
         {
-            var user = _context.Users
-                .Include(f => f.Friends)
-                .FirstOrDefault(user => user.Id == userId);
+            DateTime endDate = DateTime.Now;
+            DateTime startDate;
 
-            if (!user!.Friends.Any(f => f.Id == friendId))
-                throw new ForbiddenException("You are not allowed to view trainings of this user");
-
-            var friendTrainings = await _context.Trainings
-                .Where(t => t.UserId == friendId)
-                .Include(t => t.Exercises)
-                .ToListAsync();
-
-            var trainingDtos = friendTrainings.Select(training => new TrainingDto()
+            switch (period)
             {
-                Id = training.Id,
-                DateOfTraining = training.DateOfTraining,
-                NumberOfSeries = training.NumberOfSeries,
-                TotalPayload = training.TotalPayload,
-                Exercises = training.Exercises.Select(exercise => new ExerciseDto()
-                {
-                    Name = exercise.Name,
-                    NumberOfReps = exercise.NumberOfReps,
-                    Payload = exercise.Payload,
-                }).ToList()
-            }).ToList();
+                case TrainingPeriod.Month:
+                    startDate = endDate.AddMonths(-1);
+                    break;
+                case TrainingPeriod.Quarter:
+                    startDate = endDate.AddMonths(-3);
+                    break;
+                case TrainingPeriod.HalfYear:
+                    startDate = endDate.AddMonths(-6);
+                    break;
+                default:
+                    throw new BadRequestException("Invalid period value. Supported values are 'month', 'quarter', and 'halfyear'");
+            }
 
-            return trainingDtos;
+            startDate = startDate.Date;
+            endDate = endDate.Date;
+
+            return (startDate, endDate);
         }
     }
 }
