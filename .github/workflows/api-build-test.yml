@@ -42,5 +42,8 @@ jobs:
       - name: Restore test project dependencies
         run: dotnet restore ./FitnessPortalBACKEND/FitnessPortalAPI.Tests/FitnessPortalAPI.Tests.csproj
 
-      - name: Build and Test
+      - name: Build
+        run: dotnet build --configuration Release --no-restore ./FitnessPortalBACKEND/FitnessPortalAPI.Tests/FitnessPortalAPI.Tests.csproj
+
+      - name: Test
         run: dotnet test --configuration Release --no-build --verbosity normal ./FitnessPortalBACKEND/FitnessPortalAPI.Tests/FitnessPortalAPI.Tests.csproj
