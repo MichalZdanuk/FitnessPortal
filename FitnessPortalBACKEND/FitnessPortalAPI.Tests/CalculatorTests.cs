@@ -28,7 +28,7 @@ namespace FitnessPortalAPI.Tests
             _calculator.CalculateBMI(height, weight, out bmiIndex, out bmiCategory);
 
             // assert
-            bmiCategory.ShouldNotBe(expectedCategory);
+            bmiCategory.ShouldBe(expectedCategory);
         }
 
         [TestMethod]
