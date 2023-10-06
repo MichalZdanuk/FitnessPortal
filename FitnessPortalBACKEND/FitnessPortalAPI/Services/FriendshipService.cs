@@ -17,6 +17,7 @@ namespace FitnessPortalAPI.Services
             _friendshipRepository = friendshipRepository;
             _mapper = mapper;
         }
+
         public async Task<int> SendFriendshipRequest(int userId, int userToBeRequestedId)
         {
             var receiverUser = await _friendshipRepository.GetUserByIdAsync(userToBeRequestedId);
