@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build API
-        run: dotnet build --configuration Release --no-restore ./FitnessPortalBACKEND/FitnessPortalAPI/FitnessPortalAPI.csproj
+        run: dotnet build --configuration Release --no-restore ./FitnessPortalBACKEND/FitnessPortalAPI.Tests/FitnessPortalAPI.Tests.csproj
 
       - name: Setup .NET 7.0
         uses: actions/setup-dotnet@v2
