@@ -23,7 +23,11 @@ jobs:
 
       - name: Restore API dependencies
         run: dotnet restore ./FitnessPortalBACKEND/FitnessPortalAPI/FitnessPortalAPI.csproj
+        continue-on-error: false
 
+  tests:
+    runs-on: ubuntu-latest
+    steps:
       - name: Build API
         run: dotnet build --configuration Release --no-restore ./FitnessPortalBACKEND/FitnessPortalAPI/FitnessPortalAPI.csproj
 
