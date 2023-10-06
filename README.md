@@ -6,9 +6,13 @@ Projekt Figma został wykonany na samym początku projektu, celem ułatwienia so
 
 *https://atomicdesign.bradfrost.com/chapter-2/*
 
-Link do projektu Figma:
+![atomic_design](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/0bfba533-3dd1-444e-aa3f-0757012f5bbe)
+
+Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzenia desktop*):
 
 *https://www.figma.com/file/Gbzk6fX0RZ585CyDuZ9sMN/PortalFitness?type=design&node-id=0-1&t=eWWCsW8vmUPUCj6D-0*
+
+![figma](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/41c639ae-5367-4fce-9bba-f0e506e658f8)
 
 ## Technologie:
 ### BackEnd:
@@ -19,11 +23,12 @@ Link do projektu Figma:
 * EntityFramework + MSSql
 * MSUnit, NSubstitute, Shouldly
 ### FrontEnd:
-* React (m.in. react-router-dom, jwt-decode)
+* React (m.in. react-router-dom, recharts, jwt-decode, lodash) - Vite
 * axios
 * localstorage
 * JavaScript + Bootstrap
-## Wymagania(wstępnie zdefiniowane funkcjonalności):
+* ESLint, prettier
+## Wymagania (wstępnie zdefiniowane funkcjonalności):
 * rejestracja/logowanie
 * uaktualnianie danych konta (wiąże się to z generowaniem nowego tokena JWT; zaimplementowana blacklist'a na stare token'y)
 * dodawanie własnych wpisów/przeglądanie wpisów innych
@@ -34,11 +39,29 @@ Link do projektu Figma:
 * opisy różnych ćwiczeń/aktywności fizycznych - (statyczny) leksykon ćwiczeń
 * wysoka responsywność na urządzenia mobile oraz desktop
 ## Możliwy rozwój aplikacji(funkcjonalności, o które chciałbym wzbogacić aplikację):
-* dodawanie komentarzy do artykułów, ocena komentarzy poprzez "łapkę" w górę/dół
+* dostosowanie aplikacji front'endowej pod urządzenia typu mobile (responsywność) **(zrobione)**
+* dodanie pipeline CI celeme bezpiecznego wprowadzania kodu do repozytorium **(zrobione)**
 * paginacja rezultatów **(zrobione)**
+* obsługa odpowiedzi od API do po stronie frontend zgodne z praktykami UX - dodanie spinner'ów przy ładowaniu odpowiedzi, zwrócenie komunikatu błędy w przypadku braku połączenia/wysłania
+  błędnych danych  **(zrobione)**
+* dodawanie komentarzy do artykułów, ocena komentarzy poprzez "łapkę" w górę/dół
 * dwujęzyczność portalu - Angielski/Polski (w tym zapisanie po stronie backEnd'u preferencji użytkownika, by po zalogowaniu posiadał stan taki jaki zostawił wylogowując się z aplikacji)
 * mechanizm proponowania nowych obciążeń - prognozowanie progresu w ćwiczeniach na podstawie wykonanych już treningów
 * konteryzacja rozwiązania przy użyciu Docker'a
+## Testowanie aplikacji
+### BackEnd
+* testy jednostkowe - sprawdziłem poprawność funkcjonowania narzędzia kalkulatora, validatorów oraz przede wszystkim serwisów (wykorzystane biblioteki *MSUnit*, *NSubstitute*, *Shouldly*)
+  stosując przy tym konwencję podziału testu AAA (Arrange-Act-Assert)
+![tests_results](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/4ee6bc39-2e08-4213-bc74-e96297e3884e)
+
+* testy manualne - testy wykonywane podczas całego okresu powstawania projektu, ręcznie przetestowałem flow akcji udostępnianych przez REST API przy użyciu zarówno Swagger'a jak i Postman'a
+![postman](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/1d42e008-d2e7-433f-99f6-8a4e17828adf)
+
+
+### FrontEnd
+* samodzielne ręczne przetestowanie aplikacji poprzez uruchomienie na ekranach różnej rozdzielczości, uruchiomienie w przeglądarce jako tryb mobile
+* przekazanie aplikacji do niewielkiej grupy osób trzecich celem sprawdzenia intuicyjności aplikacji oraz poznania opinii na temat design'u
+  
 ## REST API
 
 * ### Autoryzacja poprzez token JWT:
