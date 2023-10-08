@@ -71,10 +71,14 @@ namespace FitnessPortalAPI.DAL.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<User>> FindUsersWithPattern(string pattern)
+        public async Task<IEnumerable<User>> FindUsersWithPattern(int userId, string pattern)
         {
             return await _dbContext.Users
-                .Where(user => user.Email.Contains(pattern))
+                .Where(user => 
+                    user.Id != userId &&
+                    user.Email.Contains(pattern) &&
+                    !user.Friends.Any(friend => friend.Id == userId) &&
+                    !user.ReceivedFriendRequests.Any(request => request.SenderId == userId))
                 .ToListAsync();
         }
 

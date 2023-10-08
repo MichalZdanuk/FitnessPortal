@@ -10,6 +10,6 @@ namespace FitnessPortalAPI.Services.Interfaces
         Task AcceptFriendshipRequest(int userId, int requestId);
         Task<IEnumerable<FriendDto>> GetFriendsForUser(int userId);
         Task RemoveFriendship(int userId, int userToBeRemovedId);
-        Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(string pattern);
+        Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(int userId, string pattern);
     }
 }

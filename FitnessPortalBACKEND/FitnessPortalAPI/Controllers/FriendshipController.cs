@@ -83,7 +83,9 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("matching-users")]
         public async Task<ActionResult<IEnumerable<MatchingUserDto>>> FindMatchingUsers([FromQuery] string pattern)
         {
-            var users = await _friendshipService.FindUsersWithPattern(pattern);
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
+
+            var users = await _friendshipService.FindUsersWithPattern(userId, pattern);
 
             return Ok(users);
         }

@@ -121,9 +121,9 @@ namespace FitnessPortalAPI.Services
             await _friendshipRepository.RemoveFriendAsync(user, friendToBeRemoved);
         }
 
-        public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(string pattern)
+        public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(int userId, string pattern)
         {
-            var users = await _friendshipRepository.FindUsersWithPattern(pattern);
+            var users = await _friendshipRepository.FindUsersWithPattern(userId, pattern);
 
             var matchingUsersDtos = _mapper.Map<IEnumerable<MatchingUserDto>>(users);
 

@@ -396,41 +396,43 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task FindUsersWithPattern_ReturnsOnlyOneMatchingUser()
         {
             // arrange
+            int userId = 1;
             string pattern = "John";
             var matchingUsers = new List<User>
             {
-                new User { Id = 1, Email = "John@Doe.mail.com" }
+                new User { Id = 2, Email = "John@Doe.mail.com" }
             };
-            _friendshipRepository.FindUsersWithPattern(pattern).Returns(matchingUsers);
+            _friendshipRepository.FindUsersWithPattern(userId, pattern).Returns(matchingUsers);
 
             // act
-            var result = await _friendshipService.FindUsersWithPattern(pattern);
+            var result = await _friendshipService.FindUsersWithPattern(userId, pattern);
 
             // assert
             result.ShouldNotBeEmpty();
             result.Count().ShouldBe(1);
-            result.Any(u => u.Id == 1 && u.Email == "John@Doe.mail.com").ShouldBeTrue();
+            result.Any(u => u.Id == 2 && u.Email == "John@Doe.mail.com").ShouldBeTrue();
         }
 
         [TestMethod]
         public async Task FindUsersWithPattern_ReturnsAllMatchingUsers()
         {
             // arrange
+            int userId = 1;
             string pattern = "John";
             var matchingUsers = new List<User>
             {
-                new User { Id = 1, Email = "John@Doe.mail.com" },
+                new User { Id = 2, Email = "John@Doe.mail.com" },
                 new User { Id = 3, Email = "John@Smith.mail.com" },
             };
-            _friendshipRepository.FindUsersWithPattern(pattern).Returns(matchingUsers);
+            _friendshipRepository.FindUsersWithPattern(userId, pattern).Returns(matchingUsers);
 
             // act
-            var result = await _friendshipService.FindUsersWithPattern(pattern);
+            var result = await _friendshipService.FindUsersWithPattern(userId, pattern);
 
             // assert
             result.ShouldNotBeEmpty();
             result.Count().ShouldBe(2);
-            result.Any(u => u.Id == 1 && u.Email == "John@Doe.mail.com").ShouldBeTrue();
+            result.Any(u => u.Id == 2 && u.Email == "John@Doe.mail.com").ShouldBeTrue();
             result.Any(u => u.Id == 3 && u.Email == "John@Smith.mail.com").ShouldBeTrue();
         }
 
@@ -438,11 +440,12 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task FindUsersWithPattern_ReturnsEmptyList()
         {
             // arrange
+            int userId = 1;
             string pattern = "Unknown";
-            _friendshipRepository.FindUsersWithPattern(pattern).Returns(new List<User>());
+            _friendshipRepository.FindUsersWithPattern(userId, pattern).Returns(new List<User>());
 
             // act
-            var result = await _friendshipService.FindUsersWithPattern(pattern);
+            var result = await _friendshipService.FindUsersWithPattern(userId, pattern);
 
             // assert
             result.ShouldBeEmpty();

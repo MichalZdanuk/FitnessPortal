@@ -12,7 +12,7 @@ namespace FitnessPortalAPI.Repositories
         Task RemoveFriendAsync(User userToRemove, User friendToRemove);
         Task<bool> AreUsersFriendsAsync(int firstUserId, int secondUserId);
         Task<User?> GetUserByIdAsync(int userId);
-        Task<IEnumerable<User>> FindUsersWithPattern(string pattern);
+        Task<IEnumerable<User>> FindUsersWithPattern(int userId, string pattern);
         Task<bool> FriendshipRequestExistsAsync(int senderId, int receiverId);
     }
 }
