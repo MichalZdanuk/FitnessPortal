@@ -61,7 +61,13 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 ### FrontEnd
 * samodzielne ręczne przetestowanie aplikacji poprzez uruchomienie na ekranach różnej rozdzielczości, uruchiomienie w przeglądarce jako tryb mobile
 * przekazanie aplikacji do niewielkiej grupy osób trzecich celem sprawdzenia intuicyjności aplikacji oraz poznania opinii na temat design'u
-  
+
+## Continuous Integration:
+Zdecydowałem się w tym repozytorium na wykorzystanie Github Actions do stworzenia **pipeline'a CI**. Dwa proste pliki *api-build-test.yml* oraz *frontend-lint-build.yml* nakładają restrykcje, dzięki którym kod przed wdrożeniem na branch main jest sprawdzany na backend'zie poda kątem budowy projektu oraz uzyskania pozytywnych wyników testów jednostkowych, a
+na frontend'zie pod względem formatowania kodu oraz budowy plików projektowych.
+
+![CI](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/73b278a0-f93e-4a1c-b9b3-5b13c9843f66)
+
 ## REST API
 
 * ### Autoryzacja poprzez token JWT:
