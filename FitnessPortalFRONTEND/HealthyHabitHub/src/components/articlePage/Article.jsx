@@ -13,6 +13,7 @@ const Article = () => {
   const [articleData, setArticleData] = useState(location.state)
   const [notFound, setNotFound] = useState(false)
   const { contentHeight } = useContentHeightDesktop()
+  const unused = 1
 
   useEffect(() => {
     if (!articleData) {
