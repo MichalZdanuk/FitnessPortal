@@ -87,5 +87,15 @@ namespace FitnessPortalAPI.DAL.Repositories
             return await _dbContext.FriendshipRequests
                 .AnyAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
         }
+
+        public async Task<IEnumerable<Training>> GetFriendTrainingsAsync(int friendId)
+        {
+            return await _dbContext.Trainings
+                .Where(training => training.UserId == friendId)
+                .Include(training => training.Exercises)
+                .OrderByDescending(training => training.DateOfTraining)
+                .Take(3)
+                .ToListAsync();
+        }
     }
 }

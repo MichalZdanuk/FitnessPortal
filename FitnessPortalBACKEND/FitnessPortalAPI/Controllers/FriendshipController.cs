@@ -89,5 +89,15 @@ namespace FitnessPortalAPI.Controllers
 
             return Ok(users);
         }
+
+        [HttpGet("friend/{friendId}")]
+        public async Task<ActionResult<FriendProfileDto>> GetFriendStatistics([FromRoute] int friendId)
+        {
+            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
+
+            var friendStats = await _friendshipService.GetFriendStatistics(userId, friendId);
+
+            return Ok(friendStats);
+        }
     }
 }

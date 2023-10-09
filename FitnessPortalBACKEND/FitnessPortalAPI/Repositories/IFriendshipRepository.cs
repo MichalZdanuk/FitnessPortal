@@ -1,4 +1,5 @@
-﻿using FitnessPortalAPI.Entities;
+﻿using FitnessPortalAPI.DAL.Repositories;
+using FitnessPortalAPI.Entities;
 
 namespace FitnessPortalAPI.Repositories
 {
@@ -14,5 +15,6 @@ namespace FitnessPortalAPI.Repositories
         Task<User?> GetUserByIdAsync(int userId);
         Task<IEnumerable<User>> FindUsersWithPattern(int userId, string pattern);
         Task<bool> FriendshipRequestExistsAsync(int senderId, int receiverId);
+        Task<IEnumerable<Training>> GetFriendTrainingsAsync(int friendId);
     }
 }
