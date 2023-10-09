@@ -2,8 +2,10 @@
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models.Friendship;
+using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services.Interfaces;
+using System.Linq;
 
 namespace FitnessPortalAPI.Services
 {
@@ -121,13 +123,34 @@ namespace FitnessPortalAPI.Services
             await _friendshipRepository.RemoveFriendAsync(user, friendToBeRemoved);
         }
 
-        public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(string pattern)
+        public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(int userId, string pattern)
         {
-            var users = await _friendshipRepository.FindUsersWithPattern(pattern);
+            var users = await _friendshipRepository.FindUsersWithPattern(userId, pattern);
 
             var matchingUsersDtos = _mapper.Map<IEnumerable<MatchingUserDto>>(users);
 
             return matchingUsersDtos;
+        }
+
+        public async Task<FriendProfileDto> GetFriendStatistics(int userId, int friendId)
+        {
+            var friend = await _friendshipRepository.GetUserByIdAsync(friendId);
+
+            if (friend == null)
+                throw new BadRequestException("Friend not found.");
+
+            var usersAreFriends = await _friendshipRepository.AreUsersFriendsAsync(userId, friendId);
+            if (!usersAreFriends)
+                throw new ForbiddenException("Given user is not your friend.");
+
+            var friendTrainings = await _friendshipRepository.GetFriendTrainingsAsync(friendId);
+
+            var friendProfileDto = _mapper.Map<User, FriendProfileDto>(friend);
+            friendProfileDto.NumberOfFriends = friend.Friends.Count();
+            friendProfileDto.NumberOfTrainings = friendTrainings.Count();
+            friendProfileDto.LastThreeTrainings = _mapper.Map<List<TrainingDto>>(friendTrainings);
+
+            return friendProfileDto;
         }
     }
 }

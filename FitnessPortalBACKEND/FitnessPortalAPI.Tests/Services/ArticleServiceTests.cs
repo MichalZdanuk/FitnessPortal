@@ -78,13 +78,15 @@ namespace FitnessPortalAPI.Tests.Services
         {
             // arrange
             var articleId = 1;
+            var author = new User { Id = 1, Username = "author" };
             var article = new Article()
             {
                 Id = articleId,
                 Title = "TestTitle",
                 ShortDescription = "TestDescription",
                 Content = "TestContent",
-                Category = "TestCategory"
+                Category = "TestCategory",
+                CreatedBy = author,
             };
             _articleRepository.GetByIdAsync(articleId).Returns(article);
 

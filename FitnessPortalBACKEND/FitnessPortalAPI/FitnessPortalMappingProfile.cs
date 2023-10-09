@@ -14,7 +14,8 @@ namespace FitnessPortalAPI
         {
             CreateMap<CreateArticleDto, Article>()
                 .ForMember(dest => dest.DateOfPublication, opt => opt.MapFrom(src => DateTime.Now));
-            CreateMap<Article, ArticleDto>();
+            CreateMap<Article, ArticleDto>()
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.CreatedBy.Username));
             CreateMap<UpdateArticleDto, Article>();
 
             CreateMap<BMI, BMIDto>();
@@ -37,6 +38,10 @@ namespace FitnessPortalAPI
                 .ForMember(dest => dest.SenderName, opt => opt.MapFrom(src => src.Sender.Username));
             CreateMap<User, FriendDto>();
             CreateMap<User, MatchingUserDto>();
+            CreateMap<User, FriendProfileDto>()
+                .ForMember(dest => dest.NumberOfFriends, opt => opt.MapFrom(src => src.Friends.Count))
+                .ForMember(dest => dest.NumberOfTrainings, opt => opt.Ignore())
+                .ForMember(dest => dest.LastThreeTrainings, opt => opt.Ignore());
         }
     }
 }

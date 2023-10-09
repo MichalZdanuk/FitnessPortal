@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
+using FitnessPortalAPI.Models.Friendship;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;
 using NSubstitute;
@@ -393,59 +394,175 @@ namespace FitnessPortalAPI.Tests.Services
         }
 
         [TestMethod]
-        public async Task FindUsersWithPattern_ReturnsOnlyOneMatchingUser()
+        public async Task FindUsersWithPattern_OneMatchExists_ShouldReturnOnlyOneMatchingUser()
         {
             // arrange
+            int userId = 1;
             string pattern = "John";
             var matchingUsers = new List<User>
             {
-                new User { Id = 1, Email = "John@Doe.mail.com" }
+                new User { Id = 2, Email = "John@Doe.mail.com" }
             };
-            _friendshipRepository.FindUsersWithPattern(pattern).Returns(matchingUsers);
+            _friendshipRepository.FindUsersWithPattern(userId, pattern).Returns(matchingUsers);
 
             // act
-            var result = await _friendshipService.FindUsersWithPattern(pattern);
+            var result = await _friendshipService.FindUsersWithPattern(userId, pattern);
 
             // assert
             result.ShouldNotBeEmpty();
             result.Count().ShouldBe(1);
-            result.Any(u => u.Id == 1 && u.Email == "John@Doe.mail.com").ShouldBeTrue();
+            result.Any(u => u.Id == 2 && u.Email == "John@Doe.mail.com").ShouldBeTrue();
         }
 
         [TestMethod]
-        public async Task FindUsersWithPattern_ReturnsAllMatchingUsers()
+        public async Task FindUsersWithPattern_MultipleMatchesExist_ShouldReturnAllMatchingUsers()
         {
             // arrange
+            int userId = 1;
             string pattern = "John";
             var matchingUsers = new List<User>
             {
-                new User { Id = 1, Email = "John@Doe.mail.com" },
+                new User { Id = 2, Email = "John@Doe.mail.com" },
                 new User { Id = 3, Email = "John@Smith.mail.com" },
             };
-            _friendshipRepository.FindUsersWithPattern(pattern).Returns(matchingUsers);
+            _friendshipRepository.FindUsersWithPattern(userId, pattern).Returns(matchingUsers);
 
             // act
-            var result = await _friendshipService.FindUsersWithPattern(pattern);
+            var result = await _friendshipService.FindUsersWithPattern(userId, pattern);
 
             // assert
             result.ShouldNotBeEmpty();
             result.Count().ShouldBe(2);
-            result.Any(u => u.Id == 1 && u.Email == "John@Doe.mail.com").ShouldBeTrue();
+            result.Any(u => u.Id == 2 && u.Email == "John@Doe.mail.com").ShouldBeTrue();
             result.Any(u => u.Id == 3 && u.Email == "John@Smith.mail.com").ShouldBeTrue();
         }
 
         [TestMethod]
-        public async Task FindUsersWithPattern_ReturnsEmptyList()
+        public async Task FindUsersWithPattern_NoMatchesExists_ShouldReturnEmptyList()
         {
             // arrange
+            int userId = 1;
             string pattern = "Unknown";
-            _friendshipRepository.FindUsersWithPattern(pattern).Returns(new List<User>());
+            _friendshipRepository.FindUsersWithPattern(userId, pattern).Returns(new List<User>());
 
             // act
-            var result = await _friendshipService.FindUsersWithPattern(pattern);
+            var result = await _friendshipService.FindUsersWithPattern(userId, pattern);
 
             // assert
             result.ShouldBeEmpty();
+        }
+
+        [TestMethod]
+        public async Task GetFriendStatistics_FriendIsFoundAndUsersAreFriends_ShouldReturnFriendStatistics()
+        {
+            // arrange
+            int userId = 1;
+            int friendId = 2;
+            var friend = new User { 
+                Id = friendId, 
+                Username = "FriendName",
+                Email = "example@email.com",
+                Friends = new List<User>() };
+            var friendTrainings = new List<Training>() 
+            {
+                new Training
+                {
+                    Id = 1,
+                    DateOfTraining = new DateTime(2023, 5, 11),
+                    NumberOfSeries = 4,
+                    TotalPayload = 15000f,
+                    UserId = userId,
+                    Exercises = new List<Exercise>(),
+                },
+                new Training
+                {
+                    Id = 2,
+                    DateOfTraining = new DateTime(2023, 5, 15),
+                    NumberOfSeries = 4,
+                    TotalPayload = 17000f,
+                    UserId = userId,
+                    Exercises = new List<Exercise>(),
+                }
+            };
+
+            _friendshipRepository.GetUserByIdAsync(friendId).Returns(friend);
+            _friendshipRepository.AreUsersFriendsAsync(userId, friendId).Returns(true);
+            _friendshipRepository.GetFriendTrainingsAsync(friendId).Returns(friendTrainings);
+
+            // act
+            var result = await _friendshipService.GetFriendStatistics(userId, friendId);
+
+            // assert
+            result.Username.ShouldBe(friend.Username);
+            result.Email.ShouldBe(friend.Email);
+            result.NumberOfFriends.ShouldBe(0);
+            result.NumberOfTrainings.ShouldBe(2);
+            result.LastThreeTrainings.ShouldNotBeNull();
+        }
+
+        [TestMethod]
+        public async Task GetFriendStatistics_FriendHasNoTrainings_ShouldReturnFriendStatisticsWithEmptyTrainingsList()
+        {
+            // arrange
+            int userId = 1;
+            int friendId = 2;
+            var friend = new User
+            {
+                Id = friendId,
+                Username = "FriendName",
+                Email = "example@email.com",
+                Friends = new List<User>()
+            };
+            var friendTrainings = new List<Training>();
+
+            _friendshipRepository.GetUserByIdAsync(friendId).Returns(friend);
+            _friendshipRepository.AreUsersFriendsAsync(userId, friendId).Returns(true);
+            _friendshipRepository.GetFriendTrainingsAsync(friendId).Returns(friendTrainings);
+
+            // act
+            var result = await _friendshipService.GetFriendStatistics(userId, friendId);
+
+            // assert
+            result.Username.ShouldBe(friend.Username);
+            result.Email.ShouldBe(friend.Email);
+            result.NumberOfFriends.ShouldBe(0);
+            result.NumberOfTrainings.ShouldBe(0);
+            result.LastThreeTrainings.ShouldNotBeNull();
+        }
+
+        [TestMethod]
+        public async Task GetFriendStatistics_FriendIsNotFound_ShouldThrowBadRequestException()
+        {
+            // arrange
+            int userId = 1;
+            int friendId = 2;
+            _friendshipRepository.GetUserByIdAsync(friendId).Returns(Task.FromResult<User?>(null));
+
+            // act
+            async Task Act() => await _friendshipService.GetFriendStatistics(userId, friendId);
+
+            // assert
+            var exception = await Should.ThrowAsync<BadRequestException>(Act);
+            exception.Message.ShouldBe("Friend not found.");
+        }
+
+        [TestMethod]
+        public async Task GetFriendStatistics_UsersAreNotFriends_ShouldThrowForbiddenException()
+        {
+            // arrange
+            int userId = 1;
+            int friendId = 2;
+            var friend = new User { Id = friendId };
+
+            _friendshipRepository.GetUserByIdAsync(friendId).Returns(friend);
+            _friendshipRepository.AreUsersFriendsAsync(userId, friendId).Returns(false);
+
+            // act
+            async Task Act() => await _friendshipService.GetFriendStatistics(userId, friendId);
+
+            // assert
+            var exception = await Should.ThrowAsync<ForbiddenException>(Act);
+            exception.Message.ShouldBe("Given user is not your friend.");
         }
     }
 }
