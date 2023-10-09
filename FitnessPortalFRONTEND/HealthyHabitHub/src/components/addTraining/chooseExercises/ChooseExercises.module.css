@@ -1,0 +1,31 @@
+.choose-exercises-div {
+  padding: 10px;
+}
+
+.choose-label {
+  text-align: center;
+  color: var(--main-color-variant-1);
+}
+
+.sub-text {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 1px;
+}
+
+.body-part-div {
+  margin-bottom: 20px;
+}
+
+.muscle-groups-container {
+  column-count: 2; /* Set the number of columns */
+  column-gap: 20px; /* Adjust the gap between columns */
+}
+
+.bottom-margin {
+  margin-bottom: 50px;
+}
+
+.center-button {
+  text-align: center;
+}

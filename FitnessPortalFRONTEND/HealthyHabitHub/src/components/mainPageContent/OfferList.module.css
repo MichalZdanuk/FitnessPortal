@@ -1,0 +1,58 @@
+.offers-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+  @media screen and (min-width: 768px) {
+    gap: 50px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+}
+
+.offer-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 8px 8px 24px -7px rgba(66, 68, 90, 1);
+  transition:
+    background-color 0.5s,
+    box-shadow 0.5s;
+  text-align: center;
+  @media screen and (max-width: 767px) {
+    width: 70%;
+    background-color: var(--main-color-variant-1);
+  }
+  @media screen and (min-width: 768px) {
+    width: 35vw;
+    background-color: var(--light-gray-color);
+  }
+}
+
+.offer-div:hover {
+  background-color: var(--main-color-variant-1);
+  box-shadow: 8px 8px 24px -2px rgba(66, 68, 90, 1);
+}
+
+.offer-image {
+  @media screen and (max-width: 767px) {
+    width: 35%;
+  }
+  @media screen and (min-width: 768px) {
+    width: 200px;
+  }
+}
+
+.offer-title {
+  font-weight: 600;
+  text-decoration: underline;
+}

@@ -1,0 +1,45 @@
+.not-found-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  @media screen and (max-width: 767px) {
+    gap: 5px;
+  }
+  @media screen and (min-width: 768px) {
+    gap: 20px;
+  }
+}
+
+.text-container {
+  text-align: center;
+}
+
+.main-text {
+  color: var(--submain-color-variant-1);
+}
+
+.img {
+  @media screen and (max-width: 767px) {
+    width: 50%;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    width: 250px;
+  }
+
+  @media screen and (min-width: 1024px) and (max-width: 1279px) {
+    width: 300px;
+  }
+
+  @media screen and (min-width: 1280px) and (max-width: 1439px) {
+    width: 350px;
+  }
+  @media screen and (min-width: 1440px) and (max-width: 1599px) {
+    width: 400px;
+  }
+  @media screen and (min-width: 1600px) {
+    width: 450px;
+  }
+}

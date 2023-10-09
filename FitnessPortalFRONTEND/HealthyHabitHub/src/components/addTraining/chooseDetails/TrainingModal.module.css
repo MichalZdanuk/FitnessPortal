@@ -1,0 +1,12 @@
+.green-color {
+  color: var(--main-color-variant-1);
+}
+
+.red-color {
+  color: var(--red-color);
+}
+
+.motto {
+  font-style: italic;
+  font-weight: 600;
+}

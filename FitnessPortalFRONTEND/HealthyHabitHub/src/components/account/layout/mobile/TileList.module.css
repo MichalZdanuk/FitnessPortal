@@ -1,0 +1,18 @@
+.tile-div {
+  width: 40dvw;
+  height: 25dvh;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: var(--main-color-variant-1);
+  box-shadow: 8px 8px 24px -6px rgba(66, 68, 90, 1);
+}
+
+.tile-img {
+  width: 50%;
+}

@@ -1,0 +1,170 @@
+:root {
+  --font-family: 'Montserrat', sans-serif;
+  --font-size-xs: 10px;
+  --font-size-sm: 14px;
+  --font-size-md: 18px;
+  --font-size-lg: 24px;
+  --font-size-xl: 30px;
+  --font-size-2xl: 36px;
+  --font-size-3xl: 42px;
+  --font-size-exercise-item: 16px;
+  --background-color: #f1f5f3;
+  --light-green-color: #daf8c9;
+  --main-color-variant-1: #00a896;
+  --main-color-variant-2: #02c39a;
+  --main-color-variant-3: #005b48;
+  --submain-color-variant-1: #05668d;
+  --submain-color-variant-2: #0f8a7d;
+  --red-color: #f10404;
+  --white-color: #f7f7f7;
+  --black-color: #01090c;
+  --light-gray-color: #e3e6e5;
+  --light-gray-colorV2: #bdc2c0;
+  --light-gray-colorV2-2: #c5ceca;
+  --light-gray-colorV3: #a5aaa8;
+  --gray-color: #58595a;
+  --footer-color: #817d7d;
+  --statistics-bg-color: #262626;
+}
+
+/* Smartphone */
+@media screen and (max-width: 767px) {
+  :root {
+    --font-size-xs: 9px;
+    --font-size-sm: 12px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 22px;
+    --font-size-2xl: 26px;
+    --font-size-3xl: 30px;
+    --font-size-exercise-item: 14px;
+  }
+}
+
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --font-size-xs: 10px;
+    --font-size-sm: 14px;
+    --font-size-md: 18px;
+    --font-size-lg: 24px;
+    --font-size-xl: 30px;
+    --font-size-2xl: 36px;
+    --font-size-3xl: 42px;
+    --font-size-exercise-item: 16px;
+  }
+}
+
+/* Medium screens */
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+  :root {
+    --font-size-xs: 12px;
+    --font-size-sm: 16px;
+    --font-size-md: 20px;
+    --font-size-lg: 26px;
+    --font-size-xl: 32px;
+    --font-size-2xl: 38px;
+    --font-size-3xl: 44px;
+    --font-size-exercise-item: 18px;
+  }
+}
+
+/* Large screens */
+@media screen and (min-width: 1280px) and (max-width: 1439px) {
+  :root {
+    --font-size-xs: 14px;
+    --font-size-sm: 18px;
+    --font-size-md: 22px;
+    --font-size-lg: 28px;
+    --font-size-xl: 34px;
+    --font-size-2xl: 40px;
+    --font-size-3xl: 46px;
+    --font-size-exercise-item: 20px;
+  }
+}
+
+/* Extra Large screens */
+@media screen and (min-width: 1440px) and (max-width: 1599px) {
+  :root {
+    --font-size-xs: 16px;
+    --font-size-sm: 20px;
+    --font-size-md: 24px;
+    --font-size-lg: 30px;
+    --font-size-xl: 36px;
+    --font-size-2xl: 42px;
+    --font-size-3xl: 48px;
+    --font-size-exercise-item: 22px;
+  }
+}
+
+/* 2X Large screens and above */
+@media screen and (min-width: 1600px) {
+  :root {
+    --font-size-xs: 18px;
+    --font-size-sm: 22px;
+    --font-size-md: 26px;
+    --font-size-lg: 32px;
+    --font-size-xl: 38px;
+    --font-size-2xl: 44px;
+    --font-size-3xl: 50px;
+    --font-size-exercise-item: 24px;
+  }
+}
+
+/* Apply different fonts and sizes based on media queries */
+body {
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-family: var(--font-family);
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+li,
+hr {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+}
+
+h4 {
+  font-size: var(--font-size-lg);
+  font-weight: 400;
+}
+
+h5,
+li {
+  font-size: var(--font-size-sm);
+  font-weight: 300;
+}
+
+h6 {
+  font-size: var(--font-size-xs);
+  font-weight: 200;
+}
+
+p,
+label {
+  font-size: var(--font-size-md);
+  font-weight: 400;
+}

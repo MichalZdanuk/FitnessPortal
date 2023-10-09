@@ -1,0 +1,13 @@
+.register-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+  background-color: var(--white-color);
+}
+
+.img {
+  width: 20%;
+  margin-bottom: 10%;
+}

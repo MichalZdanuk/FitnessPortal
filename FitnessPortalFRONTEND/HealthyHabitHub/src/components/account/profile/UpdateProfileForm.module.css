@@ -1,0 +1,21 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.update-div {
+  width: 100%;
+}
+
+.submit-button-wrapper {
+  @media screen and (max-width: 767px) {
+    margin-top: 30px;
+  }
+  @media screen and (min-width: 768px) {
+    margin-top: 20px;
+  }
+
+  width: 100%;
+  text-align: center;
+}

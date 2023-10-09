@@ -1,0 +1,85 @@
+.add-friend-div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px;
+  background-color: var(--main-color-variant-2);
+  border-radius: 10px;
+  box-shadow: 8px 8px 24px -8px rgba(66, 68, 90, 1);
+  @media screen and (max-width: 767px) {
+    padding: 10px;
+  }
+
+  @media screen and (min-width: 768px) {
+    padding: 15px;
+  }
+}
+
+.title {
+  font-weight: 600;
+}
+
+.friend-add-motto {
+  font-style: italic;
+}
+
+.input-box {
+  @media screen and (max-width: 767px) {
+    width: 70%;
+  }
+
+  @media screen and (min-width: 768px) {
+    width: 40%;
+  }
+  border-radius: 7px;
+  border: 3px solid var(--gray-color);
+  padding-left: 20px;
+}
+
+.invite-button {
+  @media screen and (max-width: 767px) {
+    min-width: 50%;
+  }
+
+  @media screen and (min-width: 768px) {
+    min-width: 30%;
+  }
+  padding: 1px;
+  border-radius: 7px;
+  border: none;
+  background-color: var(--submain-color-variant-1);
+  color: #f7f7f7;
+  cursor: pointer;
+  transition: background-color 0.4s;
+  box-shadow: 8px 8px 24px -13px rgba(66, 68, 90, 1);
+}
+
+.invite-button:hover {
+  background-color: var(--submain-color-variant-2);
+}
+
+.invite-button:disabled {
+  background-color: #878a89;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.search-section-div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.matching-users-list {
+  list-style: none;
+}
+
+.matching-user {
+  cursor: pointer;
+  transition: color 0.4s;
+}
+
+.matching-user:hover {
+  color: var(--white-color);
+}

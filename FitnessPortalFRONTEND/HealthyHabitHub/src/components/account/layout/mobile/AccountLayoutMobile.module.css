@@ -1,0 +1,8 @@
+.layout-div {
+  display: flex;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  padding-left: 5%;
+  flex-wrap: wrap;
+  gap: 10%;
+}

@@ -1,0 +1,10 @@
+.muscle-group-label {
+  font-weight: 600;
+  color: #383333;
+  @media screen and (max-width: 767px) {
+    margin-bottom: 5px;
+  }
+  @media screen and (min-width: 768px) {
+    margin-bottom: 15px;
+  }
+}

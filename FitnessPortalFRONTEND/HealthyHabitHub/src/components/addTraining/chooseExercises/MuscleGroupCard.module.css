@@ -1,0 +1,18 @@
+.muscle-group-div {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 20px; /* Adjust the space between subcategories */
+  break-inside: avoid-column; /* Prevent subcategories from breaking across columns */
+  background-color: var(--main-color-variant-2);
+  border-radius: 10px;
+  box-shadow: 8px 8px 24px -7px rgba(66, 68, 90, 1);
+  text-align: center;
+
+  /* transition: background-color 0.5s; */
+}
+
+/* .muscle-group-div:hover {
+  background-color: var(--submain-color-variant-2);
+} */

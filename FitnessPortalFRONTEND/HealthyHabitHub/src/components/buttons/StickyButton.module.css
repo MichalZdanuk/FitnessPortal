@@ -1,0 +1,30 @@
+.bottom-button-container {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  bottom: 40px;
+  width: 100%;
+}
+
+.bottom-button {
+  font-weight: 600;
+  width: 50%;
+  padding: 10px 20px;
+  background-color: #ffd700;
+  color: var(--black-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.bottom-button:hover {
+  transform: scale(1.05);
+}
+
+.bottom-button[disabled] {
+  background-color: #ccc; /* Example background color for the disabled state */
+  color: #999; /* Example text color for the disabled state */
+  border: 1px solid var(--footer-color);
+  cursor: not-allowed;
+}

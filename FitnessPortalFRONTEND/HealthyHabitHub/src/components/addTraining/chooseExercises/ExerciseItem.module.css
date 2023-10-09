@@ -1,0 +1,20 @@
+.exercise-item {
+  background-color: #c3fcf1;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  padding: 2px;
+  font-size: var(--font-size-exercise-item);
+  cursor: pointer;
+  transition:
+    background-color 0.4s,
+    color 0.4s;
+}
+
+.exercise-item:hover {
+  background-color: var(--submain-color-variant-2);
+  color: var(--white-color);
+}
+
+.selected {
+  background-color: var(--main-color-variant-1);
+}

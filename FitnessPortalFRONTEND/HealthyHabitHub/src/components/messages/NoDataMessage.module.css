@@ -1,0 +1,33 @@
+.no-data-div {
+  text-align: center;
+}
+
+.main-message {
+  color: var(--gray-color);
+}
+
+.underline {
+  position: relative;
+  color: var(--main-color-variant-2);
+  display: inline;
+
+  &:hover,
+  &:focus,
+  &:active {
+    cursor: pointer;
+    &:after {
+      width: 100%;
+    }
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 3px;
+    background-color: var(--main-color-variant-2);
+    width: 0;
+    transition: width 0.4s;
+  }
+}

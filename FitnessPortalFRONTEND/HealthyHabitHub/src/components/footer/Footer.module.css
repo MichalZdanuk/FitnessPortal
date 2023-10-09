@@ -1,0 +1,20 @@
+.footer {
+  flex-shrink: 0;
+  background-color: var(--footer-color);
+  color: var(--white-color);
+  padding: 2px;
+  text-align: center;
+  box-shadow: 0px -12px 38px -12px rgba(66, 68, 90, 1);
+}
+
+.credentials {
+  display: inline;
+  font-style: italic;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.5s;
+}
+
+.credentials:hover {
+  color: var(--main-color-variant-2);
+}

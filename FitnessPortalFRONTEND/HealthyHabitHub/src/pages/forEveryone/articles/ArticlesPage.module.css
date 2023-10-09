@@ -1,0 +1,29 @@
+.articles-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  @media screen and (max-width: 767px) {
+    gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  @media screen and (min-width: 768px) {
+    gap: 40px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+}
+
+.articles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media screen and (max-width: 767px) {
+    gap: 15px;
+  }
+  @media screen and (min-width: 768px) {
+    gap: 20px;
+  }
+}
