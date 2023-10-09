@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--main-color-variant-1);
+  margin-top: 40vh;
+  font-style: italic;
+}

@@ -1,0 +1,75 @@
+.choose-details-div {
+  padding: 10px;
+}
+
+.main-label {
+  text-align: center;
+  color: var(--main-color-variant-1);
+}
+
+.sub-text {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.series-input {
+  width: 50px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+}
+
+.number-of-series-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.add {
+  transition: color 0.5s;
+}
+
+.add:hover {
+  color: var(--main-color-variant-2);
+}
+
+.remove {
+  transition: color 0.5s;
+}
+
+.remove:hover {
+  color: var(--red-color);
+}
+
+.bottom-margin {
+  margin-bottom: 50px;
+}
+
+.center-button {
+  text-align: center;
+}
+
+.back-button {
+  border: 2px solid var(--light-gray-colorV2);
+  background-color: var(--light-gray-colorV2);
+  border-radius: 8px;
+  padding: 5px;
+  margin-bottom: 10px;
+  transition:
+    background-color 0.5s,
+    border 0.5s,
+    color 0.5s;
+}
+
+.back-button:hover {
+  background-color: var(--gray-color);
+  border: 2px solid var(--gray-color);
+  color: var(--white-color);
+}

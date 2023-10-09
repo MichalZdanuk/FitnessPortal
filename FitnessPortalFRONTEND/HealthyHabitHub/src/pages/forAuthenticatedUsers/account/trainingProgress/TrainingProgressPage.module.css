@@ -1,0 +1,28 @@
+.training-page-div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.title-div {
+  @media screen and (max-width: 767px) {
+    margin-bottom: 50px;
+  }
+}
+
+.chart-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.center-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

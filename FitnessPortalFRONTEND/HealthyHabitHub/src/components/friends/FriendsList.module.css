@@ -1,0 +1,73 @@
+.friends-list-div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px;
+  background-color: var(--main-color-variant-2);
+  border-radius: 10px;
+  box-shadow: 8px 8px 24px -8px rgba(66, 68, 90, 1);
+  @media screen and (max-width: 767px) {
+    padding: 10px;
+  }
+
+  @media screen and (min-width: 768px) {
+    padding: 15px;
+  }
+}
+
+.title {
+  font-weight: 600;
+}
+
+.friend-list-motto {
+  font-style: italic;
+}
+
+.no-friends {
+  color: var(--gray-color);
+}
+
+.friend-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--light-gray-color);
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 8px 8px 24px -8px rgba(66, 68, 90, 1);
+}
+
+.manage-div {
+  display: flex;
+  gap: 20px;
+}
+
+.profile-icon {
+  color: green;
+  cursor: pointer;
+  transition: transform 0.4s;
+}
+
+.profile-icon:hover {
+  transform: scale(1.2);
+}
+
+.remove-icon {
+  color: red;
+  cursor: pointer;
+  transition: transform 0.4s;
+}
+
+.remove-icon:hover {
+  transform: scale(1.2);
+}
+
+.center-spinner {
+  text-align: center;
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

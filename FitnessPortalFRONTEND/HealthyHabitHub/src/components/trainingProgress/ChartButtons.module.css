@@ -1,0 +1,28 @@
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.button {
+  background-color: transparent;
+  border-radius: 10px;
+  padding: 5px;
+  border: 2px solid var(--main-color-variant-1);
+  box-shadow: 8px 8px 24px -6px rgba(66, 68, 90, 1);
+  transition:
+    background-color 0.5s,
+    border 0.5s;
+}
+
+.button:not(.selected):hover {
+  background-color: var(--main-color-variant-2);
+  border: 2px solid var(--main-color-variant-2);
+}
+
+.selected {
+  background-color: var(--main-color-variant-1);
+  color: var(--white-color);
+}

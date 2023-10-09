@@ -1,0 +1,4 @@
+.main-page-container {
+  display: flex;
+  flex-direction: column;
+}

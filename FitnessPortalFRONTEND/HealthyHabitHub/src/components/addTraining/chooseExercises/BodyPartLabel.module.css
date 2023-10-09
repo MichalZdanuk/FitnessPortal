@@ -1,0 +1,12 @@
+.bodyPartLabel {
+  text-align: center;
+  color: var(--gray-color);
+  font-weight: 600;
+  @media screen and (max-width: 767px) {
+    margin-bottom: 10px;
+  }
+
+  @media screen and (min-width: 768px) {
+    margin-bottom: 15px;
+  }
+}

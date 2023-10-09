@@ -1,0 +1,48 @@
+.training-page-container {
+  display: flex;
+}
+
+.left-side {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 5px;
+}
+
+.right-side {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--light-green-color);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-shadow: -12px 0px 26px -22px rgba(66, 68, 90, 1);
+}
+
+.heading {
+  text-align: center;
+}
+
+.my-hr {
+  height: 5px;
+  background-color: #0c0c0c;
+  border: none;
+  border-radius: 10px;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.workout-img {
+  width: 50%;
+}
+
+.add-training-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

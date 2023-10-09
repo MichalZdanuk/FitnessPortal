@@ -1,0 +1,24 @@
+.loud-button {
+  text-align: center;
+  padding: 1%;
+  border-radius: 8px;
+  border: 3px solid var(--main-color-variant-1);
+  font-weight: 600;
+  background-color: var(--main-color-variant-1);
+  color: var(--white-color);
+  cursor: pointer;
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+}
+
+.loud-button:hover {
+  background-color: transparent;
+  color: var(--main-color-variant-1);
+}
+
+.loud-button[disabled] {
+  background-color: #ccc; /* Example background color for the disabled state */
+  color: #999; /* Example text color for the disabled state */
+  cursor: not-allowed;
+}

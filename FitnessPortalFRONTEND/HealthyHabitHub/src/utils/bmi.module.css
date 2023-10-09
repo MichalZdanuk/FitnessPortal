@@ -1,0 +1,15 @@
+.obesity-icon {
+  color: red;
+}
+
+.overweight-icon {
+  color: orange;
+}
+
+.normalweight-icon {
+  color: green;
+}
+
+.underweight-icon {
+  color: rgb(190, 190, 46);
+}

@@ -1,0 +1,67 @@
+.training-stats-div {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.mobile-div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--main-color-variant-1);
+  border-radius: 15px;
+  padding: 10px;
+  width: 80dvw;
+  box-shadow: 8px 8px 24px -8px rgba(66, 68, 90, 1);
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--black-color);
+  font-weight: 600;
+}
+
+.trainings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ex-item {
+  list-style-type: circle;
+  margin-left: 4vw;
+}
+
+/* DESKTOP */
+.desktop-div {
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.desktop-heading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: var(--main-color-variant-1);
+  font-weight: 600;
+}
+
+.container {
+  display: flex;
+}
+.column {
+  width: 50%;
+}
+
+.my-hr {
+  margin: 0.5rem 0;
+}
+
+.training-type {
+  font-weight: 600;
+}
