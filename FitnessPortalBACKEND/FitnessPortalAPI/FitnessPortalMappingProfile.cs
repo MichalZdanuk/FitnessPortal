@@ -14,7 +14,8 @@ namespace FitnessPortalAPI
         {
             CreateMap<CreateArticleDto, Article>()
                 .ForMember(dest => dest.DateOfPublication, opt => opt.MapFrom(src => DateTime.Now));
-            CreateMap<Article, ArticleDto>();
+            CreateMap<Article, ArticleDto>()
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.CreatedBy.Username));
             CreateMap<UpdateArticleDto, Article>();
 
             CreateMap<BMI, BMIDto>();
