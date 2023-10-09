@@ -1,4 +1,4 @@
-name: Lint and Build
+name: Frontend
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  lint:
+  lintFRONTEND:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,7 +24,7 @@ jobs:
         run: npm run lint
         continue-on-error: false
 
-  build:
+  buildFRONTEND:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
