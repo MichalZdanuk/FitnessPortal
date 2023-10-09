@@ -1,0 +1,47 @@
+name: Lint and Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        working-directory: FitnessPortalFRONTEND/HealthyHabitHub
+        run: npm install
+
+      - name: Run linting
+        working-directory: FitnessPortalFRONTEND/HealthyHabitHub
+        run: npm run lint
+        continue-on-error: false
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        working-directory: FitnessPortalFRONTEND/HealthyHabitHub
+        run: npm install
+
+      - name: Run build
+        working-directory: FitnessPortalFRONTEND/HealthyHabitHub
+        run: npm run build
+        continue-on-error: false
+      - name: Check build errors
+        run: |
+          if [[ ${{ job.status }} == 'failure' ]]; then
+            echo "Build failes. Aborting the push."
+            exit 1
+          fi
+        shell: bash
