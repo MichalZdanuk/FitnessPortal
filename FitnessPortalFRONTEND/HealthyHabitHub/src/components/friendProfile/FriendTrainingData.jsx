@@ -17,7 +17,9 @@ const FriendTrainingData = ({ trainings }) => {
           ))}
         </div>
       ) : (
-        <div>friend has no trainings</div>
+        <div className={classes['no-trainings']}>
+          This friend has not add any trainings yet.
+        </div>
       )}
     </div>
   )

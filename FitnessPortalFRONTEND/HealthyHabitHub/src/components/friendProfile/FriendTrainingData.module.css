@@ -17,3 +17,9 @@
   gap: 20px;
   width: 100%;
 }
+
+.no-trainings {
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+}
