@@ -13,6 +13,11 @@
   }
 }
 
+.personal-div:hover {
+  background-color: var(--submain-color-variant-2);
+  box-shadow: 8px 8px 24px -3px rgba(66, 68, 90, 1);
+}
+
 .desktop {
   display: flex;
   flex-direction: column;
