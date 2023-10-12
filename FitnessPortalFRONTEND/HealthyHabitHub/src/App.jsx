@@ -6,7 +6,6 @@ import RegisterPage from './pages/register/RegisterPage'
 import LoginPage from './pages/login/LoginPage'
 import ExercisesPage from './pages/forEveryone/exercises/ExercisesPage'
 import ArticlesPage from './pages/forEveryone/articles/ArticlesPage'
-import ToBeImplementedPage from './pages/ToBeImplementedPage'
 import CalculatorsPage from './pages/forEveryone/calculators/CalculatorsPage'
 import TrainingPage from './pages/forAuthenticatedUsers/trainingCentre/TrainingsPage'
 import Article from './components/articlePage/Article'
@@ -20,6 +19,7 @@ import NotAllowedPage from './pages/forEveryone/notAllowed/NotAllowedPage'
 import AddTrainingPage from './pages/forAuthenticatedUsers/addTraining/AddTrainingPage'
 import TrainingProgressPage from './pages/forAuthenticatedUsers/account/trainingProgress/TrainingProgressPage'
 import FriendsPage from './pages/forAuthenticatedUsers/account/friends/FriendsPage'
+import FriendProfilePage from './pages/forAuthenticatedUsers/account/friends/FriendProfilePage'
 
 function App() {
   useCheckTokenExpiration()
@@ -39,8 +39,8 @@ function App() {
               <Route path="updateProfile" element={<UpdateProfilePage />} />
               <Route path="friendList" element={<FriendsPage />} />
               <Route
-                path="friendList/:friendEmail"
-                element={<ToBeImplementedPage />}
+                path="friendList/:friendId"
+                element={<FriendProfilePage />}
               />
               <Route
                 path="trainingProgress"

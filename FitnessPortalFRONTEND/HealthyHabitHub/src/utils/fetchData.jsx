@@ -17,8 +17,11 @@ const fetchData = async (
     })
     return response.data
   } catch (error) {
-    console.log('error: ', error)
+    //console.log('error: ', error)
     if (error.response && error.response.status === 404) {
+      throw error
+    }
+    if (error.response && error.response.status === 401) {
       throw error
     }
     throw new Error('An error occurred while fetching data.')
