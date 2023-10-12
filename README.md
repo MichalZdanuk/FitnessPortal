@@ -68,26 +68,30 @@ na frontend'zie pod względem formatowania kodu oraz budowy plików projektowych
 
 ![CI](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/73b278a0-f93e-4a1c-b9b3-5b13c9843f66)
 
+## Baza danych
+Poniżej prezentuję diagram encji bazodanowych:
+
+![EntitiesDiagram](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/97a0719e-3114-43c7-9564-ae0d252ad100)
+
 ## REST API
 
 * ### Autoryzacja poprzez token JWT:
 ![autoryzacja](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/b750f1e4-5281-4668-b01a-248eed7fe2c0)
 
-* ### Account Controller (rejestracja, logowanie, aktualizacja profilu, przeglądanie profilu):
-![account_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/4a64fdea-2182-4e17-8254-f6a1cc462b74)
+* ### Account Controller (rejestracja, logowanie, odczyt danych profilu, aktualizacja profilu):
+![account_controller](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/84f3af03-f0a7-4118-9c68-47f1c99c2fe6)
 
-* ### Article Controller (tworzenie, edycja, usuwanie, przeglądanie):
-![article_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/e62682c8-a14a-4f2d-8c77-d71221731b03)
+* ### Article Controller (tworzenie, przeglądanie, edycja, usuwanie):
+![article_controller](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/448cd642-d9bf-427d-92bf-52d9461e399c)
 
 * ### Calculator Controller (wyliczanie, przeglądanie zapisanych wyników BMI):
-![calculator_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/b24923bc-334d-4b13-884f-96550d61f270)
+![calculator_controller](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/c8cd706f-44f9-40bc-9d59-b7207a06d351)
 
-* ### FriendShip Controller (wysyłanie/akceptowanie/odrzucanie zaproszeń, przeglądanie/usuwanie znajomych):
-![friendship_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/9f179bb2-2dd6-49d1-bf74-4023886a43b3)
+* ### Friendship Controller (wysyłanie/akceptowanie/odrzucanie zaproszeń, przeglądanie/usuwanie znajomych):
+![friendship_controller](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/154f3b79-2446-44f9-ac6a-24af3f179318)
 
 * ### Training Controller (dodawanie treningów i przegląd, przegląd ulubionych(na podstawie częstotliwości), możliwość filtrowania treningów ze względu na okres czasowy):
-![training_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/f16db5a7-313c-4213-afbe-54aa8ce4b666)
-
+![training_controller](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/37f183bb-d8cc-4e4c-9e20-641a8dcbea89)
 
 ## Demo:
 * strona główna
