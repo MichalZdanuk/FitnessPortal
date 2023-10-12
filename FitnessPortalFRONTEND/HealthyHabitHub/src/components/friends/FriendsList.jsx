@@ -95,9 +95,7 @@ const FriendItem = ({ friend, removeFriend, navigate }) => {
       <div className={classes['manage-div']}>
         <AccountBoxIcon
           className={classes['profile-icon']}
-          onClick={() =>
-            navigate(`/account/friendlist/${friend.email}`, { state: friend })
-          }
+          onClick={() => navigate(`/account/friendlist/${friend.id}`)}
         />
         <PersonRemoveIcon
           className={classes['remove-icon']}

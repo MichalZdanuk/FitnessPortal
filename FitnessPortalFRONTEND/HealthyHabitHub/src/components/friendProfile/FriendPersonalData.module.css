@@ -1,0 +1,39 @@
+.personal-div {
+  background-color: var(--main-color-variant-1);
+  width: 90%;
+  padding: 10px;
+  border-radius: 15px;
+  transition:
+    box-shadow 0.3s,
+    background-color 0.3s;
+  @media screen and (max-width: 767px) {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  @media screen and (min-width: 768px) {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+.personal-div:hover {
+  background-color: var(--submain-color-variant-2);
+  box-shadow: 8px 8px 24px -3px rgba(66, 68, 90, 1);
+}
+
+.desktop {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+}
+
+.column {
+  width: 50%;
+}
+
+.thick-text {
+  font-weight: 600;
+}
