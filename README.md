@@ -1,7 +1,7 @@
-# FitnessPortal
+# 💪 FitnessPortal
 Projekt realizowany w ramach przedmiotu *"Projekt Dyplomowy - 1DI1633"* na Politechnice Warszawskiej w semestrze 2023L. Tematem projektu jest zaimplementowanie w pełni funkcjonalnego portalu typu fitness (postawienie bazy, zbudowanie oraz wystawienie API oraz zaimplementowanie aplikacji klienckiej, która łączy się z API).
 ***
-## Projekt graficzny - FIGMA:
+## 🎨 Projekt graficzny - FIGMA:
 Projekt Figma został wykonany na samym początku projektu, celem ułatwienia sobie implementowania FrontEnd'u. Wykorzystałem podstawowe dobre praktyki projektowania interfejsów użytkownika: prawo Fitsa, liczba Mullera, czy spójność wewnątrz aplikacji. Metodyka jaką kierowałem się projektując interfejs to **Atomic Design** - więcej można o niej poczytać tutaj:
 
 *https://atomicdesign.bradfrost.com/chapter-2/*
@@ -14,7 +14,7 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 
 ![figma](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/41c639ae-5367-4fce-9bba-f0e506e658f8)
 
-## Technologie:
+## 💻 Technologie:
 ### BackEnd:
 * technologia C# .NET(6.0) - ASP.NET Core Web API
 * Swagger
@@ -28,7 +28,7 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * localstorage
 * JavaScript + Bootstrap
 * ESLint, prettier
-## Wymagania (wstępnie zdefiniowane funkcjonalności):
+## 📜 Wymagania (wstępnie zdefiniowane funkcjonalności):
 * rejestracja/logowanie
 * uaktualnianie danych konta (wiąże się to z generowaniem nowego tokena JWT; zaimplementowana blacklist'a na stare token'y)
 * dodawanie własnych wpisów/przeglądanie wpisów innych
@@ -38,7 +38,7 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * proste kalkulatory: kalkulator BMI, kalkulator zapotrzebowania dziennego na kalorie BMR, kalkulator poziomu tkanki tłuszczowej na podstawie podanych obwodów ciała
 * opisy różnych ćwiczeń/aktywności fizycznych - (statyczny) leksykon ćwiczeń
 * wysoka responsywność na urządzenia mobile oraz desktop
-## Możliwy rozwój aplikacji(funkcjonalności, o które chciałbym wzbogacić aplikację):
+## 🌱 Możliwy rozwój aplikacji(funkcjonalności, o które chciałbym wzbogacić aplikację):
 * dostosowanie aplikacji front'endowej pod urządzenia typu mobile (responsywność) **(zrobione)**
 * dodanie pipeline CI celeme bezpiecznego wprowadzania kodu do repozytorium **(zrobione)**
 * paginacja rezultatów **(zrobione)**
@@ -48,7 +48,7 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * dwujęzyczność portalu - Angielski/Polski (w tym zapisanie po stronie backEnd'u preferencji użytkownika, by po zalogowaniu posiadał stan taki jaki zostawił wylogowując się z aplikacji)
 * mechanizm proponowania nowych obciążeń - prognozowanie progresu w ćwiczeniach na podstawie wykonanych już treningów
 * konteryzacja rozwiązania przy użyciu Docker'a
-## Testowanie aplikacji
+## 🧪 Testowanie aplikacji
 ### BackEnd
 * testy jednostkowe - sprawdziłem poprawność funkcjonowania narzędzia kalkulatora, validatorów oraz przede wszystkim serwisów (wykorzystane biblioteki *MSUnit*, *NSubstitute*, *Shouldly*)
   stosując przy tym konwencję podziału testu AAA (Arrange-Act-Assert)
@@ -62,62 +62,90 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * samodzielne ręczne przetestowanie aplikacji poprzez uruchomienie na ekranach różnej rozdzielczości, uruchiomienie w przeglądarce jako tryb mobile
 * przekazanie aplikacji do niewielkiej grupy osób trzecich celem sprawdzenia intuicyjności aplikacji oraz poznania opinii na temat design'u
 
-## Continuous Integration:
+## 🤖 Continuous Integration:
 Zdecydowałem się w tym repozytorium na wykorzystanie Github Actions do stworzenia **pipeline'a CI**. Dwa proste pliki *api-build-test.yml* oraz *frontend-lint-build.yml* nakładają restrykcje, dzięki którym kod przed wdrożeniem na branch main jest sprawdzany na backend'zie poda kątem budowy projektu oraz uzyskania pozytywnych wyników testów jednostkowych, a
 na frontend'zie pod względem formatowania kodu oraz budowy plików projektowych.
 
 ![CI](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/73b278a0-f93e-4a1c-b9b3-5b13c9843f66)
 
-## REST API
+## 🌐 REST API
 
 * ### Autoryzacja poprzez token JWT:
 ![autoryzacja](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/b750f1e4-5281-4668-b01a-248eed7fe2c0)
 
-* ### Account Controller (rejestracja, logowanie, aktualizacja profilu, przeglądanie profilu):
+* ### Account (rejestracja, logowanie, aktualizacja profilu, przeglądanie profilu):
 ![account_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/4a64fdea-2182-4e17-8254-f6a1cc462b74)
 
-* ### Article Controller (tworzenie, edycja, usuwanie, przeglądanie):
+* ### Article (tworzenie, edycja, usuwanie, przeglądanie):
 ![article_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/e62682c8-a14a-4f2d-8c77-d71221731b03)
 
-* ### Calculator Controller (wyliczanie, przeglądanie zapisanych wyników BMI):
+* ### Calculator (wyliczanie, przeglądanie zapisanych wyników BMI):
 ![calculator_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/b24923bc-334d-4b13-884f-96550d61f270)
 
-* ### FriendShip Controller (wysyłanie/akceptowanie/odrzucanie zaproszeń, przeglądanie/usuwanie znajomych):
+* ### Friendship (wysyłanie/akceptowanie/odrzucanie zaproszeń, przeglądanie/usuwanie znajomych):
 ![friendship_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/9f179bb2-2dd6-49d1-bf74-4023886a43b3)
 
-* ### Training Controller (dodawanie treningów i przegląd, przegląd ulubionych(na podstawie częstotliwości), możliwość filtrowania treningów ze względu na okres czasowy):
+* ### Training (dodawanie treningów i przegląd, przegląd ulubionych(na podstawie częstotliwości), możliwość filtrowania treningów ze względu na okres czasowy):
 ![training_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/f16db5a7-313c-4213-afbe-54aa8ce4b666)
 
 
-## Demo:
+## 🎥 Demo:
 * strona główna
 
- ![main_page_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/0f1173c2-ab2d-4811-826b-e3948605c139)
+![homePage](https://github.com/user-attachments/assets/b7822d18-c7bf-4a7d-8e53-a8d76a7aabd3)
+
+*Pierwszy punkt kontaktu użytkownika z aplikacją, przedstawia kluczowe funkcje i zachęca do rejestracji.*
 
 * rejestracja
+  
+![register](https://github.com/user-attachments/assets/b37f168e-ef09-4250-ae38-c1ec59114d82)
 
-![register_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/02b0b290-cfd1-4eb3-80c6-c50a678f8587)
+*Umożliwia użytkownikom założenie konta, co jest niezbędne do personalizacji funkcji i przechowywania danych treningowych.*
 
-* logowanie
+* profil użytkownika
 
-![login_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/b0ca513a-48b4-4bab-94eb-98c3749ec7ad)
+![profile](https://github.com/user-attachments/assets/dba85fc6-e4d5-48d3-9f70-36ce89316cce)
 
-* strona z artykułami
+*Miejsce, w którym użytkownicy mogą zarządzać swoimi danymi.*
 
-![articles_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/b35ab460-0acd-4a43-9222-b53be1103934)
+* sekcja "Friends"
 
-* kalkulator BMI
+![friends](https://github.com/user-attachments/assets/2e3424a4-d4f2-418b-a68c-a695ff1ccfb4)
 
-![bmi_calc_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/c6c7c293-5268-468a-981c-ad9d77aad10a)
+*Funkcja wspierająca budowanie społeczności, umożliwiająca użytkownikom dodawanie znajomych i wzajemne motywowanie się.*
 
-* kalkulator BMR
+* sekcja "Articles"
 
-![bmr_calc_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/4a321b46-f3f9-4585-8283-efd6134404f8)
+![articles](https://github.com/user-attachments/assets/49ab76ed-e31f-47e9-9902-825f1ddc581f)
 
-* panel treningowy
+*Dostęp do artykułów związanych z treningiem, dietą i zdrowym stylem życia, pomagających w edukacji użytkowników.*
 
-![training_page_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/9f573a21-8b62-4dde-8b7d-221d45fddac2)
+* sekcja "Exercises"
 
-* panel znajomi
+![exercises](https://github.com/user-attachments/assets/cbb6974b-19f7-44c8-947c-27543f13ec39)
 
-![friends_page_gif](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/26b2e687-e4bd-489c-b236-f23ce6595fe0)
+*Baza ćwiczeń pozwalająca użytkownikom zaplanować i dostosować swoje treningi do indywidualnych potrzeb.*
+
+* sekcja "Calcualtors"
+  
+![calcualtors](https://github.com/user-attachments/assets/332671ec-10bb-4555-ab5c-577ae7b4116b)
+
+*Narzędzia do obliczania kalorii, zapotrzebowania na makroskładniki czy BMI, wspierające lepsze zrozumienie postępów.*
+
+* dodawanie treningu
+
+![addTraining](https://github.com/user-attachments/assets/1b1060a1-44b2-4d60-a9a9-acb6f59f1933)
+
+*Pozwala użytkownikom zapisywać sesje treningowe, co zwiększa zaangażowanie i pozwala na dalsze śledzenie postępów.*
+
+* analiza postępów treningowych
+
+![trainings](https://github.com/user-attachments/assets/93627b38-0109-46e5-a074-50a6c87e056c)
+
+*Funkcja prezentująca użytkownikowi szczegółowe dane dotyczące treningów, wspierając w monitorowaniu i optymalizacji planów.*
+
+* śledzenie wyników BMI
+
+![bmi](https://github.com/user-attachments/assets/ab04a7e4-a39f-4678-8cfc-326718ce5cb9)
+
+*Pomaga użytkownikom w zrozumieniu zmian w ich składzie ciała i ich wpływu na zdrowie.*
