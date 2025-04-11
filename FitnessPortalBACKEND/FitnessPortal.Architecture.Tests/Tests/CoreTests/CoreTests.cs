@@ -5,7 +5,6 @@ namespace FitnessPortal.Architecture.Tests.Tests.CoreTests;
 [TestClass]
 public class CoreTests
 {
-	private Assembly _assembly = typeof(FitnessPortalAPI.AssemblyMarker).Assembly;
 
 	[TestMethod]
 	public void Entities_ShouldBe_Classes_And_Public()
@@ -14,7 +13,7 @@ public class CoreTests
 		var isEntityTypeRule = new IsEntityTypeRule();
 
 		// Act
-		var result = Types.InAssembly(_assembly)
+		var result = Types.InAssembly(Consts.Assembly)
 			.That()
 			.ResideInNamespace(Consts.Namespaces.EntitiesNamespace)
 			.Should()
@@ -36,7 +35,7 @@ public class CoreTests
 		var isEnumTypeRule = new IsEnumTypeRule();
 
 		// Act
-		var result = Types.InAssembly(_assembly)
+		var result = Types.InAssembly(Consts.Assembly)
 			.That()
 			.ResideInNamespace(Consts.Namespaces.EnumsNamespace)
 			.Should()
@@ -58,7 +57,7 @@ public class CoreTests
 		var isEnumTypeRule = new IsEnumTypeRule();
 
 		// Act
-		var result = Types.InAssembly(_assembly)
+		var result = Types.InAssembly(Consts.Assembly)
 			.That()
 			.MeetCustomRule(isEnumTypeRule)
 			.Should()
