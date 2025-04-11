@@ -1,9 +1,7 @@
 /FitnessPortalBACKEND/.vs
-/FitnessPortalBACKEND/FitnessPortalAPI/bin
-/FitnessPortalBACKEND/FitnessPortalAPI/obj
+**/bin/
+**/obj/
 /FitnessPortalBACKEND/FitnessPortalAPI.Tests/.vs
-/FitnessPortalBACKEND/FitnessPortalAPI.Tests/bin
-/FitnessPortalBACKEND/FitnessPortalAPI.Tests/obj
 /fitnessportalclient/node_modules
 /FitnessPortalFRONTEND/HealthyHabitHub/node_modules
 /FitnessPortalFRONTEND/HealthyHabitHub/dist
