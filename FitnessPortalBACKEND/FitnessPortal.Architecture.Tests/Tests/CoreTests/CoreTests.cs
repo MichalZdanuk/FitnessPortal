@@ -5,9 +5,6 @@ namespace FitnessPortal.Architecture.Tests.Tests.CoreTests;
 [TestClass]
 public class CoreTests
 {
-	private const string EntitiesNamespace = "FitnessPortalAPI.Entities";
-	private const string EnumsNamespace = "FitnessPortalAPI.Enums";
-	private Assembly _assembly = typeof(FitnessPortalAPI.AssemblyMarker).Assembly;
 
 	[TestMethod]
 	public void Entities_ShouldBe_Classes_And_Public()
@@ -16,9 +13,9 @@ public class CoreTests
 		var isEntityTypeRule = new IsEntityTypeRule();
 
 		// Act
-		var result = Types.InAssembly(_assembly)
+		var result = Types.InAssembly(Consts.Assembly)
 			.That()
-			.ResideInNamespace(EntitiesNamespace)
+			.ResideInNamespace(Consts.Namespaces.EntitiesNamespace)
 			.Should()
 			.MeetCustomRule(isEntityTypeRule)
 			.GetResult();
@@ -38,9 +35,9 @@ public class CoreTests
 		var isEnumTypeRule = new IsEnumTypeRule();
 
 		// Act
-		var result = Types.InAssembly(_assembly)
+		var result = Types.InAssembly(Consts.Assembly)
 			.That()
-			.ResideInNamespace(EnumsNamespace)
+			.ResideInNamespace(Consts.Namespaces.EnumsNamespace)
 			.Should()
 			.MeetCustomRule(isEnumTypeRule)
 			.GetResult();
@@ -50,6 +47,28 @@ public class CoreTests
 		{
 			var failingTypes = string.Join(", ", result.FailingTypes.Select(_t => _t.Name));
 			Assert.Fail($"The following types do not meet the Enum naming and type conventions: {failingTypes}");
+		}
+	}
+
+	[TestMethod]
+	public void Enums_Should_Only_Exist_In_Enums_Namespace()
+	{
+		// Arrange
+		var isEnumTypeRule = new IsEnumTypeRule();
+
+		// Act
+		var result = Types.InAssembly(Consts.Assembly)
+			.That()
+			.MeetCustomRule(isEnumTypeRule)
+			.Should()
+			.ResideInNamespace(Consts.Namespaces.EnumsNamespace)
+			.GetResult();
+
+		// Assert
+		if (!result.IsSuccessful)
+		{
+			var failingTypes = string.Join(", ", result.FailingTypes.Select(t => $"{t.Name} ({t.Namespace})"));
+			Assert.Fail($"The following Enums are not in '{Consts.Namespaces.EnumsNamespace}' actual namespaces: {failingTypes}");
 		}
 	}
 
