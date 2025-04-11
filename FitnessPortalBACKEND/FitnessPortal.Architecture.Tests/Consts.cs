@@ -1,4 +1,6 @@
-﻿namespace FitnessPortal.Architecture.Tests;
+﻿using FluentValidation;
+
+namespace FitnessPortal.Architecture.Tests;
 public class Consts
 {
 	private const string APISufix = "FitnessPortalAPI";
@@ -9,11 +11,15 @@ public class Consts
 		public const string EntitiesNamespace = $"{APISufix}.Entities";
 		public const string EnumsNamespace = $"{APISufix}.Enums";
 		public const string RepositoryInterfacesNamespace = $"{APISufix}.Repositories";
+		public const string ValidatorsNamespace = $"{APISufix}.Validators";
 	}
 
 	public class Sufixes
 	{
 		public const string InterfacePrefix = "I";
 		public const string RepositorySuffix = "Repository";
+
+		public const string ValidatorSuffix = "Validator";
+		public static readonly string AbstractValidatorFullName = typeof(AbstractValidator<>).FullName!;
 	}
 }
