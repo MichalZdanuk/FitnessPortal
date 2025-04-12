@@ -47,3 +47,24 @@ jobs:
 
       - name: Test
         run: dotnet test --configuration Release --no-build --verbosity normal ./FitnessPortalBACKEND/FitnessPortalAPI.Tests/FitnessPortalAPI.Tests.csproj
+
+  archtests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0'
+
+      - name: Restore test project dependencies
+        run: dotnet restore ./FitnessPortalBACKEND/FitnessPortal.Architecture.Tests/FitnessPortal.Architecture.Tests.csproj
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore ./FitnessPortalBACKEND/FitnessPortal.Architecture.Tests/FitnessPortal.Architecture.Tests.csproj
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build --verbosity normal ./FitnessPortalBACKEND/FitnessPortal.Architecture.Tests/FitnessPortal.Architecture.Tests.csproj
