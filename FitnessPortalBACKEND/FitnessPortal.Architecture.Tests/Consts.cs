@@ -12,6 +12,7 @@ public class Consts
 		public const string EnumsNamespace = $"{APISufix}.Enums";
 		public const string RepositoryInterfacesNamespace = $"{APISufix}.Repositories";
 		public const string ValidatorsNamespace = $"{APISufix}.Validators";
+		public const string ModelsNamespace = $"{APISufix}.Models";
 	}
 
 	public class Sufixes
@@ -21,5 +22,7 @@ public class Consts
 
 		public const string ValidatorSuffix = "Validator";
 		public static readonly string AbstractValidatorFullName = typeof(AbstractValidator<>).FullName!;
+
+		public const string DtoSuffix = "Dto";
 	}
 }
