@@ -13,6 +13,7 @@ public class Consts
 		public const string RepositoryInterfacesNamespace = $"{APISufix}.Repositories";
 		public const string ValidatorsNamespace = $"{APISufix}.Validators";
 		public const string ModelsNamespace = $"{APISufix}.Models";
+		public const string ExceptionsNamespace = $"{APISufix}.Exceptions";
 	}
 
 	public class Sufixes
@@ -24,6 +25,9 @@ public class Consts
 		public static readonly string AbstractValidatorFullName = typeof(AbstractValidator<>).FullName!;
 
 		public const string DtoSuffix = "Dto";
+
+		public const string Exception = "Exception";
+		public static readonly string ExceptionFullName = typeof(Exception).FullName!;
 	}
 
 	public class FailMessages
@@ -40,5 +44,8 @@ public class Consts
 
 		public const string ValidatorRuleFailure = "The following types do not meet the validator conventions";
 		public const string ValidatorNamespaceRuleFailure = $"The following validators are not in the {Consts.Namespaces.ValidatorsNamespace} actual namespaces";
+	
+		public const string ExceptionRuleFailure = "The following types do not meet the exception conventions";
+		public const string ExceptionNamespaceRuleFailure = $"The following exceptions are not in the {Consts.Namespaces.ExceptionsNamespace} actual namespaces";
 	}
 }
