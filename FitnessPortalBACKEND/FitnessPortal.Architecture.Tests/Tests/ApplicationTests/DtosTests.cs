@@ -35,11 +35,9 @@ public class DtosTests
 			.GetResult();
 
 		// Assert
-		if (!result.IsSuccessful)
-		{
-			var failingTypes = string.Join(", ", result.FailingTypes.Select(t => t.Name));
-			Assert.Fail($"The following types do not meet the Dtos conventions: {failingTypes}");
-		}
+		result.AssertSuccess(
+			formatFailingType: t => t.Name,
+			failMessage: Consts.FailMessages.DtosRuleFailure);
 	}
 
 	[TestMethod]
@@ -57,10 +55,9 @@ public class DtosTests
 			.GetResult();
 
 		// Assert
-		if (!result.IsSuccessful)
-		{
-			var failingTypes = string.Join(", ", result.FailingTypes.Select(t => $"{t.Name} ({t.Namespace})"));
-			Assert.Fail($"The following Dtos are not in the '{Consts.Namespaces.ModelsNamespace}' actual namespaces: {failingTypes}");
-		}
+		result.AssertSuccess(
+			formatFailingType: t => $"{t.Name} ({t.Namespace})",
+			failMessage: Consts.FailMessages.DtosNamespaceRuleFailure
+			);
 	}
 }

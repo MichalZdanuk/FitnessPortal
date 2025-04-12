@@ -21,11 +21,9 @@ public class CoreTests
 			.GetResult();
 
 		// Assert
-		if (!result.IsSuccessful)
-		{
-			var failingTypes = string.Join(", ", result.FailingTypes.Select(t => t.Name));
-			Assert.Fail($"The following types do not meet the Entities type conventions: {failingTypes}");
-		}
+		result.AssertSuccess(
+			formatFailingType: t => t.Name,
+			failMessage: Consts.FailMessages.EntityRuleFailure);
 	}
 
 	[TestMethod]
@@ -43,11 +41,10 @@ public class CoreTests
 			.GetResult();
 
 		// Assert
-		if (!result.IsSuccessful)
-		{
-			var failingTypes = string.Join(", ", result.FailingTypes.Select(_t => _t.Name));
-			Assert.Fail($"The following types do not meet the Enum naming and type conventions: {failingTypes}");
-		}
+		result.AssertSuccess(
+			formatFailingType: t => t.Name,
+			failMessage: Consts.FailMessages.EnumRuleFailure
+			);
 	}
 
 	[TestMethod]
@@ -65,11 +62,9 @@ public class CoreTests
 			.GetResult();
 
 		// Assert
-		if (!result.IsSuccessful)
-		{
-			var failingTypes = string.Join(", ", result.FailingTypes.Select(t => $"{t.Name} ({t.Namespace})"));
-			Assert.Fail($"The following Enums are not in '{Consts.Namespaces.EnumsNamespace}' actual namespaces: {failingTypes}");
-		}
+		result.AssertSuccess(
+			formatFailingType: t => $"{t.Name} ({t.Namespace})",
+			failMessage: Consts.FailMessages.EnumNamespaceRuleFailure);
 	}
 
 }

@@ -19,11 +19,10 @@ public class RepositoryInterfacesTests
 			.GetResult();
 
 		// Assert
-		if (!result.IsSuccessful)
-		{
-			var failingTypes = string.Join(", ", result.FailingTypes.Select(t => t.Name));
-			Assert.Fail($"The following types do not meet the Repository interface conventions: {failingTypes}");
-		}
+		result.AssertSuccess(
+			formatFailingType: t => t.Name,
+			failMessage: Consts.FailMessages.RepositoryInterfaceRuleFailure
+			);
 	}
 
 	[TestMethod]
@@ -41,10 +40,8 @@ public class RepositoryInterfacesTests
 			.GetResult();
 
 		// Assert
-		if (!result.IsSuccessful)
-		{
-			var failingTypes = string.Join(", ", result.FailingTypes.Select(t => $"{t.Name} ({t.Namespace})"));
-			Assert.Fail($"The following Repository interfaces are not in the '{Consts.Namespaces.RepositoryInterfacesNamespace}' actual namespaces: {failingTypes}");
-		}
+		result.AssertSuccess(
+			formatFailingType: t => $"{t.Name} ({t.Namespace})",
+			failMessage: Consts.FailMessages.RepositoryInterfaceNamespaceRuleFailure);
 	}
 }

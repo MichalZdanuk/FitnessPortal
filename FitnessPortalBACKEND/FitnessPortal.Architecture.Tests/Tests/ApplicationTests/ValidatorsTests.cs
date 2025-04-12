@@ -19,11 +19,9 @@ public class ValidatorsTests
 			.GetResult();
 
 		// Assert
-		if (!result.IsSuccessful)
-		{
-			var failingTypes = string.Join(", ", result.FailingTypes.Select(t => t.Name));
-			Assert.Fail($"The following types do not meet the validator conventions: {failingTypes}");
-		}
+		result.AssertSuccess(
+			formatFailingType: t => t.Name,
+			failMessage: Consts.FailMessages.ValidatorRuleFailure);
 	}
 
 	[TestMethod]
@@ -41,10 +39,8 @@ public class ValidatorsTests
 			.GetResult();
 
 		// Assert
-		if (!result.IsSuccessful)
-		{
-			var failingTypes = string.Join(", ", result.FailingTypes.Select(t => $"{t.Name} ({t.Namespace})"));
-			Assert.Fail($"The following validators are not in the {Consts.Namespaces.ValidatorsNamespace} actual namespaces: {failingTypes}");
-		}
+		result.AssertSuccess(
+			formatFailingType: t => $"{t.Name} ({t.Namespace})",
+			failMessage: Consts.FailMessages.ValidatorNamespaceRuleFailure);
 	}
 }

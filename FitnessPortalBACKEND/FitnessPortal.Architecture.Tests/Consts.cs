@@ -25,4 +25,20 @@ public class Consts
 
 		public const string DtoSuffix = "Dto";
 	}
+
+	public class FailMessages
+	{
+		public const string EntityRuleFailure = "The following types do not meet the Entities type conventions";
+		public const string EnumRuleFailure = "The following types do not meet the Enum naming and type conventions";
+		public const string EnumNamespaceRuleFailure = $"The enums are not in the '{Consts.Namespaces.EnumsNamespace}' actual namespaces";
+
+		public const string DtosRuleFailure = "The following types do not meet the Dtos conventions";
+		public const string DtosNamespaceRuleFailure = $"The Dtos are not in the '{Consts.Namespaces.ModelsNamespace}' actual namespaces";
+
+		public const string RepositoryInterfaceRuleFailure = "The following types do not meet the Repository interface conventions";
+		public const string RepositoryInterfaceNamespaceRuleFailure = $"The following Repository interfaces are not in the '{Consts.Namespaces.RepositoryInterfacesNamespace}' actual namespaces";
+
+		public const string ValidatorRuleFailure = "The following types do not meet the validator conventions";
+		public const string ValidatorNamespaceRuleFailure = $"The following validators are not in the {Consts.Namespaces.ValidatorsNamespace} actual namespaces";
+	}
 }
