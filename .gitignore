@@ -1,6 +1,7 @@
 /FitnessPortalBACKEND/.vs
 **/bin/
 **/obj/
+/.vs/slnx.sqlite
 /FitnessPortalBACKEND/FitnessPortalAPI.Tests/.vs
 /fitnessportalclient/node_modules
 /FitnessPortalFRONTEND/HealthyHabitHub/node_modules
@@ -22,3 +23,4 @@
 /FitnessPortalFRONTEND/HealthyHabitHub/*.njsproj
 /FitnessPortalFRONTEND/HealthyHabitHub/*.sln
 /FitnessPortalFRONTEND/HealthyHabitHub/*.sw?
+/.vs/slnx.sqlite
