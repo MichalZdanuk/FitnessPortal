@@ -4,7 +4,7 @@ public class IsValidatorTypeRule
 {
 	public bool MeetsRule(TypeDefinition type)
 	{
-		if (!type.IsClass)
+		if (!type.IsPublicClass())
 		{
 			return false;
 		}
@@ -14,17 +14,12 @@ public class IsValidatorTypeRule
 			return false;
 		}
 
-		if (!HasValidName(type))
+		if (!type.HasValidSuffix(Consts.Sufixes.ValidatorSuffix))
 		{
 			return false;
 		}
 
 		return true;
-	}
-
-	private bool HasValidName(TypeDefinition type)
-	{
-		return type.Name.EndsWith(Consts.Sufixes.ValidatorSuffix, StringComparison.Ordinal);
 	}
 
 	private bool InheritsFromAbstractValidator(TypeDefinition type)

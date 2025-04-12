@@ -4,12 +4,7 @@ public class IsEntityTypeRule
 {
 	public bool MeetsRule(TypeDefinition type)
 	{
-		if (!type.IsClass)
-		{
-			return false;
-		}
-
-		if (!type.IsPublic)
+		if (!type.IsPublicClass())
 		{
 			return false;
 		}

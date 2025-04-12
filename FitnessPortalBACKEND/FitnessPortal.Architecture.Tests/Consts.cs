@@ -26,6 +26,8 @@ public class Consts
 
 		public const string DtoSuffix = "Dto";
 
+		public const string EnumSuffix = "Enum";
+
 		public const string Exception = "Exception";
 		public static readonly string ExceptionFullName = typeof(Exception).FullName!;
 	}

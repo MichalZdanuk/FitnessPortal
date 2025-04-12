@@ -4,23 +4,16 @@ public class IsRepositoryInterfaceTypeRule
 {
 	public bool MeetsRule(TypeDefinition type)
 	{
-		if (!type.IsInterface)
+		if (!type.IsPublicInterface())
 		{
 			return false;
 		}
 
-		if (!HasValidName(type))
+		if (!(type.HasValidPrefix(Consts.Sufixes.InterfacePrefix) && type.HasValidSuffix(Consts.Sufixes.RepositorySuffix)))
 		{
 			return false;
 		}
 
 		return true;
-	}
-
-	private bool HasValidName(TypeDefinition type)
-	{
-		var typeName = type.Name;
-		return typeName.StartsWith(Consts.Sufixes.InterfacePrefix, StringComparison.Ordinal) &&
-			typeName.EndsWith(Consts.Sufixes.RepositorySuffix, StringComparison.Ordinal);
 	}
 }

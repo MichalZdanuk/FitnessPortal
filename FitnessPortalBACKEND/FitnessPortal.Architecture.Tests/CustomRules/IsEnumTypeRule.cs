@@ -2,25 +2,18 @@
 public class IsEnumTypeRule
 	: ICustomRule
 {
-	private const string _enumSuffix = "Enum";
-
 	public bool MeetsRule(TypeDefinition type)
 	{
-		if (!type.IsEnum)
+		if (!type.IsPublicEnum())
 		{
 			return false;
 		}
 
-		if (!HasValidName(type))
+		if (!type.HasValidSuffix(Consts.Sufixes.EnumSuffix))
 		{
 			return false;
 		}
 
 		return true;
-	}
-
-	private bool HasValidName(TypeDefinition type)
-	{
-		return type.Name.EndsWith(_enumSuffix, StringComparison.Ordinal);
 	}
 }
