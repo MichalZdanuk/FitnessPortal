@@ -1,6 +1,4 @@
-﻿using FitnessPortal.Architecture.Tests.CustomRules;
-
-namespace FitnessPortal.Architecture.Tests.Tests.ApplicationTests;
+﻿namespace FitnessPortal.Architecture.Tests.Tests.ApplicationTests;
 [TestClass]
 public class RepositoryInterfacesTests
 {

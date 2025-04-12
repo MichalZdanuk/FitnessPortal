@@ -1,6 +1,4 @@
-﻿using FitnessPortal.Architecture.Tests.CustomRules;
-
-namespace FitnessPortal.Architecture.Tests.Tests.CoreTests;
+﻿namespace FitnessPortal.Architecture.Tests.Tests.CoreTests;
 
 [TestClass]
 public class CoreTests

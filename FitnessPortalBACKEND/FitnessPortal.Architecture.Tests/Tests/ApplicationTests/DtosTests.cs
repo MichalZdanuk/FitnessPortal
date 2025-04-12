@@ -1,5 +1,4 @@
-﻿using FitnessPortal.Architecture.Tests.CustomRules;
-using FitnessPortalAPI.Models;
+﻿using FitnessPortalAPI.Models;
 using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Models.Trainings;
