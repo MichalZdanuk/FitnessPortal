@@ -61,10 +61,10 @@ jobs:
           dotnet-version: '8.0'
 
       - name: Restore test project dependencies
-        run: dotnet restore ./FitnessPortalBACKEND/FitnessPortalAPI.Architecture.Tests/FitnessPortalAPI.Architecture.Tests.csproj
+        run: dotnet restore ./FitnessPortalBACKEND/FitnessPortal.Architecture.Tests/FitnessPortal.Architecture.Tests.csproj
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore ./FitnessPortalBACKEND/FitnessPortalAPI.Architecture.Tests/FitnessPortalAPI.Architecture.Tests.csproj
+        run: dotnet build --configuration Release --no-restore ./FitnessPortalBACKEND/FitnessPortal.Architecture.Tests/FitnessPortal.Architecture.Tests.csproj
 
       - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal ./FitnessPortalBACKEND/FitnessPortalAPI.Architecture.Tests/FitnessPortalAPI.Architecture.Tests.csproj
+        run: dotnet test --configuration Release --no-build --verbosity normal ./FitnessPortalBACKEND/FitnessPortal.Architecture.Tests/FitnessPortal.Architecture.Tests.csproj
