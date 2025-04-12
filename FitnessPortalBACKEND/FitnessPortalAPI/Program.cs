@@ -45,7 +45,8 @@ builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-builder.Services.AddDbContext<FitnessPortalDbContext>();
+builder.Services.AddDbContext<FitnessPortalDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQL")));
 builder.Services.AddScoped<FitnessPortalSeeder>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
