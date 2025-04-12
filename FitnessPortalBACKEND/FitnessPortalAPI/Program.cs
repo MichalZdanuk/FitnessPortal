@@ -1,19 +1,7 @@
 using FitnessPortalAPI;
-using FitnessPortalAPI.DAL;
-using FitnessPortalAPI.DAL.Repositories;
+using FitnessPortalAPI.DependencyInjection;
 using FitnessPortalAPI.Middleware;
-using FitnessPortalAPI.Models.Articles;
-using FitnessPortalAPI.Models.Calculators;
-using FitnessPortalAPI.Models.Trainings;
-using FitnessPortalAPI.Models.UserProfileActions;
 using FitnessPortalAPI.Seeding;
-using FitnessPortalAPI.Services;
-using FitnessPortalAPI.Validators.Articles;
-using FitnessPortalAPI.Validators.Calculators;
-using FitnessPortalAPI.Validators.Trainings;
-using FitnessPortalAPI.Validators.UserProfileActions;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -42,50 +30,10 @@ builder.Services.AddAuthentication(option =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-builder.Services.AddDbContext<FitnessPortalDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQL")));
-builder.Services.AddScoped<FitnessPortalSeeder>();
-builder.Services.AddScoped<ErrorHandlingMiddleware>();
-
-/* Add repositories */
-builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
-builder.Services.AddScoped<ICalculatorRepository, CalculatorRepository>();
-builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
-
-/* Add services for controllers*/
-builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IArticleService, ArticleService>();
-builder.Services.AddScoped<IFriendshipService, FriendshipService>();
-builder.Services.AddScoped<ITrainingService, TrainingService>();
-builder.Services.AddScoped<ICalculatorService, CalculatorService>();
-
-builder.Services.AddSingleton<ITokenStore, TokenStore>(); // added to check if token is invalid (on blacklist)
-builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-/*user operations validators*/
-builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
-builder.Services.AddScoped<IValidator<LoginUserDto>, LoginUserDtoValidator>();
-builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserDtoValidator>();
-
-/*calculators validators*/
-builder.Services.AddScoped<IValidator<CreateBMIQuery>, CreateBMIQueryValidator>();
-builder.Services.AddScoped<IValidator<CreateBMRQuery>, CreateBMRQueryValidator>();
-builder.Services.AddScoped<IValidator<CreateBodyFatQuery>, CreateBodyFatQueryValidator>();
-
-/*training validators*/
-builder.Services.AddScoped<IValidator<TrainingQuery>, TrainingQueryValidator>();
-builder.Services.AddScoped<IValidator<CreateTrainingDto>, CreateTrainingDtoValidator>();
-builder.Services.AddScoped<IValidator<CreateExerciseDto>, CreateExerciseDtoValidator>();
-
-/*article validators*/
-builder.Services.AddScoped<IValidator<ArticleQuery>, ArticleQueryValidator>();
-builder.Services.AddScoped<IValidator<CreateArticleDto>, CreateArticleDtoValidator>();
-builder.Services.AddScoped<IValidator<UpdateArticleDto>, UpdateArticleDtoValidator>();
-builder.Services.AddHttpContextAccessor();
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddSwaggerGen(option =>
 {
