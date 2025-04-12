@@ -21,7 +21,7 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * JWT
 * FluentValidation
 * EntityFramework + MSSql
-* MSUnit, NSubstitute, Shouldly
+* MSUnit, NSubstitute, Shouldly, NetArchTests
 ### FrontEnd:
 * React (m.in. react-router-dom, recharts, jwt-decode, lodash) - Vite
 * axios
@@ -54,6 +54,9 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
   stosując przy tym konwencję podziału testu AAA (Arrange-Act-Assert)
 ![tests_results](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/4ee6bc39-2e08-4213-bc74-e96297e3884e)
 
+* testy architektoniczne - po czasie rozszerzyłem obszar testowania o poprawność architektury. Testy granualrnie sprawdzają, czy cały projekt zachowuje przyjęte konwencje skanując wszystkie pliki, następnie walidując, czy konkrtetne typy są odpowiednio rozdzielone (modularność) oraz czy spełniają konwencje (spełnianie reguł Clean Architecture). Również zostało zastosowana konwencja AAA
+![archTests](https://github.com/user-attachments/assets/888d6c89-6cf6-4f0e-80b8-27610eddf237)
+
 * testy manualne - testy wykonywane podczas całego okresu powstawania projektu, ręcznie przetestowałem flow akcji udostępnianych przez REST API przy użyciu zarówno Swagger'a jak i Postman'a
 ![postman](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/1d42e008-d2e7-433f-99f6-8a4e17828adf)
 
@@ -63,10 +66,11 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * przekazanie aplikacji do niewielkiej grupy osób trzecich celem sprawdzenia intuicyjności aplikacji oraz poznania opinii na temat design'u
 
 ## 🤖 Continuous Integration:
-Zdecydowałem się w tym repozytorium na wykorzystanie Github Actions do stworzenia **pipeline'a CI**. Dwa proste pliki *api-build-test.yml* oraz *frontend-lint-build.yml* nakładają restrykcje, dzięki którym kod przed wdrożeniem na branch main jest sprawdzany na backend'zie poda kątem budowy projektu oraz uzyskania pozytywnych wyników testów jednostkowych, a
+Zdecydowałem się w tym repozytorium na wykorzystanie Github Actions do stworzenia **pipeline'a CI**. Dwa proste pliki *api-build-test.yml* oraz *frontend-lint-build.yml* nakładają restrykcje, dzięki którym kod przed wdrożeniem na branch main jest sprawdzany na backend'zie poda kątem budowy projektu oraz uzyskania pozytywnych wyników testów jednostkowych i architektonicznych, a
 na frontend'zie pod względem formatowania kodu oraz budowy plików projektowych.
 
-![CI](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/73b278a0-f93e-4a1c-b9b3-5b13c9843f66)
+![pipelines](https://github.com/user-attachments/assets/0e44faa7-3c82-4a48-a1cf-2e8eed6702fe)
+
 
 ## 🌐 REST API
 
