@@ -1,6 +1,7 @@
 /FitnessPortalBACKEND/.vs
 **/bin/
 **/obj/
+/.vs/
 /.vs/slnx.sqlite
 /FitnessPortalBACKEND/FitnessPortalAPI.Tests/.vs
 /fitnessportalclient/node_modules
