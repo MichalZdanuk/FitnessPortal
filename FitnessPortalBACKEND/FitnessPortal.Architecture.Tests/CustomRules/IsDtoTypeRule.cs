@@ -1,15 +1,15 @@
 ﻿namespace FitnessPortal.Architecture.Tests.CustomRules;
-public class IsRepositoryInterfaceTypeRule
+public class IsDtoTypeRule
 	: ICustomRule
 {
 	public bool MeetsRule(TypeDefinition type)
 	{
-		if (!type.IsPublicInterface())
+		if (!type.IsPublicRecord())
 		{
 			return false;
 		}
 
-		if (!(type.HasValidPrefix(Consts.Sufixes.InterfacePrefix) && type.HasValidSuffix(Consts.Sufixes.RepositorySuffix)))
+		if (!type.HasValidSuffix(Consts.Sufixes.DtoSuffix))
 		{
 			return false;
 		}

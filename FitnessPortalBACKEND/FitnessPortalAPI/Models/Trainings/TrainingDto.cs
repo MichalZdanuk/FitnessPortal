@@ -1,6 +1,6 @@
 ﻿namespace FitnessPortalAPI.Models.Trainings
 {
-    public class TrainingDto
+    public record TrainingDto
     {
         public int Id { get; set; }
         public DateTime DateOfTraining { get; set; }

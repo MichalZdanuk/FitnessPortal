@@ -1,6 +1,6 @@
 ﻿namespace FitnessPortalAPI.Models.Trainings
 {
-    public class TrainingStatsDto
+    public record TrainingStatsDto
     {
         public int NumberOfTrainings { get; set; }
         public TrainingDto? BestTraining { get; set; }

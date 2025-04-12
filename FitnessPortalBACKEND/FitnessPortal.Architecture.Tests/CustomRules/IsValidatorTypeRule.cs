@@ -1,12 +1,10 @@
-﻿using Mono.Cecil;
-
-namespace FitnessPortal.Architecture.Tests.CustomRules;
+﻿namespace FitnessPortal.Architecture.Tests.CustomRules;
 public class IsValidatorTypeRule
 	: ICustomRule
 {
 	public bool MeetsRule(TypeDefinition type)
 	{
-		if (!type.IsClass)
+		if (!type.IsPublicClass())
 		{
 			return false;
 		}
@@ -16,17 +14,12 @@ public class IsValidatorTypeRule
 			return false;
 		}
 
-		if (!HasValidName(type))
+		if (!type.HasValidSuffix(Consts.Sufixes.ValidatorSuffix))
 		{
 			return false;
 		}
 
 		return true;
-	}
-
-	private bool HasValidName(TypeDefinition type)
-	{
-		return type.Name.EndsWith(Consts.Sufixes.ValidatorSuffix, StringComparison.Ordinal);
 	}
 
 	private bool InheritsFromAbstractValidator(TypeDefinition type)

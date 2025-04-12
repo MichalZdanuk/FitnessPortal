@@ -1,6 +1,6 @@
 ﻿namespace FitnessPortalAPI.Models.Articles
 {
-    public class CreateArticleDto
+    public record CreateArticleDto
     {
         public string? Title { get; set; }
         public string? ShortDescription { get; set; }

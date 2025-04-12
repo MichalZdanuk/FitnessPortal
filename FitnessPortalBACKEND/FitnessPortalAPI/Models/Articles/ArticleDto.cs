@@ -1,6 +1,6 @@
 ﻿namespace FitnessPortalAPI.Models.Articles
 {
-    public class ArticleDto
+    public record ArticleDto
     {
         public int Id { get; set; }
         public string Author { get; set; } = string.Empty;
