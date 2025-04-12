@@ -1,9 +1,8 @@
 ﻿using FitnessPortalAPI.Models.Trainings;
-using FluentValidation;
 
 namespace FitnessPortalAPI.Validators.Trainings
 {
-    public class CreateTrainingDtoValidator : AbstractValidator<CreateTrainingDto>
+	public class CreateTrainingDtoValidator : AbstractValidator<CreateTrainingDto>
     {
         public CreateTrainingDtoValidator()
         {

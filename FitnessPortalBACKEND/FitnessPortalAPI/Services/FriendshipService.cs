@@ -1,15 +1,9 @@
-﻿using AutoMapper;
-using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Exceptions;
-using FitnessPortalAPI.Models.Friendship;
+﻿using FitnessPortalAPI.Models.Friendship;
 using FitnessPortalAPI.Models.Trainings;
-using FitnessPortalAPI.Repositories;
-using FitnessPortalAPI.Services.Interfaces;
-using System.Linq;
 
 namespace FitnessPortalAPI.Services
 {
-    public class FriendshipService : IFriendshipService
+	public class FriendshipService : IFriendshipService
     {
         private readonly IFriendshipRepository _friendshipRepository;
         private readonly IMapper _mapper;

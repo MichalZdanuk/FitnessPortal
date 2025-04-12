@@ -1,11 +1,9 @@
 ﻿using FitnessPortalAPI.Models.Calculators;
-using FitnessPortalAPI.Services.Interfaces;
 using FitnessPortalAPI.Utilities;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPortalAPI.Controllers
 {
-    [Route("api/calculator")]
+	[Route("api/calculator")]
     [ApiController]
     public class CalculatorController : ControllerBase
     {

@@ -1,12 +1,9 @@
 ﻿using FitnessPortalAPI.Models.UserProfileActions;
-using FitnessPortalAPI.Services.Interfaces;
 using FitnessPortalAPI.Utilities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPortalAPI.Controllers
 {
-    [Route("api/account")]
+	[Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase
     {

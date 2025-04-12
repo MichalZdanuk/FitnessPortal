@@ -1,9 +1,6 @@
-﻿using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Models.Calculators;
-
-namespace FitnessPortalAPI.Repositories
+﻿namespace FitnessPortalAPI.Repositories
 {
-    public interface ICalculatorRepository
+	public interface ICalculatorRepository
     {
         Task AddBmiAsync(BMI bmi);
         Task<List<BMI>> GetBMIsForUserPaginated(int userId, int pageNumber, int pageSize);

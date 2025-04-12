@@ -1,8 +1,6 @@
-﻿using FitnessPortalAPI.Services.Interfaces;
-
-namespace FitnessPortalAPI.Services
+﻿namespace FitnessPortalAPI.Services
 {
-    public class TokenStore : ITokenStore
+	public class TokenStore : ITokenStore
     {
         private readonly HashSet<string> _blacklistedTokens;
 

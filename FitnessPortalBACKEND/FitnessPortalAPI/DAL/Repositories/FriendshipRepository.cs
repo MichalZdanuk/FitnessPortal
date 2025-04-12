@@ -1,10 +1,6 @@
-﻿using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Repositories;
-using Microsoft.EntityFrameworkCore;
-
-namespace FitnessPortalAPI.DAL.Repositories
+﻿namespace FitnessPortalAPI.DAL.Repositories
 {
-    public class FriendshipRepository : IFriendshipRepository
+	public class FriendshipRepository : IFriendshipRepository
     {
         private readonly FitnessPortalDbContext _dbContext;
 

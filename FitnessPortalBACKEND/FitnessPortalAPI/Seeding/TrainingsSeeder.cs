@@ -1,8 +1,6 @@
-﻿using FitnessPortalAPI.Entities;
-
-namespace FitnessPortalAPI.Seeding
+﻿namespace FitnessPortalAPI.Seeding
 {
-    public static class TrainingsSeeder
+	public static class TrainingsSeeder
     {
         public static IEnumerable<Training> GetSampleTrainings(List<User> users)
         {

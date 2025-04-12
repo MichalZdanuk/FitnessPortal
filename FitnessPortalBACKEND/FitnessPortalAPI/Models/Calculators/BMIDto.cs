@@ -1,8 +1,6 @@
-﻿using FitnessPortalAPI.Constants;
-
-namespace FitnessPortalAPI.Models.Calculators
+﻿namespace FitnessPortalAPI.Models.Calculators
 {
-    public record BMIDto
+	public record BMIDto
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

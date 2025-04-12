@@ -1,9 +1,8 @@
 ﻿using FitnessPortalAPI.Models.Articles;
-using FitnessPortalAPI.Models;
 
 namespace FitnessPortalAPI.Services.Interfaces
 {
-    public interface IArticleService
+	public interface IArticleService
     {
         Task<int> CreateAsync(CreateArticleDto dto, int userId);
         Task<PageResult<ArticleDto>> GetPaginatedAsync(ArticleQuery query);

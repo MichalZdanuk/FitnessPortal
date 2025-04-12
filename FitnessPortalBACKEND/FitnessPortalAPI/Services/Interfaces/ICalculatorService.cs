@@ -1,9 +1,8 @@
 ﻿using FitnessPortalAPI.Models.Calculators;
-using FitnessPortalAPI.Models;
 
 namespace FitnessPortalAPI.Services.Interfaces
 {
-    public interface ICalculatorService
+	public interface ICalculatorService
     {
         Task<BMIDto> CalculateBMI(CreateBMIQuery dto, int userId);
         Task<BMIDto> CalculateBMIForAnonymous(CreateBMIQuery dto);

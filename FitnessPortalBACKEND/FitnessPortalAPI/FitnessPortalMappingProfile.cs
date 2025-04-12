@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Models.Articles;
+﻿using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Models.Friendship;
 using FitnessPortalAPI.Models.Trainings;
@@ -8,7 +6,7 @@ using FitnessPortalAPI.Models.UserProfileActions;
 
 namespace FitnessPortalAPI
 {
-    public class FitnessPortalMappingProfile : Profile
+	public class FitnessPortalMappingProfile : Profile
     {
         public FitnessPortalMappingProfile()
         {

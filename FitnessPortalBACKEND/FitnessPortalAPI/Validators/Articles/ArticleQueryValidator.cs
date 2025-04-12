@@ -1,9 +1,8 @@
 ﻿using FitnessPortalAPI.Models.Articles;
-using FluentValidation;
 
 namespace FitnessPortalAPI.Validators.Articles
 {
-    public class ArticleQueryValidator : AbstractValidator<ArticleQuery>
+	public class ArticleQueryValidator : AbstractValidator<ArticleQuery>
     {
         private int[] allowedPageSizes = new[] { 3, 5, 10 };
         public ArticleQueryValidator()

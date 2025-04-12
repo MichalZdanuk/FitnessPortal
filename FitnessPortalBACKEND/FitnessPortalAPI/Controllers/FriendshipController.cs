@@ -1,12 +1,9 @@
 ﻿using FitnessPortalAPI.Models.Friendship;
-using FitnessPortalAPI.Services.Interfaces;
 using FitnessPortalAPI.Utilities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPortalAPI.Controllers
 {
-    [Route("api/friendship")]
+	[Route("api/friendship")]
     [ApiController]
     [Authorize]
     public class FriendshipController : ControllerBase

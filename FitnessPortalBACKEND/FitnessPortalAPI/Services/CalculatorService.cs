@@ -1,14 +1,8 @@
-﻿using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Models.Calculators;
-using FitnessPortalAPI.Models;
-using FitnessPortalAPI.Services.Interfaces;
-using FitnessPortalAPI.Constants;
-using FitnessPortalAPI.Repositories;
-using AutoMapper;
+﻿using FitnessPortalAPI.Models.Calculators;
 
 namespace FitnessPortalAPI.Services
 {
-    public class CalculatorService : ICalculatorService
+	public class CalculatorService : ICalculatorService
     {
         private readonly ICalculatorRepository _calculatorRepository;
         private readonly IMapper _mapper;

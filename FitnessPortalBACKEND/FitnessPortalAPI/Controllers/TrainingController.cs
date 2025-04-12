@@ -1,14 +1,10 @@
-﻿using FitnessPortalAPI.Models.Trainings;
-using FitnessPortalAPI.Models;
-using FitnessPortalAPI.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using FitnessPortalAPI.Constants;
+using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Utilities;
-using FitnessPortalAPI.Constants;
 
 namespace FitnessPortalAPI.Controllers
 {
-    [Route("api/training")]
+	[Route("api/training")]
     [ApiController]
     [Authorize]
     public class TrainingController : ControllerBase

@@ -1,8 +1,6 @@
-﻿using FitnessPortalAPI.Constants;
-
-namespace FitnessPortalAPI
+﻿namespace FitnessPortalAPI
 {
-    public class Calculator
+	public class Calculator
     {
         public void CalculateBMI(float height, float weight, out float bmiIndex, out BMICategory bmiCategory)
         {

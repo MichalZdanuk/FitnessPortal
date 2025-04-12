@@ -1,9 +1,6 @@
-﻿using FitnessPortalAPI.DAL.Repositories;
-using FitnessPortalAPI.Entities;
-
-namespace FitnessPortalAPI.Repositories
+﻿namespace FitnessPortalAPI.Repositories
 {
-    public interface IFriendshipRepository
+	public interface IFriendshipRepository
     {
         Task<FriendshipRequest?> GetFriendshipRequestAsync(int requestId);
         Task<IEnumerable<FriendshipRequest>> GetFriendshipRequestsForUserAsync(int userId);

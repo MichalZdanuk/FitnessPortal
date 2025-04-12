@@ -1,14 +1,13 @@
-﻿using FitnessPortalAPI.Constants;
-using FitnessPortalAPI.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace FitnessPortalAPI.DAL
+﻿namespace FitnessPortalAPI.DAL
 {
-    public class FitnessPortalDbContext : DbContext
+	public class FitnessPortalDbContext : DbContext
     {
-        private string _connectionString =
-            "Server=ZDANUKM;Database=FitnessPortalDatabase;Trusted_Connection=True;TrustServerCertificate=True;";
-        public DbSet<User> Users { get; set; }
+		public FitnessPortalDbContext(DbContextOptions options)
+            : base(options)
+		{
+		}
+
+		public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<BMI> BMIs { get; set; }
         public DbSet<Article> Articles { get; set; }
@@ -48,10 +47,6 @@ namespace FitnessPortalAPI.DAL
                     v => v.ToString(),    // Convert enum to string
                     v => (BMICategory)Enum.Parse(typeof(BMICategory), v) // Convert string to enum
                 );
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_connectionString);
         }
     }
 }

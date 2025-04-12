@@ -1,11 +1,10 @@
 ﻿using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.Models.UserProfileActions;
-using FluentValidation;
 using System.Security.Claims;
 
 namespace FitnessPortalAPI.Validators.UserProfileActions
 {
-    public class UpdateUserDtoValidator : AbstractValidator<UpdateUserDto>
+	public class UpdateUserDtoValidator : AbstractValidator<UpdateUserDto>
     {
         private readonly IHttpContextAccessor _contextAccessor;
 
