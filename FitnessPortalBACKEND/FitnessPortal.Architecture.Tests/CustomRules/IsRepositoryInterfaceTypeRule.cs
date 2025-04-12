@@ -1,6 +1,4 @@
-﻿using Mono.Cecil;
-
-namespace FitnessPortal.Architecture.Tests.CustomRules;
+﻿namespace FitnessPortal.Architecture.Tests.CustomRules;
 public class IsRepositoryInterfaceTypeRule
 	: ICustomRule
 {

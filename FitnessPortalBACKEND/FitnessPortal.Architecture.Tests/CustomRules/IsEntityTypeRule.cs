@@ -1,7 +1,4 @@
-﻿using Mono.Cecil;
-using NetArchTest.Rules;
-
-namespace FitnessPortal.Architecture.Tests.CustomRules;
+﻿namespace FitnessPortal.Architecture.Tests.CustomRules;
 public class IsEntityTypeRule
 	: ICustomRule
 {
