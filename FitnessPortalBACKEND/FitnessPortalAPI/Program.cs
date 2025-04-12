@@ -1,27 +1,21 @@
 using FitnessPortalAPI;
 using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.DAL.Repositories;
-using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Middleware;
 using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Models.UserProfileActions;
-using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Seeding;
 using FitnessPortalAPI.Services;
-using FitnessPortalAPI.Services.Interfaces;
 using FitnessPortalAPI.Validators.Articles;
 using FitnessPortalAPI.Validators.Calculators;
 using FitnessPortalAPI.Validators.Trainings;
 using FitnessPortalAPI.Validators.UserProfileActions;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 

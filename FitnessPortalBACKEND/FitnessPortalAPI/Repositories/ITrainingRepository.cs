@@ -1,9 +1,8 @@
-﻿using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Models.Trainings;
+﻿using FitnessPortalAPI.Models.Trainings;
 
 namespace FitnessPortalAPI.Repositories
 {
-    public interface ITrainingRepository
+	public interface ITrainingRepository
     {
         Task<int> CreateTrainingAsync(Training training, List<Exercise> exercises);
         Task DeleteTraining(int trainingId);

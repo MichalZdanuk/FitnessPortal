@@ -1,9 +1,6 @@
-﻿using FitnessPortalAPI.Constants;
-using FitnessPortalAPI.Entities;
-
-namespace FitnessPortalAPI.Seeding
+﻿namespace FitnessPortalAPI.Seeding
 {
-    public static class BMISeeder
+	public static class BMISeeder
     {
         private static readonly Calculator _calculator = new Calculator();
         public static IEnumerable<BMI> GetBMIRecords(List<User> users)

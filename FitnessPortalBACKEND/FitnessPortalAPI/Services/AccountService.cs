@@ -1,13 +1,5 @@
-﻿using AutoMapper;
-using FitnessPortalAPI.Constants;
-using FitnessPortalAPI.DAL;
-using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Exceptions;
-using FitnessPortalAPI.Models.UserProfileActions;
-using FitnessPortalAPI.Repositories;
-using FitnessPortalAPI.Services.Interfaces;
+﻿using FitnessPortalAPI.Models.UserProfileActions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,7 +7,7 @@ using System.Text;
 
 namespace FitnessPortalAPI.Services
 {
-    public class AccountService : IAccountService
+	public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IPasswordHasher<User> _passwordHasher;

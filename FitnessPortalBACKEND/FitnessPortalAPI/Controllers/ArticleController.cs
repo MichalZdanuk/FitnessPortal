@@ -1,11 +1,9 @@
 ﻿using FitnessPortalAPI.Models.Articles;
-using FitnessPortalAPI.Services.Interfaces;
 using FitnessPortalAPI.Utilities;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPortalAPI.Controllers
 {
-    [Route("api/article")]
+	[Route("api/article")]
     [ApiController]
     public class ArticleController : ControllerBase
     {

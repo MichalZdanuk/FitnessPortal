@@ -1,8 +1,6 @@
-﻿using FitnessPortalAPI.Entities;
-
-namespace FitnessPortalAPI.Repositories
+﻿namespace FitnessPortalAPI.Repositories
 {
-    public interface IAccountRepository
+	public interface IAccountRepository
     {
         Task CreateUserAsync(User user);
         Task<User?> GetUserByEmailAsync(string email);

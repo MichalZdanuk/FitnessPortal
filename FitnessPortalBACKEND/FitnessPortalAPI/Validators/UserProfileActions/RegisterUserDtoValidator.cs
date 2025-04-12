@@ -1,10 +1,9 @@
 ﻿using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.Models.UserProfileActions;
-using FluentValidation;
 
 namespace FitnessPortalAPI.Validators.UserProfileActions
 {
-    public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
+	public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
     {
         private readonly HashSet<string> commonPasswords;
         public RegisterUserDtoValidator(FitnessPortalDbContext dbContext)

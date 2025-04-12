@@ -1,8 +1,6 @@
-﻿using FitnessPortalAPI.Entities;
-
-namespace FitnessPortalAPI.Repositories
+﻿namespace FitnessPortalAPI.Repositories
 {
-    public interface IArticleRepository
+	public interface IArticleRepository
     {
         Task<int> CreateAsync(Article article);
         Task<List<Article>> GetAllAsync(int pageNumber, int pageSize);

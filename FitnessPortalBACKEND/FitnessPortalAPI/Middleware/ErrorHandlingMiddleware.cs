@@ -1,10 +1,6 @@
-﻿using FitnessPortalAPI.Exceptions;
-using FitnessPortalAPI.Services;
-using FitnessPortalAPI.Services.Interfaces;
-
-namespace FitnessPortalAPI.Middleware
+﻿namespace FitnessPortalAPI.Middleware
 {
-    public class ErrorHandlingMiddleware : IMiddleware
+	public class ErrorHandlingMiddleware : IMiddleware
     {
         private readonly ITokenStore _tokenStore;
         public ErrorHandlingMiddleware(ITokenStore tokenStore)

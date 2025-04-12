@@ -1,10 +1,6 @@
-﻿using FitnessPortalAPI.Constants;
-using FitnessPortalAPI.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace FitnessPortalAPI.DAL
+﻿namespace FitnessPortalAPI.DAL
 {
-    public class FitnessPortalDbContext : DbContext
+	public class FitnessPortalDbContext : DbContext
     {
         private string _connectionString =
             "Server=ZDANUKM;Database=FitnessPortalDatabase;Trusted_Connection=True;TrustServerCertificate=True;";

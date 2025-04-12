@@ -1,10 +1,8 @@
-﻿using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Models.Articles;
-using FluentValidation;
+﻿using FitnessPortalAPI.Models.Articles;
 
 namespace FitnessPortalAPI.Validators.Articles
 {
-    public class UpdateArticleDtoValidator : AbstractValidator<UpdateArticleDto>
+	public class UpdateArticleDtoValidator : AbstractValidator<UpdateArticleDto>
     {
         public UpdateArticleDtoValidator()
         {

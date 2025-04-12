@@ -1,11 +1,9 @@
-﻿using FitnessPortalAPI.Constants;
-using FitnessPortalAPI.DAL;
-using FitnessPortalAPI.Entities;
+﻿using FitnessPortalAPI.DAL;
 using Microsoft.AspNetCore.Identity;
 
 namespace FitnessPortalAPI.Seeding
 {
-    public class FitnessPortalSeeder
+	public class FitnessPortalSeeder
     {
         private readonly FitnessPortalDbContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;

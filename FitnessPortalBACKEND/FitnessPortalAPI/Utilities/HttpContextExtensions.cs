@@ -1,9 +1,8 @@
-﻿using FitnessPortalAPI.Exceptions;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace FitnessPortalAPI.Utilities
 {
-    public static class HttpContextExtensions
+	public static class HttpContextExtensions
     {
         public static int EnsureUserId(HttpContext httpContext)
         {

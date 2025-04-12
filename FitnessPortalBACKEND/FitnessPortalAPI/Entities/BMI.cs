@@ -1,8 +1,6 @@
-﻿using FitnessPortalAPI.Constants;
-
-namespace FitnessPortalAPI.Entities
+﻿namespace FitnessPortalAPI.Entities
 {
-    public class BMI
+	public class BMI
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

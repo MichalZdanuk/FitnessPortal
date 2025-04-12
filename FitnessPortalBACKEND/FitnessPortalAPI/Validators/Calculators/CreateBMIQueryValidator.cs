@@ -1,9 +1,8 @@
 ﻿using FitnessPortalAPI.Models.Calculators;
-using FluentValidation;
 
 namespace FitnessPortalAPI.Validators.Calculators
 {
-    public class CreateBMIQueryValidator : AbstractValidator<CreateBMIQuery>
+	public class CreateBMIQueryValidator : AbstractValidator<CreateBMIQuery>
     {
         public CreateBMIQueryValidator()
         {

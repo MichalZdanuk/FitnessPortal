@@ -1,14 +1,8 @@
-﻿using FitnessPortalAPI.Entities;
-using FitnessPortalAPI.Exceptions;
-using FitnessPortalAPI.Models.Articles;
-using FitnessPortalAPI.Models;
-using FitnessPortalAPI.Services.Interfaces;
-using FitnessPortalAPI.Repositories;
-using AutoMapper;
+﻿using FitnessPortalAPI.Models.Articles;
 
 namespace FitnessPortalAPI.Services
 {
-    public class ArticleService : IArticleService
+	public class ArticleService : IArticleService
     {
         private readonly IArticleRepository _articleRepository;
         private readonly IMapper _mapper;
