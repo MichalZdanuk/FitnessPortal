@@ -50,14 +50,14 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * konteryzacja rozwiązania przy użyciu Docker'a
 ## 🧪 Testowanie aplikacji
 ### BackEnd
-* testy jednostkowe - sprawdziłem poprawność funkcjonowania narzędzia kalkulatora, validatorów oraz przede wszystkim serwisów (wykorzystane biblioteki *MSUnit*, *NSubstitute*, *Shouldly*)
+* *testy jednostkowe* - sprawdziłem poprawność funkcjonowania narzędzia kalkulatora, validatorów oraz przede wszystkim serwisów (wykorzystane biblioteki *MSUnit*, *NSubstitute*, *Shouldly*)
   stosując przy tym konwencję podziału testu AAA (Arrange-Act-Assert)
 ![tests_results](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/4ee6bc39-2e08-4213-bc74-e96297e3884e)
 
-* testy architektoniczne - po czasie rozszerzyłem obszar testowania o poprawność architektury. Testy granualrnie sprawdzają, czy cały projekt zachowuje przyjęte konwencje skanując wszystkie pliki, następnie walidując, czy konkrtetne typy są odpowiednio rozdzielone (modularność) oraz czy spełniają konwencje (spełnianie reguł Clean Architecture). Również zostało zastosowana konwencja AAA
+* *testy architektoniczne* - po czasie rozszerzyłem obszar testowania o poprawność architektury. Testy granualrnie sprawdzają, czy cały projekt zachowuje przyjęte konwencje skanując wszystkie pliki, następnie walidując, czy konkrtetne typy są odpowiednio rozdzielone (modularność) oraz czy spełniają konwencje (spełnianie reguł Clean Architecture). Również zostało zastosowana konwencja AAA
 ![archTests](https://github.com/user-attachments/assets/888d6c89-6cf6-4f0e-80b8-27610eddf237)
 
-* testy manualne - testy wykonywane podczas całego okresu powstawania projektu, ręcznie przetestowałem flow akcji udostępnianych przez REST API przy użyciu zarówno Swagger'a jak i Postman'a
+* *testy manualne* - testy wykonywane podczas całego okresu powstawania projektu, ręcznie przetestowałem flow akcji udostępnianych przez REST API przy użyciu zarówno Swagger'a jak i Postman'a
 ![postman](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/1d42e008-d2e7-433f-99f6-8a4e17828adf)
 
 
