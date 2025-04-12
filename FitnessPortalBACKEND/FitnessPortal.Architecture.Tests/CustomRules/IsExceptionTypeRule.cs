@@ -4,7 +4,7 @@ public class IsExceptionTypeRule
 {
 	public bool MeetsRule(TypeDefinition type)
 	{
-		if (!type.IsClass)
+		if (!type.IsPublicClass())
 		{
 			return false;
 		}
@@ -14,7 +14,7 @@ public class IsExceptionTypeRule
 			return false;
 		}
 
-		if (!HasValidName(type))
+		if (!type.HasValidSuffix(Consts.Sufixes.Exception))
 		{
 			return false;
 		}
@@ -25,10 +25,5 @@ public class IsExceptionTypeRule
 	private bool InheritsFromException(TypeDefinition type)
 	{
 		return type.BaseType != null && type.BaseType.FullName == Consts.Sufixes.ExceptionFullName;
-	}
-
-	private bool HasValidName(TypeDefinition type)
-	{
-		return type.Name.EndsWith(Consts.Sufixes.Exception, StringComparison.Ordinal);
 	}
 }
