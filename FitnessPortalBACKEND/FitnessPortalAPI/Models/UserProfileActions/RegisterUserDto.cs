@@ -1,6 +1,6 @@
 ﻿namespace FitnessPortalAPI.Models.UserProfileActions
 {
-    public class RegisterUserDto
+    public record RegisterUserDto
     {
         public string Email { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;

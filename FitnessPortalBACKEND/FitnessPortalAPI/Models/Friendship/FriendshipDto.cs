@@ -1,6 +1,6 @@
 ﻿namespace FitnessPortalAPI.Models.Friendship
 {
-    public class FriendshipDto
+    public record FriendshipDto
     {
         public int Id { get; set; }
         public int SenderId { get; set; }

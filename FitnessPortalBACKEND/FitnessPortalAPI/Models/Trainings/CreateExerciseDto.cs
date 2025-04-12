@@ -1,6 +1,6 @@
 ﻿namespace FitnessPortalAPI.Models.Trainings
 {
-    public class CreateExerciseDto
+    public record CreateExerciseDto
     {
         public string? Name { get; set; }
         public int NumberOfReps { get; set; }

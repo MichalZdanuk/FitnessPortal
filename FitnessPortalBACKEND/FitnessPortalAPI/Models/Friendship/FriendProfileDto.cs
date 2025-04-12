@@ -2,7 +2,7 @@
 
 namespace FitnessPortalAPI.Models.Friendship
 {
-    public class FriendProfileDto
+    public record FriendProfileDto
     {
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;

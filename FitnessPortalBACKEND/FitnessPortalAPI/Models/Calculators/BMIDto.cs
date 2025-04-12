@@ -2,7 +2,7 @@
 
 namespace FitnessPortalAPI.Models.Calculators
 {
-    public class BMIDto
+    public record BMIDto
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

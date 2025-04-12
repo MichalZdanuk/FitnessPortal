@@ -1,6 +1,6 @@
 ﻿namespace FitnessPortalAPI.Models.Calculators
 {
-    public class BodyFatDto
+    public record BodyFatDto
     {
         public float BodyFatLevel { get; set; }
     }
