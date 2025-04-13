@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
 
 namespace FitnessPortal.Architecture.Tests;
 public class Consts
@@ -14,6 +15,7 @@ public class Consts
 		public const string ValidatorsNamespace = $"{APISufix}.Validators";
 		public const string ModelsNamespace = $"{APISufix}.Models";
 		public const string ExceptionsNamespace = $"{APISufix}.Exceptions";
+		public const string MiddlewareNamespace = $"{APISufix}.Middleware";
 	}
 
 	public class Sufixes
@@ -27,6 +29,9 @@ public class Consts
 		public const string DtoSuffix = "Dto";
 
 		public const string EnumSuffix = "Enum";
+
+		public const string MiddlewareSuffix = "Middleware";
+		public static readonly string MiddlewareFullName = typeof(IMiddleware).FullName!;
 
 		public const string Exception = "Exception";
 		public static readonly string ExceptionFullName = typeof(Exception).FullName!;
@@ -49,5 +54,8 @@ public class Consts
 	
 		public const string ExceptionRuleFailure = "The following types do not meet the exception conventions";
 		public const string ExceptionNamespaceRuleFailure = $"The following exceptions are not in the {Consts.Namespaces.ExceptionsNamespace} actual namespaces";
+		
+		public const string MiddlewareRuleFailure = "The following types do not meet the middleware conventions";
+		public const string MiddlewareNamespaceRuleFailure = $"The following middlewares are not in the {Consts.Namespaces.MiddlewareNamespace} actual namespaces";
 	}
 }
