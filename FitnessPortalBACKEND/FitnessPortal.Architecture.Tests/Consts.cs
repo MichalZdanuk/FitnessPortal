@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessPortal.Architecture.Tests;
 public class Consts
@@ -17,6 +18,7 @@ public class Consts
 		public const string ExceptionsNamespace = $"{APISufix}.Exceptions";
 		public const string MiddlewareNamespace = $"{APISufix}.Middleware";
 		public const string RepositoryNamespace = $"{APISufix}.DAL.Repositories";
+		public const string DbContextNamespace = $"{APISufix}.DAL";
 	}
 
 	public class Sufixes
@@ -36,6 +38,9 @@ public class Consts
 
 		public const string Exception = "Exception";
 		public static readonly string ExceptionFullName = typeof(Exception).FullName!;
+
+		public const string DbContext = "DbContext";
+		public static readonly string DbContextFullName = typeof(DbContext).FullName!;
 	}
 
 	public class FailMessages
@@ -62,5 +67,7 @@ public class Consts
 		public const string RepositoryRuleFailure = "The following types do not meet the repository conventions";
 		public const string RepositoryNamespaceRuleFailure = $"The following repositiories are not in the {Consts.Namespaces.RepositoryNamespace} actual namespaces";
 	
+		public const string DbContextRuleFailure = "The following types do not meet the DbContext conventions";
+		public const string DbContextNamespaceRuleFailure = $"The following DbContexts are not in the {Consts.Namespaces.DbContextNamespace} actual namespaces";
 	}
 }
