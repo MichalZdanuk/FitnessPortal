@@ -6,14 +6,14 @@ public class RepositoryTests
 	public void Repository_ShouldBe_PublicClass_And_Implement_IRepository_And_Have_Repository_Suffix()
 	{
 		// Arrange
-		var isRepositoryRuleType = new IsRepositoryTypeRule();
+		var isRepositoryTypeRule = new IsRepositoryTypeRule();
 
 		// Act
 		var result = Types.InAssembly(Consts.Assembly)
 			.That()
 			.ResideInNamespace(Consts.Namespaces.RepositoryNamespace)
 			.Should()
-			.MeetCustomRule(isRepositoryRuleType)
+			.MeetCustomRule(isRepositoryTypeRule)
 			.GetResult();
 
 		// Assert
@@ -26,12 +26,12 @@ public class RepositoryTests
 	public void Repositories_ShouldBe_In_DALRepositoriesNamespace()
 	{
 		// Arrange
-		var isRepositoryRuleType = new IsRepositoryTypeRule();
+		var isRepositoryTypeRule = new IsRepositoryTypeRule();
 
 		// Act
 		var result = Types.InAssembly(Consts.Assembly)
 			.That()
-			.MeetCustomRule(isRepositoryRuleType)
+			.MeetCustomRule(isRepositoryTypeRule)
 			.Should()
 			.ResideInNamespace(Consts.Namespaces.RepositoryNamespace)
 			.GetResult();
