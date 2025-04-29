@@ -28,7 +28,7 @@ namespace FitnessPortalAPI.Tests.Services
             _passwordHasher = Substitute.For<IPasswordHasher<User>>();
             _authenticationSettings = new AuthenticationSettings
             {
-                JwtKey = "PRIVATE_KEY_DONT_SHARE",
+                JwtKey = "SUPER_LONG_PRIVATE_KEY_DONT_SHARE",
                 JwtExpireDays = 1,
                 JwtIssuer = "http://fitnessportalapi.com",
             };
