@@ -3,103 +3,91 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
-namespace FitnessPortalAPI.Services
+namespace FitnessPortalAPI.Services;
+
+public class AccountService(IAccountRepository accountRepository,
+		IPasswordHasher<User> passwordHasher,
+		AuthenticationSettings authenticationSettings,
+		ITokenStore tokenStore,
+		IMapper mapper)
+		: IAccountService
 {
-	public class AccountService : IAccountService
-    {
-        private readonly IAccountRepository _accountRepository;
-        private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly AuthenticationSettings _authenticationSettings;
-        private readonly ITokenStore _tokenStore;
-        private readonly IMapper _mapper;
+	public async Task RegisterUserAsync(RegisterUserDto dto)
+	{
+		var newUser = mapper.Map<User>(dto);
+		newUser.RoleId = (int)Roles.User;
+		var hashedPassword = passwordHasher.HashPassword(newUser, dto.Password);
+		newUser.PasswordHash = hashedPassword;
 
-        public AccountService(IAccountRepository accountRepository, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings, ITokenStore tokenStore, IMapper mapper)
-        {
-            _accountRepository = accountRepository;
-            _passwordHasher = passwordHasher;
-            _authenticationSettings = authenticationSettings;
-            _tokenStore = tokenStore;
-            _mapper = mapper;
-        }
+		await accountRepository.CreateUserAsync(newUser);
+	}
 
-        public async Task RegisterUserAsync(RegisterUserDto dto)
-        {
-            var newUser = _mapper.Map<User>(dto);
-            newUser.RoleId = (int)Roles.User;
-            var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
-            newUser.PasswordHash = hashedPassword;
+	public async Task<string> GenerateJwtAsync(LoginUserDto dto)
+	{
+		var user = await accountRepository.GetUserByEmailAsync(dto.Email);
 
-            await _accountRepository.CreateUserAsync(newUser);
-        }
+		if (user == null)
+			throw new BadRequestException("Invalid username or password");
 
-        public async Task<string> GenerateJwtAsync(LoginUserDto dto)
-        {
-            var user = await _accountRepository.GetUserByEmailAsync(dto.Email);
+		var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
 
-            if (user == null)
-                throw new BadRequestException("Invalid username or password");
+		if (result == PasswordVerificationResult.Failed)
+			throw new BadRequestException("Invalid username or password");
 
-            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+		return GenerateJwtToken(user);
+	}
 
-            if (result == PasswordVerificationResult.Failed)
-                throw new BadRequestException("Invalid username or password");
+	public async Task<UserProfileInfoDto> GetProfileInfoAsync(int userId)
+	{
+		var user = await accountRepository.GetUserByIdAsync(userId);
 
-            return GenerateJwtToken(user);
-        }
+		if (user == null)
+			throw new NotFoundException("User not found");
 
-        public async  Task<UserProfileInfoDto> GetProfileInfoAsync(int userId)
-        {
-            var user = await _accountRepository.GetUserByIdAsync(userId);
+		var userProfileInfoDto = mapper.Map<UserProfileInfoDto>(user);
+		userProfileInfoDto.NumberOfFriends = user.Friends.Count();
 
-            if (user == null)
-                throw new NotFoundException("User not found");
+		return userProfileInfoDto;
+	}
 
-            var userProfileInfoDto = _mapper.Map<UserProfileInfoDto>(user);
-            userProfileInfoDto.NumberOfFriends = user.Friends.Count();
+	public async Task<string> UpdateProfileAsync(UpdateUserDto dto, int userId, string previousToken)
+	{
+		var userToBeUpdated = await accountRepository.GetUserByIdAsync(userId);
 
-            return userProfileInfoDto;
-        }
+		if (userToBeUpdated == null)
+			throw new ForbiddenException("You are not allowed to update profile");
 
-        public async Task<string> UpdateProfileAsync(UpdateUserDto dto, int userId, string previousToken)
-        {
-            var userToBeUpdated = await _accountRepository.GetUserByIdAsync(userId);
+		await tokenStore.BlacklistTokenAsync(previousToken);
+		mapper.Map(dto, userToBeUpdated);
+		await accountRepository.UpdateUserAsync(userToBeUpdated);
 
-            if (userToBeUpdated == null)
-                throw new ForbiddenException("You are not allowed to update profile");
+		return GenerateJwtToken(userToBeUpdated);
+	}
 
-            await _tokenStore.BlacklistTokenAsync(previousToken);
-            _mapper.Map(dto, userToBeUpdated);
-            await _accountRepository.UpdateUserAsync(userToBeUpdated);
+	private string GenerateJwtToken(User user)
+	{
+		var claims = new List<Claim>()
+			{
+				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+				new Claim(ClaimTypes.Email, user.Email),
+				new Claim(ClaimTypes.Name, user.Username),
+				new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
+				new Claim("DateOfBirth", user.DateOfBirth?.ToString("yyyy-MM-dd") ?? "N/A")
+			};
 
-            return GenerateJwtToken(userToBeUpdated);
-        }
+		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey));
+		var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+		var expires = DateTime.Now.AddDays(authenticationSettings.JwtExpireDays);
 
-        private string GenerateJwtToken(User user)
-        {
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
-                new Claim("DateOfBirth", user.DateOfBirth?.ToString("yyyy-MM-dd") ?? "N/A")
-            };
+		var token = new JwtSecurityToken(authenticationSettings.JwtIssuer,
+			authenticationSettings.JwtIssuer,
+			claims,
+			expires: expires,
+			signingCredentials: cred);
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
+		var tokenHandler = new JwtSecurityTokenHandler();
 
-            var token = new JwtSecurityToken(_authenticationSettings.JwtIssuer,
-                _authenticationSettings.JwtIssuer,
-                claims,
-                expires: expires,
-                signingCredentials: cred);
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            return tokenHandler.WriteToken(token);
-        }
-    }
+		return tokenHandler.WriteToken(token);
+	}
 }

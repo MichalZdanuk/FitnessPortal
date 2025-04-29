@@ -1,72 +1,63 @@
 ﻿using FitnessPortalAPI.Models.Articles;
 
-namespace FitnessPortalAPI.Services
+namespace FitnessPortalAPI.Services;
+
+public class ArticleService(IArticleRepository articleRepository, IMapper mapper)
+		: IArticleService
 {
-	public class ArticleService : IArticleService
-    {
-        private readonly IArticleRepository _articleRepository;
-        private readonly IMapper _mapper;
+	public async Task<int> CreateAsync(CreateArticleDto dto, int userId)
+	{
+		var article = mapper.Map<Article>(dto);
+		article.DateOfPublication = DateTime.Now;
+		article.CreatedById = userId;
 
-        public ArticleService(IArticleRepository articleRepository, IMapper mapper)
-        {
-            _articleRepository = articleRepository;
-            _mapper = mapper;
-        }
+		var articleId = await articleRepository.CreateAsync(article);
 
-        public async Task<int> CreateAsync(CreateArticleDto dto, int userId)
-        {
-            var article = _mapper.Map<Article>(dto);
-            article.DateOfPublication = DateTime.Now;
-            article.CreatedById = userId;
+		return article.Id;
+	}
 
-            var articleId = await _articleRepository.CreateAsync(article);
+	public async Task<PageResult<ArticleDto>> GetPaginatedAsync(ArticleQuery query)
+	{
+		var articles = await articleRepository.GetAllAsync(query.PageNumber, query.PageSize);
+		var totalItemsCount = await articleRepository.GetTotalCountAsync();
 
-            return article.Id;
-        }
+		var articlesDtos = mapper.Map<List<ArticleDto>>(articles);
 
-        public async Task<PageResult<ArticleDto>> GetPaginatedAsync(ArticleQuery query)
-        {
-            var articles = await _articleRepository.GetAllAsync(query.PageNumber, query.PageSize);
-            var totalItemsCount = await _articleRepository.GetTotalCountAsync();
+		var result = new PageResult<ArticleDto>(articlesDtos, totalItemsCount, query.PageSize, query.PageNumber);
 
-            var articlesDtos = _mapper.Map<List<ArticleDto>>(articles);
+		return result;
+	}
 
-            var result = new PageResult<ArticleDto>(articlesDtos, totalItemsCount, query.PageSize, query.PageNumber);
+	public async Task<ArticleDto> GetByIdAsync(int id)
+	{
+		var article = await articleRepository.GetByIdAsync(id);
 
-            return result;
-        }
+		if (article is null)
+			throw new NotFoundException("Article not found");
 
-        public async Task<ArticleDto> GetByIdAsync(int id)
-        {
-            var article = await _articleRepository.GetByIdAsync(id);
+		var result = mapper.Map<ArticleDto>(article);
 
-            if (article is null)
-                throw new NotFoundException("Article not found");
+		return result;
+	}
 
-            var result = _mapper.Map<ArticleDto>(article);
+	public async Task UpdateAsync(int articleId, UpdateArticleDto dto)
+	{
+		var article = await articleRepository.GetByIdAsync(articleId);
 
-            return result;
-        }
+		if (article == null)
+			throw new NotFoundException("Article not found");
 
-        public async Task UpdateAsync(int articleId, UpdateArticleDto dto)
-        {
-            var article = await _articleRepository.GetByIdAsync(articleId);
+		mapper.Map(dto, article);
 
-            if (article == null)
-                throw new NotFoundException("Article not found");
+		await articleRepository.UpdateAsync(article);
+	}
+	public async Task RemoveAsync(int articleId)
+	{
+		var article = await articleRepository.GetByIdAsync(articleId);
 
-            _mapper.Map(dto, article);
+		if (article is null)
+			throw new NotFoundException("Article not found");
 
-            await _articleRepository.UpdateAsync(article);
-        }
-        public async Task RemoveAsync(int articleId)
-        {
-            var article = await _articleRepository.GetByIdAsync(articleId);
-
-            if (article is null)
-                throw new NotFoundException("Article not found");
-
-            await _articleRepository.DeleteAsync(article.Id);
-        }
-    }
+		await articleRepository.DeleteAsync(article.Id);
+	}
 }

@@ -1,150 +1,141 @@
 ﻿using FitnessPortalAPI.Models.Friendship;
 using FitnessPortalAPI.Models.Trainings;
 
-namespace FitnessPortalAPI.Services
+namespace FitnessPortalAPI.Services;
+
+public class FriendshipService(IFriendshipRepository friendshipRepository, IMapper mapper)
+		: IFriendshipService
 {
-	public class FriendshipService : IFriendshipService
-    {
-        private readonly IFriendshipRepository _friendshipRepository;
-        private readonly IMapper _mapper;
+	public async Task<int> SendFriendshipRequest(int userId, int userToBeRequestedId)
+	{
+		var receiverUser = await friendshipRepository.GetUserByIdAsync(userToBeRequestedId);
+		if (receiverUser == null)
+			throw new BadRequestException("Receiver user does not exist.");
 
-        public FriendshipService(IFriendshipRepository friendshipRepository, IMapper mapper)
-        {
-            _friendshipRepository = friendshipRepository;
-            _mapper = mapper;
-        }
+		var existingRequest = await friendshipRepository.FriendshipRequestExistsAsync(userId, userToBeRequestedId);
+		if (existingRequest)
+			throw new BadRequestException("Frienship request has already been sent between these users.");
 
-        public async Task<int> SendFriendshipRequest(int userId, int userToBeRequestedId)
-        {
-            var receiverUser = await _friendshipRepository.GetUserByIdAsync(userToBeRequestedId);
-            if (receiverUser == null)
-                throw new BadRequestException("Receiver user does not exist.");
+		var usersAreFriends = await friendshipRepository.AreUsersFriendsAsync(userId, userToBeRequestedId);
+		if (usersAreFriends)
+			throw new BadRequestException("These users are already friends.");
 
-            var existingRequest = await _friendshipRepository.FriendshipRequestExistsAsync(userId, userToBeRequestedId);
-            if (existingRequest)
-                throw new BadRequestException("Frienship request has already been sent between these users.");
+		var friendshipRequest = new FriendshipRequest
+		{
+			SenderId = userId,
+			ReceiverId = userToBeRequestedId,
+			SendDate = DateTime.Now,
+		};
 
-            var usersAreFriends = await _friendshipRepository.AreUsersFriendsAsync(userId, userToBeRequestedId);
-            if (usersAreFriends)
-                throw new BadRequestException("These users are already friends.");
+		await friendshipRepository.CreateFriendshipRequestAsync(friendshipRequest);
 
-            var friendshipRequest = new FriendshipRequest
-            {
-                SenderId = userId,
-                ReceiverId = userToBeRequestedId,
-                SendDate = DateTime.Now,
-            };
+		return friendshipRequest.Id;
+	}
 
-            await _friendshipRepository.CreateFriendshipRequestAsync(friendshipRequest);
+	public async Task<IEnumerable<FriendshipDto>> GetFriendshipRequests(int userId)
+	{
+		var friendshipRequests = await friendshipRepository.GetFriendshipRequestsForUserAsync(userId);
 
-            return friendshipRequest.Id;
-        }
+		var friendshipDtos = mapper.Map<List<FriendshipDto>>(friendshipRequests);
 
-        public async Task<IEnumerable<FriendshipDto>> GetFriendshipRequests(int userId)
-        {
-            var friendshipRequests = await _friendshipRepository.GetFriendshipRequestsForUserAsync(userId);
+		return friendshipDtos;
+	}
 
-            var friendshipDtos = _mapper.Map<List<FriendshipDto>>(friendshipRequests);
+	public async Task RejectFriendshipRequest(int userId, int requestId)
+	{
+		var friendRequest = await friendshipRepository.GetFriendshipRequestAsync(requestId);
+		if (friendRequest == null)
+			throw new BadRequestException("Friendship request not found.");
 
-            return friendshipDtos;
-        }
+		if (friendRequest.ReceiverId != userId)
+			throw new ForbiddenException("You are not allowed to remove someone else request!!!");
 
-        public async Task RejectFriendshipRequest(int userId, int requestId)
-        {
-            var friendRequest = await _friendshipRepository.GetFriendshipRequestAsync(requestId);
-            if (friendRequest == null)
-                throw new BadRequestException("Friendship request not found.");
+		await friendshipRepository.RemoveFriendshipRequest(friendRequest);
+	}
 
-            if (friendRequest.ReceiverId != userId)
-                throw new ForbiddenException("You are not allowed to remove someone else request!!!");
+	public async Task AcceptFriendshipRequest(int userId, int requestId)
+	{
+		var friendshipRequest = await friendshipRepository.GetFriendshipRequestAsync(requestId);
 
-            await _friendshipRepository.RemoveFriendshipRequest(friendRequest);
-        }
+		if (friendshipRequest == null)
+			throw new BadRequestException("Friendship request not found.");
 
-        public async Task AcceptFriendshipRequest(int userId, int requestId)
-        {
-            var friendshipRequest = await _friendshipRepository.GetFriendshipRequestAsync(requestId);
+		var sender = friendshipRequest.Sender;
+		var receiver = friendshipRequest.Receiver;
 
-            if (friendshipRequest == null)
-                throw new BadRequestException("Friendship request not found.");
+		if (sender == null || receiver == null)
+			throw new BadRequestException("Invalid sender or receiver.");
 
-            var sender = friendshipRequest.Sender;
-            var receiver = friendshipRequest.Receiver;
+		if (friendshipRequest.ReceiverId != userId)
+			throw new ForbiddenException("You are not allowed to accept someone else request!!!");
 
-            if (sender == null || receiver == null)
-                throw new BadRequestException("Invalid sender or receiver.");
+		await friendshipRepository.AddFriendAsync(sender, receiver);
+		await friendshipRepository.RemoveFriendshipRequest(friendshipRequest);
+	}
 
-            if (friendshipRequest.ReceiverId != userId)
-                throw new ForbiddenException("You are not allowed to accept someone else request!!!");
+	public async Task<IEnumerable<FriendDto>> GetFriendsForUser(int userId)
+	{
+		var user = await friendshipRepository.GetUserByIdAsync(userId);
 
-            await _friendshipRepository.AddFriendAsync(sender, receiver);
-            await _friendshipRepository.RemoveFriendshipRequest(friendshipRequest);
-        }
+		if (user == null)
+			throw new NotFoundException("User not found.");
 
-        public async Task<IEnumerable<FriendDto>> GetFriendsForUser(int userId)
-        {
-            var user = await _friendshipRepository.GetUserByIdAsync(userId);
+		var friends = user.Friends;
 
-            if (user == null)
-                throw new NotFoundException("User not found.");
+		var friendsDtos = mapper.Map<IEnumerable<FriendDto>>(friends);
 
-            var friends = user.Friends;
+		return friendsDtos;
+	}
 
-            var friendsDtos = _mapper.Map<IEnumerable<FriendDto>>(friends);
+	public async Task RemoveFriendship(int userId, int userToBeRemovedId)
+	{
+		var user = await friendshipRepository.GetUserByIdAsync(userId);
 
-            return friendsDtos;
-        }
+		if (user == null)
+			throw new BadRequestException("User not found.");
 
-        public async Task RemoveFriendship(int userId, int userToBeRemovedId)
-        {
-            var user = await _friendshipRepository.GetUserByIdAsync(userId);
+		var friendToBeRemoved = await friendshipRepository.GetUserByIdAsync(userToBeRemovedId);
 
-            if (user == null)
-                throw new BadRequestException("User not found.");
+		if (friendToBeRemoved == null)
+			throw new BadRequestException("Friend not found.");
 
-            var friendToBeRemoved = await _friendshipRepository.GetUserByIdAsync(userToBeRemovedId);
+		var usersAreFriends = await friendshipRepository.AreUsersFriendsAsync(userId, userToBeRemovedId);
 
-            if (friendToBeRemoved == null)
-                throw new BadRequestException("Friend not found.");
+		if (!usersAreFriends)
+		{
+			throw new BadRequestException("You are not friend with this user.");
+		}
 
-            var usersAreFriends = await _friendshipRepository.AreUsersFriendsAsync(userId, userToBeRemovedId);
+		await friendshipRepository.RemoveFriendAsync(user, friendToBeRemoved);
+	}
 
-            if (!usersAreFriends)
-            {
-                throw new BadRequestException("You are not friend with this user.");
-            }
+	public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(int userId, string pattern)
+	{
+		var users = await friendshipRepository.FindUsersWithPattern(userId, pattern);
 
-            await _friendshipRepository.RemoveFriendAsync(user, friendToBeRemoved);
-        }
+		var matchingUsersDtos = mapper.Map<IEnumerable<MatchingUserDto>>(users);
 
-        public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(int userId, string pattern)
-        {
-            var users = await _friendshipRepository.FindUsersWithPattern(userId, pattern);
+		return matchingUsersDtos;
+	}
 
-            var matchingUsersDtos = _mapper.Map<IEnumerable<MatchingUserDto>>(users);
+	public async Task<FriendProfileDto> GetFriendStatistics(int userId, int friendId)
+	{
+		var friend = await friendshipRepository.GetUserByIdAsync(friendId);
 
-            return matchingUsersDtos;
-        }
+		if (friend == null)
+			throw new BadRequestException("Friend not found.");
 
-        public async Task<FriendProfileDto> GetFriendStatistics(int userId, int friendId)
-        {
-            var friend = await _friendshipRepository.GetUserByIdAsync(friendId);
+		var usersAreFriends = await friendshipRepository.AreUsersFriendsAsync(userId, friendId);
+		if (!usersAreFriends)
+			throw new ForbiddenException("Given user is not your friend.");
 
-            if (friend == null)
-                throw new BadRequestException("Friend not found.");
+		var friendTrainings = await friendshipRepository.GetFriendTrainingsAsync(friendId);
 
-            var usersAreFriends = await _friendshipRepository.AreUsersFriendsAsync(userId, friendId);
-            if (!usersAreFriends)
-                throw new ForbiddenException("Given user is not your friend.");
+		var friendProfileDto = mapper.Map<User, FriendProfileDto>(friend);
+		friendProfileDto.NumberOfFriends = friend.Friends.Count();
+		friendProfileDto.NumberOfTrainings = friendTrainings.Count();
+		friendProfileDto.LastThreeTrainings = mapper.Map<List<TrainingDto>>(friendTrainings);
 
-            var friendTrainings = await _friendshipRepository.GetFriendTrainingsAsync(friendId);
-
-            var friendProfileDto = _mapper.Map<User, FriendProfileDto>(friend);
-            friendProfileDto.NumberOfFriends = friend.Friends.Count();
-            friendProfileDto.NumberOfTrainings = friendTrainings.Count();
-            friendProfileDto.LastThreeTrainings = _mapper.Map<List<TrainingDto>>(friendTrainings);
-
-            return friendProfileDto;
-        }
-    }
+		return friendProfileDto;
+	}
 }
