@@ -6,12 +6,6 @@ namespace FitnessPortalAPI.Tests
     [TestClass]
     public class CalculatorTests
     {
-        private Calculator _calculator;
-        public CalculatorTests()
-        {
-            _calculator = new Calculator();
-        }
-
         [TestMethod]
         [DataRow(250, 45, BMICategory.Underweight)] // Minimum valid height and weight
         [DataRow(200, 300, BMICategory.Obesity)]    // Maximum valid height and weight
@@ -24,8 +18,8 @@ namespace FitnessPortalAPI.Tests
             float bmiIndex;
             BMICategory bmiCategory;
 
-            // act
-            _calculator.CalculateBMI(height, weight, out bmiIndex, out bmiCategory);
+			// act
+			Calculator.CalculateBMI(height, weight, out bmiIndex, out bmiCategory);
 
             // assert
             bmiCategory.ShouldBe(expectedCategory);
@@ -40,7 +34,7 @@ namespace FitnessPortalAPI.Tests
             // arrange
 
             // act
-            Action act = () => _calculator.CalculateBMI(height, weight, out _, out _);
+            Action act = () => Calculator.CalculateBMI(height, weight, out _, out _);
 
             // assert
             var exception = Should.Throw<ArgumentException>(act);
@@ -58,7 +52,7 @@ namespace FitnessPortalAPI.Tests
             // arrange
 
             // act
-            Action act = () => _calculator.CalculateBMI(height, weight, out _, out _);
+            Action act = () => Calculator.CalculateBMI(height, weight, out _, out _);
 
             // assert
             var exception = Should.Throw<ArgumentException>(act);
@@ -74,7 +68,7 @@ namespace FitnessPortalAPI.Tests
             float bmrResult = 0f;
 
             // act
-            bmrResult = _calculator.CalculateBMR(height, weight, age, sex);
+            bmrResult = Calculator.CalculateBMR(height, weight, age, sex);
 
             // assert
             bmrResult.ShouldBe(expectedBMRResult);
@@ -90,7 +84,7 @@ namespace FitnessPortalAPI.Tests
             // arrange
 
             // act
-            Action act = () => _calculator.CalculateBMR(height, weight, age, sex);
+            Action act = () => Calculator.CalculateBMR(height, weight, age, sex);
 
             // assert
             var exception = Should.Throw<ArgumentException>(act);
@@ -104,8 +98,8 @@ namespace FitnessPortalAPI.Tests
             bool result = false;
 
             // act
-            float bfResult = _calculator.CalculateBodyFat(175.2f, 98.2f, 38.1f, 55.1f, Sex.Male);
-            float bfResultWideWaist = _calculator.CalculateBodyFat(175.2f, 108.2f, 38.1f, 55.1f, Sex.Male);
+            float bfResult = Calculator.CalculateBodyFat(175.2f, 98.2f, 38.1f, 55.1f, Sex.Male);
+            float bfResultWideWaist = Calculator.CalculateBodyFat(175.2f, 108.2f, 38.1f, 55.1f, Sex.Male);
             result = bfResultWideWaist > bfResult;
 
             // assert
@@ -119,8 +113,8 @@ namespace FitnessPortalAPI.Tests
             bool result = false;
 
             // act
-            float bfResult = _calculator.CalculateBodyFat(175.2f, 98.2f, 35.3f, 55.1f, Sex.Male);
-            float bfResultTallerPerson = _calculator.CalculateBodyFat(185.2f, 98.2f, 38.3f, 55.1f, Sex.Male);
+            float bfResult = Calculator.CalculateBodyFat(175.2f, 98.2f, 35.3f, 55.1f, Sex.Male);
+            float bfResultTallerPerson = Calculator.CalculateBodyFat(185.2f, 98.2f, 38.3f, 55.1f, Sex.Male);
             result = bfResult > bfResultTallerPerson;
 
             // assert
@@ -139,7 +133,7 @@ namespace FitnessPortalAPI.Tests
             // arrange
 
             // act
-            Action act = () => _calculator.CalculateBodyFat(height, waist, neck, hip, sex);
+            Action act = () => Calculator.CalculateBodyFat(height, waist, neck, hip, sex);
 
             // assert
             var exception = Should.Throw<ArgumentException>(act);

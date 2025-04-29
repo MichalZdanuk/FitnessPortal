@@ -7,12 +7,10 @@ namespace FitnessPortalAPI.Seeding
     {
         private readonly FitnessPortalDbContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
-        private Calculator _calculator;
         public FitnessPortalSeeder(FitnessPortalDbContext context, IPasswordHasher<User> passwordHasher)
         {
             _context = context;
             _passwordHasher = passwordHasher;
-            _calculator = new Calculator();
         }
         public void Seed()
         {

@@ -5,13 +5,11 @@ namespace FitnessPortalAPI.Services;
 public class CalculatorService(ICalculatorRepository calculatorRepository, IMapper mapper)
 	: ICalculatorService
 {
-	private Calculator _calculator = new Calculator();
-
 	public async Task<BMIDto> CalculateBMI(CreateBMIQuery dto, int userId)
 	{
 		var bmiIndex = 0.0f;
 		var bmiCategory = BMICategory.Normalweight;
-		_calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
+		Calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
 
 		var bmi = new BMI()
 		{
@@ -33,7 +31,7 @@ public class CalculatorService(ICalculatorRepository calculatorRepository, IMapp
 	{
 		var bmiIndex = 0.0f;
 		var bmiCategory = BMICategory.Normalweight;
-		_calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
+		Calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
 		var bmiDto = new BMIDto()
 		{
 			Date = DateTime.Now,
@@ -58,7 +56,7 @@ public class CalculatorService(ICalculatorRepository calculatorRepository, IMapp
 
 	public async Task<BMRDto> CalculateBMRForAnonymous(CreateBMRQuery bmrQuery)
 	{
-		var bmrResult = _calculator.CalculateBMR(bmrQuery.Height, bmrQuery.Weight, bmrQuery.Age, bmrQuery.Sex);
+		var bmrResult = Calculator.CalculateBMR(bmrQuery.Height, bmrQuery.Weight, bmrQuery.Age, bmrQuery.Sex);
 		var bmrDto = new BMRDto()
 		{
 			BMRScore = bmrResult,
@@ -69,7 +67,7 @@ public class CalculatorService(ICalculatorRepository calculatorRepository, IMapp
 
 	public async Task<BodyFatDto> CalculateBodyFatForAnonymous(CreateBodyFatQuery bodyFatQuery)
 	{
-		var bodyFatResult = _calculator.CalculateBodyFat(bodyFatQuery.Height, bodyFatQuery.Waist, bodyFatQuery.Neck, bodyFatQuery.Hip, bodyFatQuery.Sex);
+		var bodyFatResult = Calculator.CalculateBodyFat(bodyFatQuery.Height, bodyFatQuery.Waist, bodyFatQuery.Neck, bodyFatQuery.Hip, bodyFatQuery.Sex);
 		var bodyFatDto = new BodyFatDto()
 		{
 			BodyFatLevel = bodyFatResult,

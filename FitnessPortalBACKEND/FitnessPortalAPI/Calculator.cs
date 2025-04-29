@@ -1,8 +1,8 @@
 ﻿namespace FitnessPortalAPI
 {
-	public class Calculator
+	public static class Calculator
     {
-        public void CalculateBMI(float height, float weight, out float bmiIndex, out BMICategory bmiCategory)
+        public static void CalculateBMI(float height, float weight, out float bmiIndex, out BMICategory bmiCategory)
         {
             if (height <= 0 || weight <= 0)
             {
@@ -38,7 +38,7 @@
                 bmiCategory = BMICategory.Obesity;
             }
         }
-        public float CalculateBMR(float height, float weight, int age, Sex? sex)
+        public static float CalculateBMR(float height, float weight, int age, Sex? sex)
         {
             if (weight <= 0 || height <= 0 || age <= 0)
             {
@@ -67,7 +67,7 @@
             return bmrResult;
         }
 
-        public float CalculateBodyFat(float height, float waist, float neck, float hip, Sex? sex)
+        public static float CalculateBodyFat(float height, float waist, float neck, float hip, Sex? sex)
         {
             if (height <= 0 || waist <= 0 || neck <= 0 || hip <= 0)
             {
