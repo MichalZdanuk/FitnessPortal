@@ -16,10 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup .NET 6.0
+      - name: Setup .NET 8.0
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '6.0'
+          dotnet-version: '8.0'
 
       - name: Restore API dependencies
         run: dotnet restore ./FitnessPortalBACKEND/FitnessPortalAPI/FitnessPortalAPI.csproj
@@ -34,10 +34,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup .NET 7.0
+      - name: Setup .NET 8.0
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '7.0'
+          dotnet-version: '8.0'
 
       - name: Restore test project dependencies
         run: dotnet restore ./FitnessPortalBACKEND/FitnessPortalAPI.Tests/FitnessPortalAPI.Tests.csproj
