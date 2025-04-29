@@ -1,9 +1,7 @@
-﻿namespace FitnessPortalAPI.Constants
+﻿namespace FitnessPortalAPI.Constants;
+public enum Roles
 {
-    public enum Roles
-    {
-        User = 1,
-        Manager = 2,
-        Admin = 3,
-    }
+	User = 1,
+	Manager = 2,
+	Admin = 3,
 }

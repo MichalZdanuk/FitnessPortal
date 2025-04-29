@@ -1,88 +1,78 @@
 ﻿using FitnessPortalAPI.Models.Calculators;
 
-namespace FitnessPortalAPI.Services
+namespace FitnessPortalAPI.Services;
+
+public class CalculatorService(ICalculatorRepository calculatorRepository, IMapper mapper)
+	: ICalculatorService
 {
-	public class CalculatorService : ICalculatorService
-    {
-        private readonly ICalculatorRepository _calculatorRepository;
-        private readonly IMapper _mapper;
-        private Calculator _calculator = new Calculator();
+	public async Task<BMIDto> CalculateBMIAsync(CreateBMIQuery dto, int userId)
+	{
+		var bmiIndex = 0.0f;
+		var bmiCategory = BMICategory.Normalweight;
+		Calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
 
-        public CalculatorService(ICalculatorRepository calculatorRepository, IMapper mapper)
-        {
-            _calculatorRepository = calculatorRepository;
-            _mapper = mapper;
-        }
+		var bmi = new BMI()
+		{
+			Date = DateTime.Now,
+			BMIScore = bmiIndex,
+			BMICategory = bmiCategory,
+			Height = dto.Height,
+			Weight = dto.Weight,
+			UserId = userId,
+		};
 
-        public async Task<BMIDto> CalculateBMI(CreateBMIQuery dto, int userId)
-        {
-            var bmiIndex = 0.0f;
-            var bmiCategory = BMICategory.Normalweight;
-            _calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
+		await calculatorRepository.AddBmiAsync(bmi);
+		var bmiDto = mapper.Map<BMIDto>(bmi);
 
-            var bmi = new BMI()
-            {
-                Date = DateTime.Now,
-                BMIScore = bmiIndex,
-                BMICategory = bmiCategory,
-                Height = dto.Height,
-                Weight = dto.Weight,
-                UserId = userId,
-            };
+		return bmiDto;
+	}
 
-            await _calculatorRepository.AddBmiAsync(bmi);
-            var bmiDto = _mapper.Map<BMIDto>(bmi);
+	public async Task<BMIDto> CalculateBMIForAnonymousAsync(CreateBMIQuery dto)
+	{
+		var bmiIndex = 0.0f;
+		var bmiCategory = BMICategory.Normalweight;
+		Calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
+		var bmiDto = new BMIDto()
+		{
+			Date = DateTime.Now,
+			BMIScore = bmiIndex,
+			BMICategory = bmiCategory,
+		};
 
-            return bmiDto;
-        }
+		return await Task.FromResult(bmiDto);
+	}
 
-        public async Task<BMIDto> CalculateBMIForAnonymous(CreateBMIQuery dto)
-        {
-            var bmiIndex = 0.0f;
-            var bmiCategory = BMICategory.Normalweight;
-            _calculator.CalculateBMI(dto.Height, dto.Weight, out bmiIndex, out bmiCategory);
-            var bmiDto = new BMIDto()
-            {
-                Date = DateTime.Now,
-                BMIScore = bmiIndex,
-                BMICategory = bmiCategory,
-            };
+	public async Task<PageResult<BMIDto>> GetAllBMIsForUserPaginatedAsync(BMIQuery query, int userId)
+	{
+		var bmis = await calculatorRepository.GetBMIsForUserPaginatedAsync(userId, query.PageNumber, query.PageSize);
+		var totalItemsCount = await calculatorRepository.GetTotalBMIsCountForUserAsync(userId);
 
-            return await Task.FromResult(bmiDto);
-        }
+		var bmiDtos = mapper.Map<List<BMIDto>>(bmis);
 
-        public async Task<PageResult<BMIDto>> GetAllBMIsForUserPaginated(BMIQuery query, int userId)
-        {
-            var bmis = await _calculatorRepository.GetBMIsForUserPaginated(userId, query.PageNumber, query.PageSize);
-            var totalItemsCount = await _calculatorRepository.GetTotalBMIsCountForUser(userId);
+		var result = new PageResult<BMIDto>(bmiDtos, totalItemsCount, query.PageSize, query.PageNumber);
 
-            var bmiDtos = _mapper.Map<List<BMIDto>>(bmis);
+		return result;
+	}
 
-            var result = new PageResult<BMIDto>(bmiDtos, totalItemsCount, query.PageSize, query.PageNumber);
+	public async Task<BMRDto> CalculateBMRForAnonymousAsync(CreateBMRQuery bmrQuery)
+	{
+		var bmrResult = Calculator.CalculateBMR(bmrQuery.Height, bmrQuery.Weight, bmrQuery.Age, bmrQuery.Sex);
+		var bmrDto = new BMRDto()
+		{
+			BMRScore = bmrResult,
+		};
 
-            return result;
-        }
+		return await Task.FromResult(bmrDto);
+	}
 
-        public async Task<BMRDto> CalculateBMRForAnonymous(CreateBMRQuery bmrQuery)
-        {
-            var bmrResult = _calculator.CalculateBMR(bmrQuery.Height, bmrQuery.Weight, bmrQuery.Age, bmrQuery.Sex);
-            var bmrDto = new BMRDto()
-            {
-                BMRScore = bmrResult,
-            };
+	public async Task<BodyFatDto> CalculateBodyFatForAnonymousAsync(CreateBodyFatQuery bodyFatQuery)
+	{
+		var bodyFatResult = Calculator.CalculateBodyFat(bodyFatQuery.Height, bodyFatQuery.Waist, bodyFatQuery.Neck, bodyFatQuery.Hip, bodyFatQuery.Sex);
+		var bodyFatDto = new BodyFatDto()
+		{
+			BodyFatLevel = bodyFatResult,
+		};
 
-            return await Task.FromResult(bmrDto);
-        }
-
-        public async Task<BodyFatDto> CalculateBodyFatForAnonymous(CreateBodyFatQuery bodyFatQuery)
-        {
-            var bodyFatResult = _calculator.CalculateBodyFat(bodyFatQuery.Height, bodyFatQuery.Waist, bodyFatQuery.Neck, bodyFatQuery.Hip, bodyFatQuery.Sex);
-            var bodyFatDto = new BodyFatDto()
-            {
-                BodyFatLevel = bodyFatResult,
-            };
-
-            return await Task.FromResult(bodyFatDto);
-        }
-    }
+		return await Task.FromResult(bodyFatDto);
+	}
 }

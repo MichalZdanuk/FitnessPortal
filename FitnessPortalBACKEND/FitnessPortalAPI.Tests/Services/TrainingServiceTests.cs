@@ -50,7 +50,7 @@ namespace FitnessPortalAPI.Tests.Services
             var userId = 1;
 
             // act
-            await _trainingService.AddTraining(createTrainingDto, userId);
+            await _trainingService.AddTrainingAsync(createTrainingDto, userId);
 
             // assert
             await _trainingRepository.Received(1).CreateTrainingAsync(Arg.Any<Training>(), Arg.Any<List<Exercise>>());
@@ -70,10 +70,10 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetTrainingByIdAsync(trainingId).Returns(training);
 
             // act
-            await _trainingService.DeleteTraining(trainingId, userId);
+            await _trainingService.DeleteTrainingAsync(trainingId, userId);
 
             // assert
-            await _trainingRepository.Received(1).DeleteTraining(trainingId);
+            await _trainingRepository.Received(1).DeleteTrainingAsync(trainingId);
         }
 
         [TestMethod]
@@ -85,7 +85,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetTrainingByIdAsync(invalidTrainingId).Returns(Task.FromResult<Training?>(null));
 
             // act
-            async Task Act() => await _trainingService.DeleteTraining(invalidTrainingId, userId);
+            async Task Act() => await _trainingService.DeleteTrainingAsync(invalidTrainingId, userId);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
@@ -107,7 +107,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetTrainingByIdAsync(trainingId).Returns(training);
 
             // act
-            async Task Act() => await _trainingService.DeleteTraining(trainingId, invaliduserId);
+            async Task Act() => await _trainingService.DeleteTrainingAsync(trainingId, invaliduserId);
 
             // assert
             var exception = await Should.ThrowAsync<ForbiddenException>(Act);
@@ -130,7 +130,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetTotalTrainingsCountForUserAsync(userId).Returns(totalItemsCount);
 
             // act
-            var result = await _trainingService.GetTrainingsPaginated(query, userId);
+            var result = await _trainingService.GetTrainingsPaginatedAsync(query, userId);
 
             // assert
             result.ShouldNotBeNull();
@@ -154,7 +154,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetTotalTrainingsCountForUserAsync(userId).Returns(totalItemsCount);
 
             // act
-            var result = await _trainingService.GetTrainingsPaginated(query, userId);
+            var result = await _trainingService.GetTrainingsPaginatedAsync(query, userId);
 
             // assert
             result.ShouldNotBeNull();
@@ -179,7 +179,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetChartDataAsync(userId, startDate, endDate).Returns(expectedTrainingData);
 
             // act
-            var result = await _trainingService.GetTrainingChartData(period, userId);
+            var result = await _trainingService.GetTrainingChartDataAsync(period, userId);
 
             // assert
             result.ShouldNotBeNull();
@@ -195,7 +195,7 @@ namespace FitnessPortalAPI.Tests.Services
             var userId = 1;
 
             // act
-            async Task Act() => await _trainingService.GetTrainingChartData(period, userId);
+            async Task Act() => await _trainingService.GetTrainingChartDataAsync(period, userId);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
@@ -214,7 +214,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetChartDataAsync(userId, startDate, endDate).Returns(expectedTrainingData);
 
             // act
-            var result = await _trainingService.GetTrainingChartData(period, userId);
+            var result = await _trainingService.GetTrainingChartDataAsync(period, userId);
 
             // assert
             result.ShouldNotBeNull();
@@ -230,13 +230,13 @@ namespace FitnessPortalAPI.Tests.Services
             var bestTraining = new Training { Id = 1 };
             var mostRecentTraining = new Training { Id = 2 };
             var totalTrainings = 5;
-            _trainingRepository.GetUserWithTrainings(userId).Returns(user);
+            _trainingRepository.GetUserWithTrainingsAsync(userId).Returns(user);
             _trainingRepository.GetBestTrainingAsync(userId).Returns(bestTraining);
             _trainingRepository.GetMostRecentTrainingAsync(userId).Returns(mostRecentTraining);
             _trainingRepository.GetTotalTrainingsCountForUserAsync(userId).Returns(totalTrainings);
 
             // act
-            var result = await _trainingService.GetTrainingStats(userId);
+            var result = await _trainingService.GetTrainingStatsAsync(userId);
 
             // assert
             result.ShouldNotBeNull();
@@ -252,10 +252,10 @@ namespace FitnessPortalAPI.Tests.Services
         {
             // arrange
             var userId = 1;
-            _trainingRepository.GetUserWithTrainings(userId).Returns(new User { Id = userId });
+            _trainingRepository.GetUserWithTrainingsAsync(userId).Returns(new User { Id = userId });
 
             // act
-            var result = await _trainingService.GetTrainingStats(userId);
+            var result = await _trainingService.GetTrainingStatsAsync(userId);
 
             // assert
             result.ShouldNotBeNull();
@@ -269,10 +269,10 @@ namespace FitnessPortalAPI.Tests.Services
         {
             // arrange
             var userId = 1;
-            _trainingRepository.GetUserWithTrainings(userId).Returns(Task.FromResult<User?>(null));
+            _trainingRepository.GetUserWithTrainingsAsync(userId).Returns(Task.FromResult<User?>(null));
 
             // act
-            async Task Act() => await _trainingService.GetTrainingStats(userId);
+            async Task Act() => await _trainingService.GetTrainingStatsAsync(userId);
 
             // assert
             var exception = await Should.ThrowAsync<NotFoundException>(Act);
@@ -323,7 +323,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetRecentTrainingsForUserAsync(userId, 3).Returns(trainings);
 
             // act
-            var result = await _trainingService.GetFavouriteExercises(userId);
+            var result = await _trainingService.GetFavouriteExercisesAsync(userId);
 
             // assert
             result.ShouldNotBeNull();
@@ -350,7 +350,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetRecentTrainingsForUserAsync(userId, 3).Returns(new List<Training> { training });
 
             // act
-            var result = await _trainingService.GetFavouriteExercises(userId);
+            var result = await _trainingService.GetFavouriteExercisesAsync(userId);
 
             // assert
             result.ShouldNotBeNull();

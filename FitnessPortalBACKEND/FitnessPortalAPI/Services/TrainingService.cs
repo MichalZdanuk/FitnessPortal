@@ -1,166 +1,157 @@
 ﻿using FitnessPortalAPI.Models.Trainings;
 
-namespace FitnessPortalAPI.Services
+namespace FitnessPortalAPI.Services;
+
+public class TrainingService(ITrainingRepository trainingRepository, IMapper mapper)
+		: ITrainingService
 {
-	public class TrainingService : ITrainingService
-    {
-        private readonly ITrainingRepository _trainingRepository;
-        private readonly IMapper _mapper;
+	public async Task<int> AddTrainingAsync(CreateTrainingDto dto, int userId)
+	{
+		var training = mapper.Map<Training>(dto);
+		training.DateOfTraining = DateTime.Now;
+		training.UserId = userId;
 
-        public TrainingService(ITrainingRepository trainingRepository, IMapper mapper)
-        {
-            _trainingRepository = trainingRepository;
-            _mapper = mapper;
-        }
+		var exercises = dto.Exercises.Select(exerciseDto => mapper.Map<Exercise>(exerciseDto)).ToList();
 
-        public async Task<int> AddTraining(CreateTrainingDto dto, int userId)
-        {
-            var training = _mapper.Map<Training>(dto);
-            training.DateOfTraining = DateTime.Now;
-            training.UserId = userId;
+		float totalPayload = 0;
 
-            var exercises = dto.Exercises.Select(exerciseDto => _mapper.Map<Exercise>(exerciseDto)).ToList();
+		foreach (var exercise in exercises)
+		{
+			totalPayload += exercise.NumberOfReps * exercise.Payload;
+		}
 
-            float totalPayload = 0;
+		training.TotalPayload = totalPayload * dto.NumberOfSeries;
 
-            foreach (var exercise in exercises)
-            {
-                totalPayload += exercise.NumberOfReps * exercise.Payload;
-            }
+		return await trainingRepository.CreateTrainingAsync(training, exercises);
+	}
 
-            training.TotalPayload = totalPayload*dto.NumberOfSeries;
+	public async Task DeleteTrainingAsync(int id, int userId)
+	{
+		var training = await trainingRepository.GetTrainingByIdAsync(id);
 
-            return await _trainingRepository.CreateTrainingAsync(training, exercises);
-        }
+		if (training == null)
+			throw new BadRequestException("Training not found");
 
-        public async Task DeleteTraining(int id, int userId)
-        {
-            var training = await _trainingRepository.GetTrainingByIdAsync(id);
+		if (training.UserId != userId)
+			throw new ForbiddenException("You are not allowed to delete this training");
 
-            if (training == null)
-                throw new BadRequestException("Training not found");
+		await trainingRepository.DeleteTrainingAsync(id);
+	}
 
-            if (training.UserId != userId)
-                throw new ForbiddenException("You are not allowed to delete this training");
+	public async Task<PageResult<TrainingDto>> GetTrainingsPaginatedAsync(TrainingQuery query, int userId)
+	{
+		var trainings = await trainingRepository.GetPaginatedTrainingsForUserAsync(userId, query);
+		var totalItemsCount = await trainingRepository.GetTotalTrainingsCountForUserAsync(userId);
+		var trainingsDtos = mapper.Map<List<TrainingDto>>(trainings);
+		var result = new PageResult<TrainingDto>(trainingsDtos, totalItemsCount, query.PageSize, query.PageNumber);
 
-            await _trainingRepository.DeleteTraining(id);
-        }
+		return result;
+	}
 
-        public async Task<PageResult<TrainingDto>> GetTrainingsPaginated(TrainingQuery query, int userId)
-        {
-            var trainings = await _trainingRepository.GetPaginatedTrainingsForUserAsync(userId, query);
-            var totalItemsCount = await _trainingRepository.GetTotalTrainingsCountForUserAsync(userId);
-            var trainingsDtos = _mapper.Map<List<TrainingDto>>(trainings);
-            var result = new PageResult<TrainingDto>(trainingsDtos, totalItemsCount, query.PageSize, query.PageNumber);
+	public async Task<IEnumerable<TrainingChartDataDto>> GetTrainingChartDataAsync(TrainingPeriod period, int userId)
+	{
+		(DateTime startDate, DateTime endDate) = CalculateDateRange(period);
 
-            return result;
-        }
+		var trainings = await trainingRepository.GetChartDataAsync(userId, startDate, endDate);
+		var trainingChartData = mapper.Map<IEnumerable<TrainingChartDataDto>>(trainings);
 
-        public async Task<IEnumerable<TrainingChartDataDto>> GetTrainingChartData(TrainingPeriod period, int userId)
-        {
-            (DateTime startDate, DateTime endDate) = CalculateDateRange(period);
+		return trainingChartData;
+	}
 
-            var trainings = await _trainingRepository.GetChartDataAsync(userId, startDate, endDate);
-            var trainingChartData = _mapper.Map<IEnumerable<TrainingChartDataDto>>(trainings);
+	public async Task<TrainingStatsDto> GetTrainingStatsAsync(int userId)
+	{
+		var user = await trainingRepository.GetUserWithTrainingsAsync(userId);
 
-            return trainingChartData;
-        }
+		if (user == null)
+		{
+			throw new NotFoundException("User not found");
+		}
 
-        public async Task<TrainingStatsDto> GetTrainingStats(int userId)
-        {
-            var user = await _trainingRepository.GetUserWithTrainings(userId);
+		var bestTraining = await trainingRepository.GetBestTrainingAsync(userId);
+		var mostRecentTraining = await trainingRepository.GetMostRecentTrainingAsync(userId);
+		var numberOfTrainings = await trainingRepository.GetTotalTrainingsCountForUserAsync(userId);
 
-            if (user == null)
-            {
-                throw new NotFoundException("User not found");
-            }
+		var userTrainingStats = new TrainingStatsDto()
+		{
+			NumberOfTrainings = numberOfTrainings,
+			BestTraining = mapper.Map<TrainingDto>(bestTraining),
+			MostRecentTraining = mapper.Map<TrainingDto>(mostRecentTraining),
+		};
 
-            var bestTraining = await _trainingRepository.GetBestTrainingAsync(userId);
-            var mostRecentTraining = await _trainingRepository.GetMostRecentTrainingAsync(userId);
-            var numberOfTrainings = await _trainingRepository.GetTotalTrainingsCountForUserAsync(userId);
+		return userTrainingStats;
+	}
 
-            var userTrainingStats = new TrainingStatsDto()
-            {
-                NumberOfTrainings = numberOfTrainings,
-                BestTraining = _mapper.Map<TrainingDto>(bestTraining),
-                MostRecentTraining = _mapper.Map<TrainingDto>(mostRecentTraining),
-            };
+	public async Task<FavouriteExercisesDto> GetFavouriteExercisesAsync(int userId)
+	{
+		var userTrainings = await trainingRepository.GetRecentTrainingsForUserAsync(userId, 3);
+		var trainingsList = userTrainings.ToList();
 
-            return userTrainingStats;
-        }
+		if (trainingsList.Count < 3)
+		{
+			return new FavouriteExercisesDto
+			{
+				Exercises = new List<ExerciseDto>()
+			};
+		}
 
-        public async Task<FavouriteExercisesDto> GetFavouriteExercises(int userId)
-        {
-            var userTrainings = await _trainingRepository.GetRecentTrainingsForUserAsync(userId, 3);
-            var trainingsList = userTrainings.ToList();
+		var exerciseTotals = new Dictionary<string, (int NumberOfReps, float Payload)>();
+		foreach (var training in userTrainings)
+		{
+			foreach (var exercise in training.Exercises)
+			{
+				if (!exerciseTotals.ContainsKey(exercise.Name))
+				{
+					exerciseTotals[exercise.Name] = (0, 0);
+				}
+				var currentTuple = exerciseTotals[exercise.Name];
+				exerciseTotals[exercise.Name] = (
+					currentTuple.NumberOfReps += exercise.NumberOfReps * training.NumberOfSeries,
+					currentTuple.Payload += exercise.Payload * exercise.NumberOfReps * training.NumberOfSeries
+				);
+			}
+		}
 
-            if (trainingsList.Count < 3)
-            {
-                return new FavouriteExercisesDto
-                {
-                    Exercises = new List<ExerciseDto>()
-                };
-            }
+		var topExercises = exerciseTotals.OrderByDescending(kv => kv.Value.NumberOfReps)
+			.Take(3)
+			.Select(kv => new ExerciseDto()
+			{
+				Name = kv.Key,
+				NumberOfReps = kv.Value.NumberOfReps,
+				Payload = kv.Value.Payload,
+			})
+			.ToList();
 
-            var exerciseTotals = new Dictionary<string, (int NumberOfReps, float Payload)>();
-            foreach (var training in userTrainings)
-            {
-                foreach (var exercise in training.Exercises)
-                {
-                    if (!exerciseTotals.ContainsKey(exercise.Name))
-                    {
-                        exerciseTotals[exercise.Name] = (0, 0);
-                    }
-                    var currentTuple = exerciseTotals[exercise.Name];
-                    exerciseTotals[exercise.Name] = (
-                        currentTuple.NumberOfReps += exercise.NumberOfReps*training.NumberOfSeries,
-                        currentTuple.Payload += exercise.Payload* exercise.NumberOfReps * training.NumberOfSeries
-                    );
-                }
-            }
+		var favouriteDto = new FavouriteExercisesDto
+		{
+			Exercises = topExercises,
+		};
 
-            var topExercises = exerciseTotals.OrderByDescending(kv => kv.Value.NumberOfReps)
-                .Take(3)
-                .Select(kv => new ExerciseDto()
-                {
-                    Name = kv.Key,
-                    NumberOfReps = kv.Value.NumberOfReps,
-                    Payload = kv.Value.Payload,
-                })
-                .ToList();
+		return favouriteDto;
+	}
 
-            var favouriteDto = new FavouriteExercisesDto
-            {
-                Exercises = topExercises,
-            };
+	private (DateTime startDate, DateTime endDate) CalculateDateRange(TrainingPeriod period)
+	{
+		DateTime endDate = DateTime.Now;
+		DateTime startDate;
 
-            return favouriteDto;
-        }
+		switch (period)
+		{
+			case TrainingPeriod.Month:
+				startDate = endDate.AddMonths(-1);
+				break;
+			case TrainingPeriod.Quarter:
+				startDate = endDate.AddMonths(-3);
+				break;
+			case TrainingPeriod.HalfYear:
+				startDate = endDate.AddMonths(-6);
+				break;
+			default:
+				throw new BadRequestException("Invalid period value. Supported values are 'month', 'quarter', and 'halfyear'");
+		}
 
-        private (DateTime startDate, DateTime endDate) CalculateDateRange(TrainingPeriod period)
-        {
-            DateTime endDate = DateTime.Now;
-            DateTime startDate;
+		startDate = startDate.Date;
+		endDate = endDate.Date;
 
-            switch (period)
-            {
-                case TrainingPeriod.Month:
-                    startDate = endDate.AddMonths(-1);
-                    break;
-                case TrainingPeriod.Quarter:
-                    startDate = endDate.AddMonths(-3);
-                    break;
-                case TrainingPeriod.HalfYear:
-                    startDate = endDate.AddMonths(-6);
-                    break;
-                default:
-                    throw new BadRequestException("Invalid period value. Supported values are 'month', 'quarter', and 'halfyear'");
-            }
-
-            startDate = startDate.Date;
-            endDate = endDate.Date;
-
-            return (startDate, endDate);
-        }
-    }
+		return (startDate, endDate);
+	}
 }

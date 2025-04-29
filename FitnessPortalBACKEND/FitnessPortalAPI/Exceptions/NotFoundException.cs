@@ -1,10 +1,2 @@
-﻿namespace FitnessPortalAPI.Exceptions
-{
-    public class NotFoundException : Exception
-    {
-        public NotFoundException(string message) : base(message)
-        {
-
-        }
-    }
-}
+﻿namespace FitnessPortalAPI.Exceptions;
+public class NotFoundException(string message) : Exception(message);

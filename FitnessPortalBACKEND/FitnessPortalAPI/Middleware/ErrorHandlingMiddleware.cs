@@ -1,16 +1,9 @@
 ﻿namespace FitnessPortalAPI.Middleware
 {
-	public class ErrorHandlingMiddleware : IMiddleware
+	public class ErrorHandlingMiddleware(ITokenStore tokenStore) : IMiddleware
     {
-        private readonly ITokenStore _tokenStore;
-        public ErrorHandlingMiddleware(ITokenStore tokenStore)
-        {
-            _tokenStore = tokenStore;
-        }
-
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            Thread.Sleep(600); // added globally delay, only for preseting loading in client app!!!
             try
             {
                 //var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
@@ -19,7 +12,7 @@
                 if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
                 {
                     var token = authorizationHeader.Replace("Bearer ", "");
-                    var isTokenBlacklisted = await _tokenStore.IsTokenBlacklistedAsync(token);
+                    var isTokenBlacklisted = await tokenStore.IsTokenBlacklistedAsync(token);
                     if (isTokenBlacklisted)
                     {
                         context.Response.StatusCode = 401;

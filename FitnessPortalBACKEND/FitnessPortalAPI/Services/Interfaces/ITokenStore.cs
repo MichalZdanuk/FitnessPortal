@@ -1,8 +1,6 @@
-﻿namespace FitnessPortalAPI.Services.Interfaces
+﻿namespace FitnessPortalAPI.Services.Interfaces;
+public interface ITokenStore
 {
-    public interface ITokenStore
-    {
-        Task BlacklistTokenAsync(string token);
-        Task<bool> IsTokenBlacklistedAsync(string token);
-    }
+	Task BlacklistTokenAsync(string token);
+	Task<bool> IsTokenBlacklistedAsync(string token);
 }

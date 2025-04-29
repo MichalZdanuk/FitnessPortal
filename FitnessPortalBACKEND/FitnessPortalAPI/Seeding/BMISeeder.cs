@@ -2,7 +2,6 @@
 {
 	public static class BMISeeder
     {
-        private static readonly Calculator _calculator = new Calculator();
         public static IEnumerable<BMI> GetBMIRecords(List<User> users)
         {
             var bmis = new List<BMI>()
@@ -75,7 +74,7 @@
             // Calculate BMIScore and BMICategory for each BMI record
             foreach (var bmi in bmis)
             {
-                _calculator.CalculateBMI(bmi.Height, bmi.Weight, out float bmiIndex, out BMICategory bmiCategory);
+				Calculator.CalculateBMI(bmi.Height, bmi.Weight, out float bmiIndex, out BMICategory bmiCategory);
                 bmi.BMIScore = bmiIndex;
                 bmi.BMICategory = bmiCategory;
             }

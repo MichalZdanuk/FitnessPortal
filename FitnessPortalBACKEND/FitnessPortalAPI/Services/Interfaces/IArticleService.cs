@@ -1,13 +1,11 @@
 ﻿using FitnessPortalAPI.Models.Articles;
 
-namespace FitnessPortalAPI.Services.Interfaces
+namespace FitnessPortalAPI.Services.Interfaces;
+public interface IArticleService
 {
-	public interface IArticleService
-    {
-        Task<int> CreateAsync(CreateArticleDto dto, int userId);
-        Task<PageResult<ArticleDto>> GetPaginatedAsync(ArticleQuery query);
-        Task<ArticleDto> GetByIdAsync(int id);
-        Task UpdateAsync(int articleId, UpdateArticleDto dto);
-        Task RemoveAsync(int articleId);
-    }
+	Task<int> CreateAsync(CreateArticleDto dto, int userId);
+	Task<PageResult<ArticleDto>> GetPaginatedAsync(ArticleQuery query);
+	Task<ArticleDto> GetByIdAsync(int id);
+	Task UpdateAsync(int articleId, UpdateArticleDto dto);
+	Task RemoveAsync(int articleId);
 }
