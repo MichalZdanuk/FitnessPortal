@@ -5,23 +5,15 @@ namespace FitnessPortalAPI.Controllers
 {
 	[Route("api/calculator")]
     [ApiController]
-    public class CalculatorController : ControllerBase
+    public class CalculatorController(ICalculatorService calculatorService, IHttpContextAccessor contextAccessor)
+        : ControllerBase
     {
-        private readonly ICalculatorService _calculatorService;
-        private readonly IHttpContextAccessor _contextAccessor;
-
-        public CalculatorController(ICalculatorService calculatorService, IHttpContextAccessor contextAccessor)
-        {
-            _contextAccessor = contextAccessor;
-            _calculatorService = calculatorService;
-        }
-
         [HttpPost("bmi")]
         public async Task<ActionResult<BMIDto>> CalculateBmi([FromQuery] CreateBMIQuery dto)
         {
-            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
+            var userId = HttpContextExtensions.EnsureUserId(contextAccessor.HttpContext!);
 
-            var calculatedBMI = await _calculatorService.CalculateBMI(dto, userId);
+            var calculatedBMI = await calculatorService.CalculateBMI(dto, userId);
 
             return Ok(calculatedBMI);
         }
@@ -29,7 +21,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("bmi/anonymous")]
         public async Task<ActionResult<BMIDto>> CalculateBmiForNotLogged([FromQuery] CreateBMIQuery dto)
         {
-            var calcualtedBMI = await _calculatorService.CalculateBMIForAnonymous(dto);
+            var calcualtedBMI = await calculatorService.CalculateBMIForAnonymous(dto);
 
             return Ok(calcualtedBMI);
         }
@@ -37,9 +29,9 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("bmi")]
         public async Task<ActionResult<IEnumerable<BMIDto>>> GetAllBMIsPaginated([FromQuery] BMIQuery query)
         {
-            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
+            var userId = HttpContextExtensions.EnsureUserId(contextAccessor.HttpContext!);
 
-            var bmis = await _calculatorService.GetAllBMIsForUserPaginated(query, userId);
+            var bmis = await calculatorService.GetAllBMIsForUserPaginated(query, userId);
 
             return Ok(bmis);
         }
@@ -47,7 +39,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("bmr/anonymous")]
         public async Task<ActionResult<BMRDto>> CalculateBMRForNotLogged([FromQuery] CreateBMRQuery bmrQuery)
         {
-            var calcualtedBMR = await _calculatorService.CalculateBMRForAnonymous(bmrQuery);
+            var calcualtedBMR = await calculatorService.CalculateBMRForAnonymous(bmrQuery);
 
             return Ok(calcualtedBMR);
         }
@@ -55,7 +47,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("bodyFat/anonymous")]
         public async Task<ActionResult<BodyFatDto>> CalculateBodyFatForNotLogged([FromQuery] CreateBodyFatQuery bodyFatQuery)
         {
-            var calcualtedBodyFat = await _calculatorService.CalculateBodyFatForAnonymous(bodyFatQuery);
+            var calcualtedBodyFat = await calculatorService.CalculateBodyFatForAnonymous(bodyFatQuery);
 
             return Ok(calcualtedBodyFat);
         }
