@@ -35,7 +35,7 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 		if (training.UserId != userId)
 			throw new ForbiddenException("You are not allowed to delete this training");
 
-		await trainingRepository.DeleteTraining(id);
+		await trainingRepository.DeleteTrainingAsync(id);
 	}
 
 	public async Task<PageResult<TrainingDto>> GetTrainingsPaginatedAsync(TrainingQuery query, int userId)
@@ -60,7 +60,7 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 
 	public async Task<TrainingStatsDto> GetTrainingStatsAsync(int userId)
 	{
-		var user = await trainingRepository.GetUserWithTrainings(userId);
+		var user = await trainingRepository.GetUserWithTrainingsAsync(userId);
 
 		if (user == null)
 		{

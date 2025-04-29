@@ -58,8 +58,8 @@ namespace FitnessPortalAPI.Tests.Services
             var bmis = Enumerable.Range(1, 10).Select(i => new BMI { Id = i }).ToList();
             var totalItemsCount = 10;
 
-            _calculatorRepository.GetBMIsForUserPaginated(userId, bmiQuery.PageNumber, bmiQuery.PageSize).Returns(bmis);
-            _calculatorRepository.GetTotalBMIsCountForUser(userId).Returns(totalItemsCount);
+            _calculatorRepository.GetBMIsForUserPaginatedAsync(userId, bmiQuery.PageNumber, bmiQuery.PageSize).Returns(bmis);
+            _calculatorRepository.GetTotalBMIsCountForUserAsync(userId).Returns(totalItemsCount);
 
             // act
             var result = await _calculatorService.GetAllBMIsForUserPaginatedAsync(bmiQuery, userId);

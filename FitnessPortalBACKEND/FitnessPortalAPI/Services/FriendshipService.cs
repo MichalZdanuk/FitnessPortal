@@ -50,7 +50,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 		if (friendRequest.ReceiverId != userId)
 			throw new ForbiddenException("You are not allowed to remove someone else request!!!");
 
-		await friendshipRepository.RemoveFriendshipRequest(friendRequest);
+		await friendshipRepository.RemoveFriendshipRequestAsync(friendRequest);
 	}
 
 	public async Task AcceptFriendshipRequestAsync(int userId, int requestId)
@@ -70,7 +70,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 			throw new ForbiddenException("You are not allowed to accept someone else request!!!");
 
 		await friendshipRepository.AddFriendAsync(sender, receiver);
-		await friendshipRepository.RemoveFriendshipRequest(friendshipRequest);
+		await friendshipRepository.RemoveFriendshipRequestAsync(friendshipRequest);
 	}
 
 	public async Task<IEnumerable<FriendDto>> GetFriendsForUserAsync(int userId)
@@ -111,7 +111,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 
 	public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPatternAsync(int userId, string pattern)
 	{
-		var users = await friendshipRepository.FindUsersWithPattern(userId, pattern);
+		var users = await friendshipRepository.FindUsersWithPatternAsync(userId, pattern);
 
 		var matchingUsersDtos = mapper.Map<IEnumerable<MatchingUserDto>>(users);
 

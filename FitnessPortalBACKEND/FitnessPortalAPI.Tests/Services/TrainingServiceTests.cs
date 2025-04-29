@@ -73,7 +73,7 @@ namespace FitnessPortalAPI.Tests.Services
             await _trainingService.DeleteTrainingAsync(trainingId, userId);
 
             // assert
-            await _trainingRepository.Received(1).DeleteTraining(trainingId);
+            await _trainingRepository.Received(1).DeleteTrainingAsync(trainingId);
         }
 
         [TestMethod]
@@ -230,7 +230,7 @@ namespace FitnessPortalAPI.Tests.Services
             var bestTraining = new Training { Id = 1 };
             var mostRecentTraining = new Training { Id = 2 };
             var totalTrainings = 5;
-            _trainingRepository.GetUserWithTrainings(userId).Returns(user);
+            _trainingRepository.GetUserWithTrainingsAsync(userId).Returns(user);
             _trainingRepository.GetBestTrainingAsync(userId).Returns(bestTraining);
             _trainingRepository.GetMostRecentTrainingAsync(userId).Returns(mostRecentTraining);
             _trainingRepository.GetTotalTrainingsCountForUserAsync(userId).Returns(totalTrainings);
@@ -252,7 +252,7 @@ namespace FitnessPortalAPI.Tests.Services
         {
             // arrange
             var userId = 1;
-            _trainingRepository.GetUserWithTrainings(userId).Returns(new User { Id = userId });
+            _trainingRepository.GetUserWithTrainingsAsync(userId).Returns(new User { Id = userId });
 
             // act
             var result = await _trainingService.GetTrainingStatsAsync(userId);
@@ -269,7 +269,7 @@ namespace FitnessPortalAPI.Tests.Services
         {
             // arrange
             var userId = 1;
-            _trainingRepository.GetUserWithTrainings(userId).Returns(Task.FromResult<User?>(null));
+            _trainingRepository.GetUserWithTrainingsAsync(userId).Returns(Task.FromResult<User?>(null));
 
             // act
             async Task Act() => await _trainingService.GetTrainingStatsAsync(userId);

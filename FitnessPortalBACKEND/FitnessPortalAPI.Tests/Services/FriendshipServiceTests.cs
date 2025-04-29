@@ -150,7 +150,7 @@ namespace FitnessPortalAPI.Tests.Services
             await _friendshipService.RejectFriendshipRequestAsync(userId, requestId);
 
             // assert
-            await _friendshipRepository.Received(1).RemoveFriendshipRequest(friendRequest);
+            await _friendshipRepository.Received(1).RemoveFriendshipRequestAsync(friendRequest);
         }
 
         [TestMethod]
@@ -205,7 +205,7 @@ namespace FitnessPortalAPI.Tests.Services
 
             // assert
             await _friendshipRepository.Received().AddFriendAsync(sender, receiver);
-            await _friendshipRepository.Received().RemoveFriendshipRequest(friendshipRequest);
+            await _friendshipRepository.Received().RemoveFriendshipRequestAsync(friendshipRequest);
         }
 
         [TestMethod]
@@ -403,7 +403,7 @@ namespace FitnessPortalAPI.Tests.Services
             {
                 new User { Id = 2, Email = "John@Doe.mail.com" }
             };
-            _friendshipRepository.FindUsersWithPattern(userId, pattern).Returns(matchingUsers);
+            _friendshipRepository.FindUsersWithPatternAsync(userId, pattern).Returns(matchingUsers);
 
             // act
             var result = await _friendshipService.FindUsersWithPatternAsync(userId, pattern);
@@ -425,7 +425,7 @@ namespace FitnessPortalAPI.Tests.Services
                 new User { Id = 2, Email = "John@Doe.mail.com" },
                 new User { Id = 3, Email = "John@Smith.mail.com" },
             };
-            _friendshipRepository.FindUsersWithPattern(userId, pattern).Returns(matchingUsers);
+            _friendshipRepository.FindUsersWithPatternAsync(userId, pattern).Returns(matchingUsers);
 
             // act
             var result = await _friendshipService.FindUsersWithPatternAsync(userId, pattern);
@@ -443,7 +443,7 @@ namespace FitnessPortalAPI.Tests.Services
             // arrange
             int userId = 1;
             string pattern = "Unknown";
-            _friendshipRepository.FindUsersWithPattern(userId, pattern).Returns(new List<User>());
+            _friendshipRepository.FindUsersWithPatternAsync(userId, pattern).Returns(new List<User>());
 
             // act
             var result = await _friendshipService.FindUsersWithPatternAsync(userId, pattern);

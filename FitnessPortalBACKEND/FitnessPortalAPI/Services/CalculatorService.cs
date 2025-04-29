@@ -44,8 +44,8 @@ public class CalculatorService(ICalculatorRepository calculatorRepository, IMapp
 
 	public async Task<PageResult<BMIDto>> GetAllBMIsForUserPaginatedAsync(BMIQuery query, int userId)
 	{
-		var bmis = await calculatorRepository.GetBMIsForUserPaginated(userId, query.PageNumber, query.PageSize);
-		var totalItemsCount = await calculatorRepository.GetTotalBMIsCountForUser(userId);
+		var bmis = await calculatorRepository.GetBMIsForUserPaginatedAsync(userId, query.PageNumber, query.PageSize);
+		var totalItemsCount = await calculatorRepository.GetTotalBMIsCountForUserAsync(userId);
 
 		var bmiDtos = mapper.Map<List<BMIDto>>(bmis);
 

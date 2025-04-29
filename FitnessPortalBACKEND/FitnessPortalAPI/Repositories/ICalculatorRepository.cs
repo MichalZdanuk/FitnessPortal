@@ -1,9 +1,7 @@
-﻿namespace FitnessPortalAPI.Repositories
+﻿namespace FitnessPortalAPI.Repositories;
+public interface ICalculatorRepository
 {
-	public interface ICalculatorRepository
-    {
-        Task AddBmiAsync(BMI bmi);
-        Task<List<BMI>> GetBMIsForUserPaginated(int userId, int pageNumber, int pageSize);
-        Task<int> GetTotalBMIsCountForUser(int userId);
-    }
+	Task AddBmiAsync(BMI bmi);
+	Task<List<BMI>> GetBMIsForUserPaginatedAsync(int userId, int pageNumber, int pageSize);
+	Task<int> GetTotalBMIsCountForUserAsync(int userId);
 }
