@@ -1,13 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FitnessPortalAPI.Constants
+namespace FitnessPortalAPI.Constants;
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum BMICategory
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum BMICategory
-    {
-        Underweight,
-        Normalweight,
-        Overweight,
-        Obesity
-    }
+	Underweight,
+	Normalweight,
+	Overweight,
+	Obesity
 }
