@@ -1,8 +1,10 @@
 ﻿using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.DAL.Repositories;
 using FitnessPortalAPI.Middleware;
+using FitnessPortalAPI.Options;
 using FitnessPortalAPI.Seeding;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace FitnessPortalAPI.DependencyInjection;
 
@@ -15,6 +17,8 @@ public static class InfrastructureDepenedencyInjection
 			options.UseSqlServer(configuration.GetConnectionString("MSSQL")));
 
 		services.AddRepositories();
+
+		services.Configure<VersionOptions>(configuration.GetSection("Version"));
 
 		services.AddScoped<FitnessPortalSeeder>();
 		services.AddScoped<ErrorHandlingMiddleware>();

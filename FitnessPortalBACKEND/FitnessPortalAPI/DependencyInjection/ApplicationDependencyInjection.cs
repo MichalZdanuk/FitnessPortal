@@ -29,6 +29,7 @@ public static class ApplicationDependencyInjection
 		services.AddScoped<IFriendshipService, FriendshipService>();
 		services.AddScoped<ITrainingService, TrainingService>();
 		services.AddScoped<ICalculatorService, CalculatorService>();
+		services.AddScoped<IVersionService, VersionService>();
 		services.AddSingleton<ITokenStore, TokenStore>(); // added to check if token is invalid (on blacklist)
 
 		return services;
