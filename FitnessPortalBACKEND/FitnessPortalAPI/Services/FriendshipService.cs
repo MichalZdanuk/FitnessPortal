@@ -6,7 +6,7 @@ namespace FitnessPortalAPI.Services;
 public class FriendshipService(IFriendshipRepository friendshipRepository, IMapper mapper)
 		: IFriendshipService
 {
-	public async Task<int> SendFriendshipRequest(int userId, int userToBeRequestedId)
+	public async Task<int> SendFriendshipRequestAsync(int userId, int userToBeRequestedId)
 	{
 		var receiverUser = await friendshipRepository.GetUserByIdAsync(userToBeRequestedId);
 		if (receiverUser == null)
@@ -32,7 +32,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 		return friendshipRequest.Id;
 	}
 
-	public async Task<IEnumerable<FriendshipDto>> GetFriendshipRequests(int userId)
+	public async Task<IEnumerable<FriendshipDto>> GetFriendshipRequestsAsync(int userId)
 	{
 		var friendshipRequests = await friendshipRepository.GetFriendshipRequestsForUserAsync(userId);
 
@@ -41,7 +41,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 		return friendshipDtos;
 	}
 
-	public async Task RejectFriendshipRequest(int userId, int requestId)
+	public async Task RejectFriendshipRequestAsync(int userId, int requestId)
 	{
 		var friendRequest = await friendshipRepository.GetFriendshipRequestAsync(requestId);
 		if (friendRequest == null)
@@ -53,7 +53,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 		await friendshipRepository.RemoveFriendshipRequest(friendRequest);
 	}
 
-	public async Task AcceptFriendshipRequest(int userId, int requestId)
+	public async Task AcceptFriendshipRequestAsync(int userId, int requestId)
 	{
 		var friendshipRequest = await friendshipRepository.GetFriendshipRequestAsync(requestId);
 
@@ -73,7 +73,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 		await friendshipRepository.RemoveFriendshipRequest(friendshipRequest);
 	}
 
-	public async Task<IEnumerable<FriendDto>> GetFriendsForUser(int userId)
+	public async Task<IEnumerable<FriendDto>> GetFriendsForUserAsync(int userId)
 	{
 		var user = await friendshipRepository.GetUserByIdAsync(userId);
 
@@ -87,7 +87,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 		return friendsDtos;
 	}
 
-	public async Task RemoveFriendship(int userId, int userToBeRemovedId)
+	public async Task RemoveFriendshipAsync(int userId, int userToBeRemovedId)
 	{
 		var user = await friendshipRepository.GetUserByIdAsync(userId);
 
@@ -109,7 +109,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 		await friendshipRepository.RemoveFriendAsync(user, friendToBeRemoved);
 	}
 
-	public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(int userId, string pattern)
+	public async Task<IEnumerable<MatchingUserDto>> FindUsersWithPatternAsync(int userId, string pattern)
 	{
 		var users = await friendshipRepository.FindUsersWithPattern(userId, pattern);
 
@@ -118,7 +118,7 @@ public class FriendshipService(IFriendshipRepository friendshipRepository, IMapp
 		return matchingUsersDtos;
 	}
 
-	public async Task<FriendProfileDto> GetFriendStatistics(int userId, int friendId)
+	public async Task<FriendProfileDto> GetFriendStatisticsAsync(int userId, int friendId)
 	{
 		var friend = await friendshipRepository.GetUserByIdAsync(friendId);
 

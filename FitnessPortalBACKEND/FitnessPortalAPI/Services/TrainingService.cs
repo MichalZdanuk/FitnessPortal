@@ -5,7 +5,7 @@ namespace FitnessPortalAPI.Services;
 public class TrainingService(ITrainingRepository trainingRepository, IMapper mapper)
 		: ITrainingService
 {
-	public async Task<int> AddTraining(CreateTrainingDto dto, int userId)
+	public async Task<int> AddTrainingAsync(CreateTrainingDto dto, int userId)
 	{
 		var training = mapper.Map<Training>(dto);
 		training.DateOfTraining = DateTime.Now;
@@ -25,7 +25,7 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 		return await trainingRepository.CreateTrainingAsync(training, exercises);
 	}
 
-	public async Task DeleteTraining(int id, int userId)
+	public async Task DeleteTrainingAsync(int id, int userId)
 	{
 		var training = await trainingRepository.GetTrainingByIdAsync(id);
 
@@ -38,7 +38,7 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 		await trainingRepository.DeleteTraining(id);
 	}
 
-	public async Task<PageResult<TrainingDto>> GetTrainingsPaginated(TrainingQuery query, int userId)
+	public async Task<PageResult<TrainingDto>> GetTrainingsPaginatedAsync(TrainingQuery query, int userId)
 	{
 		var trainings = await trainingRepository.GetPaginatedTrainingsForUserAsync(userId, query);
 		var totalItemsCount = await trainingRepository.GetTotalTrainingsCountForUserAsync(userId);
@@ -48,7 +48,7 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 		return result;
 	}
 
-	public async Task<IEnumerable<TrainingChartDataDto>> GetTrainingChartData(TrainingPeriod period, int userId)
+	public async Task<IEnumerable<TrainingChartDataDto>> GetTrainingChartDataAsync(TrainingPeriod period, int userId)
 	{
 		(DateTime startDate, DateTime endDate) = CalculateDateRange(period);
 
@@ -58,7 +58,7 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 		return trainingChartData;
 	}
 
-	public async Task<TrainingStatsDto> GetTrainingStats(int userId)
+	public async Task<TrainingStatsDto> GetTrainingStatsAsync(int userId)
 	{
 		var user = await trainingRepository.GetUserWithTrainings(userId);
 
@@ -81,7 +81,7 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 		return userTrainingStats;
 	}
 
-	public async Task<FavouriteExercisesDto> GetFavouriteExercises(int userId)
+	public async Task<FavouriteExercisesDto> GetFavouriteExercisesAsync(int userId)
 	{
 		var userTrainings = await trainingRepository.GetRecentTrainingsForUserAsync(userId, 3);
 		var trainingsList = userTrainings.ToList();

@@ -1,16 +1,14 @@
 ﻿using FitnessPortalAPI.Models.Friendship;
 
-namespace FitnessPortalAPI.Services.Interfaces
+namespace FitnessPortalAPI.Services.Interfaces;
+public interface IFriendshipService
 {
-    public interface IFriendshipService
-    {
-        Task<int> SendFriendshipRequest(int userId, int userToBeRequestedId);
-        Task<IEnumerable<FriendshipDto>> GetFriendshipRequests(int userId);
-        Task RejectFriendshipRequest(int userId, int requestId);
-        Task AcceptFriendshipRequest(int userId, int requestId);
-        Task<IEnumerable<FriendDto>> GetFriendsForUser(int userId);
-        Task RemoveFriendship(int userId, int userToBeRemovedId);
-        Task<IEnumerable<MatchingUserDto>> FindUsersWithPattern(int userId, string pattern);
-        Task<FriendProfileDto> GetFriendStatistics(int userId, int friendId);
-    }
+	Task<int> SendFriendshipRequestAsync(int userId, int userToBeRequestedId);
+	Task<IEnumerable<FriendshipDto>> GetFriendshipRequestsAsync(int userId);
+	Task RejectFriendshipRequestAsync(int userId, int requestId);
+	Task AcceptFriendshipRequestAsync(int userId, int requestId);
+	Task<IEnumerable<FriendDto>> GetFriendsForUserAsync(int userId);
+	Task RemoveFriendshipAsync(int userId, int userToBeRemovedId);
+	Task<IEnumerable<MatchingUserDto>> FindUsersWithPatternAsync(int userId, string pattern);
+	Task<FriendProfileDto> GetFriendStatisticsAsync(int userId, int friendId);
 }

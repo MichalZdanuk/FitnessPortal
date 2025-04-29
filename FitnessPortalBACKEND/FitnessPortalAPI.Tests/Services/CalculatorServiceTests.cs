@@ -34,7 +34,7 @@ namespace FitnessPortalAPI.Tests.Services
             };
 
             // act
-            await _calculatorService.CalculateBMI(createBMIQuery, userId);
+            await _calculatorService.CalculateBMIAsync(createBMIQuery, userId);
 
             // assert
             await _calculatorRepository.Received(1).AddBmiAsync(Arg.Is<BMI>(b =>
@@ -62,7 +62,7 @@ namespace FitnessPortalAPI.Tests.Services
             _calculatorRepository.GetTotalBMIsCountForUser(userId).Returns(totalItemsCount);
 
             // act
-            var result = await _calculatorService.GetAllBMIsForUserPaginated(bmiQuery, userId);
+            var result = await _calculatorService.GetAllBMIsForUserPaginatedAsync(bmiQuery, userId);
 
             // assert
             result.ShouldNotBeNull();
