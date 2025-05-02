@@ -1,3 +1,4 @@
+using FitnessPortalAPI.DAL;
 using FitnessPortalAPI.DependencyInjection;
 using FitnessPortalAPI.Middleware;
 using FitnessPortalAPI.Seeding;
@@ -16,8 +17,18 @@ builder.Services
 
 var app = builder.Build();
 
-/*configuring CORS*/
 app.UseCors("FrontEndClient");
+
+if (app.Environment.IsDevelopment())
+{
+    using(var servicesScope = app.Services.CreateScope())
+    {
+        var services = servicesScope.ServiceProvider;
+        var dbContext = services.GetRequiredService<FitnessPortalDbContext>();
+
+        dbContext.Database.Migrate();
+    }
+}
 
 // Configure the HTTP request pipeline.
 
@@ -27,11 +38,8 @@ seeder.Seed();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
-app.UseAuthentication();// before each request from API client there is need to authenticate with JWT
+app.UseAuthentication();
 
-app.UseHttpsRedirection();
-
-// Adding Swagger to Project
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
