@@ -1,4 +1,4 @@
-﻿namespace FitnessPortalAPI;
+﻿namespace FitnessPortalAPI.Utils;
 public static class Calculator
 {
 	public static void CalculateBMI(float height, float weight, out float bmiIndex, out BMICategory bmiCategory)
@@ -54,10 +54,10 @@ public static class Calculator
 		switch (sex)
 		{
 			case Sex.Male:
-				bmrResult = 88.362f + (13.397f * weight) + (4.799f * height) - (5.677f * age);
+				bmrResult = 88.362f + 13.397f * weight + 4.799f * height - 5.677f * age;
 				break;
 			case Sex.Female:
-				bmrResult = 447.593f + (9.247f * weight) + (3.098f * height) - (4.330f * age);
+				bmrResult = 447.593f + 9.247f * weight + 3.098f * height - 4.330f * age;
 				break;
 			default:
 				break;

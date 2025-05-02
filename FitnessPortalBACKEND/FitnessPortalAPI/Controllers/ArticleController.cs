@@ -1,19 +1,16 @@
 ﻿using FitnessPortalAPI.Models.Articles;
-using FitnessPortalAPI.Utilities;
 
 namespace FitnessPortalAPI.Controllers
 {
 	[Route("api/article")]
     [ApiController]
-    public class ArticleController(IArticleService articleService, IHttpContextAccessor contextAccessor)
+    public class ArticleController(IArticleService articleService)
         : ControllerBase
     {
         [HttpPost]
         public async Task<ActionResult> CreateArticle([FromBody] CreateArticleDto dto)
         {
-            var userId = HttpContextExtensions.EnsureUserId(contextAccessor.HttpContext!);
-
-            var id = await articleService.CreateAsync(dto, userId);
+            var id = await articleService.CreateAsync(dto);
 
             return Created($"/api/article/{id}", null);
         }

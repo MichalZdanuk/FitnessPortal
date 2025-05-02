@@ -1,29 +1,17 @@
-﻿using FitnessPortalAPI.Constants;
-using FitnessPortalAPI.Models.Trainings;
-using FitnessPortalAPI.Utilities;
+﻿using FitnessPortalAPI.Models.Trainings;
 
 namespace FitnessPortalAPI.Controllers
 {
 	[Route("api/training")]
     [ApiController]
     [Authorize]
-    public class TrainingController : ControllerBase
+    public class TrainingController(ITrainingService trainingService)
+        : ControllerBase
     {
-        private readonly ITrainingService _trainingService;
-        private readonly IHttpContextAccessor _contextAccessor;
-
-        public TrainingController(ITrainingService trainingService, IHttpContextAccessor contextAccessor)
-        {
-            _trainingService = trainingService;
-            _contextAccessor = contextAccessor;
-        }
-
         [HttpPost]
         public async Task<ActionResult> AddTraining([FromBody] CreateTrainingDto dto)
         {
-            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
-
-            var id = await _trainingService.AddTrainingAsync(dto, userId);
+            var id = await trainingService.AddTrainingAsync(dto);
 
             return Created($"/api/training/{id}", null);
         }
@@ -31,9 +19,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<PageResult<TrainingDto>>> GetTrainingsPaginated([FromQuery] TrainingQuery query)
         {
-            int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
-
-            var trainings = await _trainingService.GetTrainingsPaginatedAsync(query, userId);
+            var trainings = await trainingService.GetTrainingsPaginatedAsync(query);
 
             return Ok(trainings);
         }
@@ -41,9 +27,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpDelete("{trainingId}")]
         public async Task<ActionResult> DeleteTraining([FromRoute] int trainingId)
         {
-            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
-
-            await _trainingService.DeleteTrainingAsync(trainingId, userId);
+            await trainingService.DeleteTrainingAsync(trainingId);
 
             return NoContent();
         }
@@ -51,9 +35,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("chart-data")]
         public async Task<ActionResult<IEnumerable<TrainingChartDataDto>>> GetTrainingChartData([FromQuery] TrainingPeriod period)
         {
-            var userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
-
-            var filteredTrainings = await _trainingService.GetTrainingChartDataAsync(period, userId);
+            var filteredTrainings = await trainingService.GetTrainingChartDataAsync(period);
 
             return Ok(filteredTrainings);
         }
@@ -61,9 +43,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("stats")]
         public async Task<ActionResult<TrainingStatsDto>> GetTrainingStats()
         {
-            int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
-
-            var trainingStats = await _trainingService.GetTrainingStatsAsync(userId);
+            var trainingStats = await trainingService.GetTrainingStatsAsync();
 
             return Ok(trainingStats);
         }
@@ -71,9 +51,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("favourite")]
         public async Task<ActionResult<FavouriteExercisesDto>> GetFavouriteExercises()
         {
-            int userId = HttpContextExtensions.EnsureUserId(_contextAccessor.HttpContext!);
-
-            var favouriteExercises = await _trainingService.GetFavouriteExercisesAsync(userId);
+            var favouriteExercises = await trainingService.GetFavouriteExercisesAsync();
 
             return Ok(favouriteExercises);
         }

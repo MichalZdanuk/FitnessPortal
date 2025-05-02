@@ -1,4 +1,5 @@
 ﻿using FitnessPortalAPI.Models.UserProfileActions;
+using FitnessPortalAPI.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -6,9 +7,11 @@ using System.Security.Claims;
 
 namespace FitnessPortalAPI.Services;
 
-public class AccountService(IAccountRepository accountRepository,
+public class AccountService(IAuthenticationContext authenticationContext,
+		IHttpContextAccessor httpContextAccessor,
+		IAccountRepository accountRepository,
 		IPasswordHasher<User> passwordHasher,
-		AuthenticationSettings authenticationSettings,
+		AuthenticationOptions authenticationSettings,
 		ITokenStore tokenStore,
 		IMapper mapper)
 		: IAccountService
@@ -38,9 +41,9 @@ public class AccountService(IAccountRepository accountRepository,
 		return GenerateJwtToken(user);
 	}
 
-	public async Task<UserProfileInfoDto> GetProfileInfoAsync(int userId)
+	public async Task<UserProfileInfoDto> GetProfileInfoAsync()
 	{
-		var user = await accountRepository.GetUserByIdAsync(userId);
+		var user = await accountRepository.GetUserByIdAsync(authenticationContext.UserId);
 
 		if (user == null)
 			throw new NotFoundException("User not found");
@@ -51,9 +54,11 @@ public class AccountService(IAccountRepository accountRepository,
 		return userProfileInfoDto;
 	}
 
-	public async Task<string> UpdateProfileAsync(UpdateUserDto dto, int userId, string previousToken)
+	public async Task<string> UpdateProfileAsync(UpdateUserDto dto)
 	{
-		var userToBeUpdated = await accountRepository.GetUserByIdAsync(userId);
+		var previousToken = httpContextAccessor.HttpContext!.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+		var userToBeUpdated = await accountRepository.GetUserByIdAsync(authenticationContext.UserId);
 
 		if (userToBeUpdated == null)
 			throw new ForbiddenException("You are not allowed to update profile");

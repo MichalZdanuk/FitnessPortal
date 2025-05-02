@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using FitnessPortalAPI.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FitnessPortalAPI.DependencyInjection;
 
@@ -8,9 +9,10 @@ public static class AuthenticationDependencyInjection
 
 	public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
 	{
-		var authSettings = new AuthenticationSettings();
-		configuration.GetSection("Authentication").Bind(authSettings);
-		services.AddSingleton(authSettings);
+		var authenticationOptions = new AuthenticationOptions();
+		configuration.GetSection("Authentication").Bind(authenticationOptions);
+		services.AddSingleton(authenticationOptions);
+		services.AddScoped<IAuthenticationContext, AuthenticationContext>();
 
 		services.AddAuthentication(options =>
 		{
@@ -24,9 +26,9 @@ public static class AuthenticationDependencyInjection
 			cfg.SaveToken = true;
 			cfg.TokenValidationParameters = new TokenValidationParameters
 			{
-				ValidIssuer = authSettings.JwtIssuer,
-				ValidAudience = authSettings.JwtIssuer,
-				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.JwtKey)),
+				ValidIssuer = authenticationOptions.JwtIssuer,
+				ValidAudience = authenticationOptions.JwtIssuer,
+				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationOptions.JwtKey)),
 			};
 		});
 

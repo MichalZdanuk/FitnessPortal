@@ -1,4 +1,6 @@
-﻿namespace FitnessPortalAPI.Seeding
+﻿using FitnessPortalAPI.Utils;
+
+namespace FitnessPortalAPI.Seeding
 {
 	public static class BMISeeder
     {

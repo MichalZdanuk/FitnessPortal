@@ -1,4 +1,5 @@
 ﻿using FitnessPortalAPI.Constants;
+using FitnessPortalAPI.Utils;
 using Shouldly;
 
 namespace FitnessPortalAPI.Tests

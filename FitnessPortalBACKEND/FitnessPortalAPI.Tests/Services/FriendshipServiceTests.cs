@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FitnessPortalAPI.Authentication;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
+using FitnessPortalAPI.Mappings;
 using FitnessPortalAPI.Models.Friendship;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;
@@ -12,22 +14,25 @@ namespace FitnessPortalAPI.Tests.Services
     [TestClass]
     public class FriendshipServiceTests
     {
+        private IAuthenticationContext _authenticationContext;
         private IFriendshipRepository _friendshipRepository;
         private IMapper _mapper;
         private FriendshipService _friendshipService;
+        private int userId = 1;
 
-        public FriendshipServiceTests()
+		public FriendshipServiceTests()
         {
+            _authenticationContext = Substitute.For<IAuthenticationContext>();
+            _authenticationContext.UserId.Returns(userId);
             _friendshipRepository = Substitute.For<IFriendshipRepository>();
             _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<FitnessPortalMappingProfile>()));
-            _friendshipService = new FriendshipService(_friendshipRepository, _mapper);
+            _friendshipService = new FriendshipService(_authenticationContext, _friendshipRepository, _mapper);
         }
 
         [TestMethod]
         public async Task SendFriendshipRequest_ValidRequest_ShouldCreateRequest()
         {
             // arrange
-            int userId = 1;
             int userToBeRequestedId = 2;
             var receiverUser = new User { Id = userToBeRequestedId };
             _friendshipRepository.GetUserByIdAsync(userToBeRequestedId).Returns(receiverUser);
@@ -35,7 +40,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.AreUsersFriendsAsync(userId, userToBeRequestedId).Returns(false);
 
             // act
-            int requestId = await _friendshipService.SendFriendshipRequestAsync(userId, userToBeRequestedId);
+            int requestId = await _friendshipService.SendFriendshipRequestAsync(userToBeRequestedId);
 
             // assert
             await _friendshipRepository.Received(1).CreateFriendshipRequestAsync(Arg.Is<FriendshipRequest>(f =>
@@ -47,13 +52,11 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task SendFriendshipRequest_ReceiverUserNotFound_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int userToBeRequestedId = 2;
             _friendshipRepository.GetUserByIdAsync(userToBeRequestedId).Returns(Task.FromResult<User?>(null));
 
-
             // act
-            async Task Act() => await _friendshipService.SendFriendshipRequestAsync(userId, userToBeRequestedId);
+            async Task Act() => await _friendshipService.SendFriendshipRequestAsync(userToBeRequestedId);
 
 
             // assert
@@ -65,13 +68,12 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task SendFriendshipRequest_FriendshipRequestExists_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int userToBeRequestedId = 2;
             _friendshipRepository.GetUserByIdAsync(userToBeRequestedId).Returns(new User());
             _friendshipRepository.FriendshipRequestExistsAsync(userId, userToBeRequestedId).Returns(true);
 
             // act
-            async Task Act() => await _friendshipService.SendFriendshipRequestAsync(userId, userToBeRequestedId);
+            async Task Act() => await _friendshipService.SendFriendshipRequestAsync(userToBeRequestedId);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
@@ -82,13 +84,12 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task SendFriendshipRequest_AlreadyFriends_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int userToBeRequestedId = 2;
             _friendshipRepository.GetUserByIdAsync(userToBeRequestedId).Returns(new User());
             _friendshipRepository.AreUsersFriendsAsync(userId, userToBeRequestedId).Returns(true);
 
             // act
-            async Task Act() => await _friendshipService.SendFriendshipRequestAsync(userId, userToBeRequestedId);
+            async Task Act() => await _friendshipService.SendFriendshipRequestAsync(userToBeRequestedId);
 
 
             // assert
@@ -100,12 +101,11 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetFriendshipRequests_NoFriends_ShouldReturnEmptyList()
         {
             // arrange
-            int userId = 1;
             List<FriendshipRequest> emptyList = new List<FriendshipRequest>();
             _friendshipRepository.GetFriendshipRequestsForUserAsync(userId).Returns(emptyList);
 
             // act
-            var result = await _friendshipService.GetFriendshipRequestsAsync(userId);
+            var result = await _friendshipService.GetFriendshipRequestsAsync();
 
             // assert
             result.ShouldNotBeNull();
@@ -116,7 +116,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetFriendshipRequests_SomeFriendshipRequests_ShouldReturnMappedList()
         {
             // arrange
-            int userId = 1;
             List<FriendshipRequest> requests = new List<FriendshipRequest>
             {
                 new FriendshipRequest { Id = 1, SenderId = 2 },
@@ -125,7 +124,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.GetFriendshipRequestsForUserAsync(userId).Returns(requests);
 
             // act
-            var result = await _friendshipService.GetFriendshipRequestsAsync(userId);
+            var result = await _friendshipService.GetFriendshipRequestsAsync();
 
             // assert
             result.ShouldNotBeNull();
@@ -141,13 +140,12 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task RejectFriendshipRequest_ValidRequest_ShouldRemoveFriendshipRequest()
         {
             // arrange
-            int userId = 1;
             int requestId = 2;
             var friendRequest = new FriendshipRequest { Id = requestId, ReceiverId = userId };
             _friendshipRepository.GetFriendshipRequestAsync(requestId).Returns(friendRequest);
 
             // act
-            await _friendshipService.RejectFriendshipRequestAsync(userId, requestId);
+            await _friendshipService.RejectFriendshipRequestAsync(requestId);
 
             // assert
             await _friendshipRepository.Received(1).RemoveFriendshipRequestAsync(friendRequest);
@@ -157,12 +155,11 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task RejectFriendshipRequest_FriendshipRequestNotFound_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int invalidRequestId = 999;
             _friendshipRepository.GetFriendshipRequestAsync(invalidRequestId).Returns(Task.FromResult<FriendshipRequest?>(null));
 
             // act
-            async Task Act() => await _friendshipService.RejectFriendshipRequestAsync(userId, invalidRequestId);
+            async Task Act() => await _friendshipService.RejectFriendshipRequestAsync(invalidRequestId);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
@@ -173,14 +170,13 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task RejectFriendshipRequest_UserNotAllowedToRemoveRequest_ShouldThrowForbiddenException()
         {
             // arrange
-            int userId = 1;
             int receiverId = 999;
             int requestId = 2;
             var friendRequest = new FriendshipRequest { Id = requestId, ReceiverId = receiverId };
             _friendshipRepository.GetFriendshipRequestAsync(requestId).Returns(friendRequest);
 
             // act
-            async Task Act() => await _friendshipService.RejectFriendshipRequestAsync(userId, requestId);
+            async Task Act() => await _friendshipService.RejectFriendshipRequestAsync(requestId);
 
             // assert
             var exception = await Should.ThrowAsync<ForbiddenException>(Act);
@@ -191,7 +187,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task AcceptFriendshipRequest_WhenRequestExistsAndCurrentUserIsReceiver_AddsFriendAndRemovesRequest()
         {
             // arrange
-            int userId = 1;
             int requestId = 2;
 
             var sender = new User { Id = 2, Username = "Sender" };
@@ -201,7 +196,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.GetFriendshipRequestAsync(requestId).Returns(friendshipRequest);
 
             // act
-            await _friendshipService.AcceptFriendshipRequestAsync(userId, requestId);
+            await _friendshipService.AcceptFriendshipRequestAsync(requestId);
 
             // assert
             await _friendshipRepository.Received().AddFriendAsync(sender, receiver);
@@ -212,12 +207,11 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task AcceptFriendshipRequest_WhenRequestNotFound_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int requestId = 2;
             _friendshipRepository.GetFriendshipRequestAsync(requestId).Returns(Task.FromResult<FriendshipRequest?>(null));
 
             // act
-            async Task Act() => await _friendshipService.AcceptFriendshipRequestAsync(userId, requestId);
+            async Task Act() => await _friendshipService.AcceptFriendshipRequestAsync(requestId);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
@@ -228,14 +222,13 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task AcceptFriendshipRequest_WhenSenderOrReceiverIsNull_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int requestId = 2;
             var friendshipRequest = new FriendshipRequest { Id = requestId, ReceiverId = userId };
 
             _friendshipRepository.GetFriendshipRequestAsync(requestId).Returns(friendshipRequest);
 
             // act
-            async Task Act() => await _friendshipService.AcceptFriendshipRequestAsync(userId, requestId);
+            async Task Act() => await _friendshipService.AcceptFriendshipRequestAsync(requestId);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
@@ -246,7 +239,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task AcceptFriendshipRequest_WhenCurrentUserIsNotReceiver_ShouldThrowForbiddenException()
         {
             // arrange
-            int userId = 1;
             int requestId = 2;
             var sender = new User { Id = 2, Username = "Sender" };
             var receiver = new User { Id = 3, Username = "Receiver" };
@@ -255,7 +247,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.GetFriendshipRequestAsync(requestId).Returns(friendshipRequest);
 
             // act
-            async Task Act() => await _friendshipService.AcceptFriendshipRequestAsync(userId, requestId);
+            async Task Act() => await _friendshipService.AcceptFriendshipRequestAsync(requestId);
 
             // assert
             var exception = await Should.ThrowAsync<ForbiddenException>(Act);
@@ -263,32 +255,30 @@ namespace FitnessPortalAPI.Tests.Services
         }
 
         [TestMethod]
-        public async Task GetFriendsForUser_EmptyFriendList_ShouldReturnEmptyList()
+        public async Task GetFriends_EmptyFriendList_ShouldReturnEmptyList()
         {
             // arrange
-            int userId = 1;
             var user = new User { Id = userId, Friends = new List<User>() };
             _friendshipRepository.GetUserByIdAsync(userId).Returns(user);
 
             // act
-            var result = await _friendshipService.GetFriendsForUserAsync(userId);
+            var result = await _friendshipService.GetFriendsAsync();
 
             // assert
             result.ShouldBeEmpty();
         }
 
         [TestMethod]
-        public async Task GetFriendsForUser_ListOfFriends_ShouldReturnFriendList()
+        public async Task GetFriends_ListOfFriends_ShouldReturnFriendList()
         {
             // arrange
-            int userId = 1;
             var friend1 = new User { Id = 2, Username = "Friend 1" };
             var friend2 = new User { Id = 3, Username = "Friend 2" };
             var user = new User { Id = userId, Friends = new List<User> { friend1, friend2 } };
             _friendshipRepository.GetUserByIdAsync(userId).Returns(user);
 
             // act
-            var result = await _friendshipService.GetFriendsForUserAsync(userId);
+            var result = await _friendshipService.GetFriendsAsync();
 
             // assert
             result.ShouldNotBeEmpty();
@@ -298,14 +288,13 @@ namespace FitnessPortalAPI.Tests.Services
         }
 
         [TestMethod]
-        public async Task GetFriendsForUser_UserNotFound_ShouldThrowNotFoundException()
+        public async Task GetFriends_UserNotFound_ShouldThrowNotFoundException()
         {
             // arrange
-            int userId = 1;
             _friendshipRepository.GetUserByIdAsync(userId).Returns(Task.FromResult<User?>(null));
 
             // act
-            async Task Act() => await _friendshipService.GetFriendsForUserAsync(userId);
+            async Task Act() => await _friendshipService.GetFriendsAsync();
 
             // assert
             var exception = await Should.ThrowAsync<NotFoundException>(Act);
@@ -316,7 +305,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task RemoveFriendship_WhenUsersAreFriends_CallsRepositoryRemoveFriendAsync()
         {
             // arrange
-            int userId = 1;
             int friendId = 2;
             var user = new User { Id = userId, Username = "User1" };
             var friend = new User { Id = friendId, Username = "Friend1" };
@@ -326,7 +314,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.AreUsersFriendsAsync(userId, friendId).Returns(true);
 
             // act
-            await _friendshipService.RemoveFriendshipAsync(userId, friendId);
+            await _friendshipService.RemoveFriendshipAsync(friendId);
 
             // assert
             await _friendshipRepository.Received().RemoveFriendAsync(user, friend);
@@ -336,12 +324,11 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task RemoveFriendship_WhenUserIsNotFound_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int friendId = 2;
 
             // act
             _friendshipRepository.GetUserByIdAsync(userId).Returns(Task.FromResult<User?>(null));
-            async Task Act() => await _friendshipService.RemoveFriendshipAsync(userId, friendId);
+            async Task Act() => await _friendshipService.RemoveFriendshipAsync(friendId);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
@@ -352,7 +339,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task RemoveFriendship_WhenFriendIsNotFound_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int friendId = 2;
 
             var user = new User { Id = userId, Username = "User1" };
@@ -361,7 +347,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.GetUserByIdAsync(friendId).Returns(Task.FromResult<User?>(null));
 
             // act
-            async Task Act() => await _friendshipService.RemoveFriendshipAsync(userId, friendId);
+            async Task Act() => await _friendshipService.RemoveFriendshipAsync(friendId);
 
             // assert
 
@@ -373,7 +359,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task RemoveFriendship_WhenUsersAreNotFriends_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int friendId = 2;
 
             var user = new User { Id = userId, Username = "User1" };
@@ -384,7 +369,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.AreUsersFriendsAsync(userId, friendId).Returns(false);
 
             // act
-            async Task Act() => await _friendshipService.RemoveFriendshipAsync(userId, friendId);
+            async Task Act() => await _friendshipService.RemoveFriendshipAsync(friendId);
 
             // assert
 
@@ -397,7 +382,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task FindUsersWithPattern_OneMatchExists_ShouldReturnOnlyOneMatchingUser()
         {
             // arrange
-            int userId = 1;
             string pattern = "John";
             var matchingUsers = new List<User>
             {
@@ -406,7 +390,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.FindUsersWithPatternAsync(userId, pattern).Returns(matchingUsers);
 
             // act
-            var result = await _friendshipService.FindUsersWithPatternAsync(userId, pattern);
+            var result = await _friendshipService.FindUsersWithPatternAsync(pattern);
 
             // assert
             result.ShouldNotBeEmpty();
@@ -418,7 +402,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task FindUsersWithPattern_MultipleMatchesExist_ShouldReturnAllMatchingUsers()
         {
             // arrange
-            int userId = 1;
             string pattern = "John";
             var matchingUsers = new List<User>
             {
@@ -428,7 +411,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.FindUsersWithPatternAsync(userId, pattern).Returns(matchingUsers);
 
             // act
-            var result = await _friendshipService.FindUsersWithPatternAsync(userId, pattern);
+            var result = await _friendshipService.FindUsersWithPatternAsync(pattern);
 
             // assert
             result.ShouldNotBeEmpty();
@@ -441,12 +424,11 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task FindUsersWithPattern_NoMatchesExists_ShouldReturnEmptyList()
         {
             // arrange
-            int userId = 1;
             string pattern = "Unknown";
             _friendshipRepository.FindUsersWithPatternAsync(userId, pattern).Returns(new List<User>());
 
             // act
-            var result = await _friendshipService.FindUsersWithPatternAsync(userId, pattern);
+            var result = await _friendshipService.FindUsersWithPatternAsync(pattern);
 
             // assert
             result.ShouldBeEmpty();
@@ -456,7 +438,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetFriendStatistics_FriendIsFoundAndUsersAreFriends_ShouldReturnFriendStatistics()
         {
             // arrange
-            int userId = 1;
             int friendId = 2;
             var friend = new User { 
                 Id = friendId, 
@@ -490,7 +471,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.GetFriendTrainingsAsync(friendId).Returns(friendTrainings);
 
             // act
-            var result = await _friendshipService.GetFriendStatisticsAsync(userId, friendId);
+            var result = await _friendshipService.GetFriendStatisticsAsync(friendId);
 
             // assert
             result.Username.ShouldBe(friend.Username);
@@ -504,7 +485,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetFriendStatistics_FriendHasNoTrainings_ShouldReturnFriendStatisticsWithEmptyTrainingsList()
         {
             // arrange
-            int userId = 1;
             int friendId = 2;
             var friend = new User
             {
@@ -520,7 +500,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.GetFriendTrainingsAsync(friendId).Returns(friendTrainings);
 
             // act
-            var result = await _friendshipService.GetFriendStatisticsAsync(userId, friendId);
+            var result = await _friendshipService.GetFriendStatisticsAsync(friendId);
 
             // assert
             result.Username.ShouldBe(friend.Username);
@@ -534,12 +514,11 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetFriendStatistics_FriendIsNotFound_ShouldThrowBadRequestException()
         {
             // arrange
-            int userId = 1;
             int friendId = 2;
             _friendshipRepository.GetUserByIdAsync(friendId).Returns(Task.FromResult<User?>(null));
 
             // act
-            async Task Act() => await _friendshipService.GetFriendStatisticsAsync(userId, friendId);
+            async Task Act() => await _friendshipService.GetFriendStatisticsAsync(friendId);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
@@ -550,7 +529,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetFriendStatistics_UsersAreNotFriends_ShouldThrowForbiddenException()
         {
             // arrange
-            int userId = 1;
             int friendId = 2;
             var friend = new User { Id = friendId };
 
@@ -558,7 +536,7 @@ namespace FitnessPortalAPI.Tests.Services
             _friendshipRepository.AreUsersFriendsAsync(userId, friendId).Returns(false);
 
             // act
-            async Task Act() => await _friendshipService.GetFriendStatisticsAsync(userId, friendId);
+            async Task Act() => await _friendshipService.GetFriendStatisticsAsync(friendId);
 
             // assert
             var exception = await Should.ThrowAsync<ForbiddenException>(Act);

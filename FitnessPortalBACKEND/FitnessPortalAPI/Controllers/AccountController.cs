@@ -1,11 +1,11 @@
 ﻿using FitnessPortalAPI.Models.UserProfileActions;
-using FitnessPortalAPI.Utilities;
 
 namespace FitnessPortalAPI.Controllers
 {
 	[Route("api/account")]
     [ApiController]
-    public class AccountController(IAccountService accountService, IHttpContextAccessor contextAccessor) : ControllerBase
+    public class AccountController(IAccountService accountService)
+        : ControllerBase
     {
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser([FromBody] RegisterUserDto dto)
@@ -19,7 +19,7 @@ namespace FitnessPortalAPI.Controllers
         {
             string token = await accountService.GenerateJwtAsync(dto);
 
-            if (token == null)
+            if (token is null)
             {
                 return BadRequest("Invalid user data");
             }
@@ -31,9 +31,7 @@ namespace FitnessPortalAPI.Controllers
         [HttpGet("profile-info")]
         public async Task<ActionResult<UserProfileInfoDto>> GetMyProfileInfo()
         {
-            var userId = HttpContextExtensions.EnsureUserId(contextAccessor.HttpContext!);
-
-            var userInfo = await accountService.GetProfileInfoAsync(userId);
+            var userInfo = await accountService.GetProfileInfoAsync();
 
             return Ok(userInfo);
         }
@@ -42,11 +40,8 @@ namespace FitnessPortalAPI.Controllers
         [HttpPut("update-profile")]
         public async Task<ActionResult<string>> UpdateMyProfile([FromBody] UpdateUserDto dto)
         {
-            var userId = HttpContextExtensions.EnsureUserId(contextAccessor.HttpContext!);
-            var previousToken = contextAccessor.HttpContext!.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
-            string newToken = await accountService.UpdateProfileAsync(dto, userId, previousToken);
-            if (newToken == null)
+            string newToken = await accountService.UpdateProfileAsync(dto);
+            if (newToken is null)
             {
                 return BadRequest("Invalid user data");
             }

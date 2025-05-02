@@ -16,3 +16,4 @@ global using FitnessPortalAPI.Exceptions;
 global using FitnessPortalAPI.Models;
 global using FitnessPortalAPI.Services.Interfaces;
 global using FitnessPortalAPI.Repositories;
+global using FitnessPortalAPI.Authentication;
