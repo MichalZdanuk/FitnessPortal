@@ -2,10 +2,12 @@
 
 namespace FitnessPortalAPI.Services;
 
-public class CalculatorService(ICalculatorRepository calculatorRepository, IMapper mapper)
+public class CalculatorService(IAuthenticationContext authenticationContext,
+	ICalculatorRepository calculatorRepository,
+	IMapper mapper)
 	: ICalculatorService
 {
-	public async Task<BMIDto> CalculateBMIAsync(CreateBMIQuery dto, int userId)
+	public async Task<BMIDto> CalculateBMIAsync(CreateBMIQuery dto)
 	{
 		var bmiIndex = 0.0f;
 		var bmiCategory = BMICategory.Normalweight;
@@ -18,7 +20,7 @@ public class CalculatorService(ICalculatorRepository calculatorRepository, IMapp
 			BMICategory = bmiCategory,
 			Height = dto.Height,
 			Weight = dto.Weight,
-			UserId = userId,
+			UserId = authenticationContext.UserId,
 		};
 
 		await calculatorRepository.AddBmiAsync(bmi);
@@ -42,8 +44,9 @@ public class CalculatorService(ICalculatorRepository calculatorRepository, IMapp
 		return await Task.FromResult(bmiDto);
 	}
 
-	public async Task<PageResult<BMIDto>> GetAllBMIsForUserPaginatedAsync(BMIQuery query, int userId)
+	public async Task<PageResult<BMIDto>> GetAllBMIsForUserPaginatedAsync(BMIQuery query)
 	{
+		var userId = authenticationContext.UserId;
 		var bmis = await calculatorRepository.GetBMIsForUserPaginatedAsync(userId, query.PageNumber, query.PageSize);
 		var totalItemsCount = await calculatorRepository.GetTotalBMIsCountForUserAsync(userId);
 

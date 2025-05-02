@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitnessPortalAPI.Authentication;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Repositories;
@@ -12,14 +13,16 @@ namespace FitnessPortalAPI.Tests.Services
     [TestClass]
     public class CalculatorServiceTests
     {
+        private IAuthenticationContext _authenticationContext;
         private ICalculatorRepository _calculatorRepository;
         private IMapper _mapper;
         private ICalculatorService _calculatorService;
         public CalculatorServiceTests()
         {
+            _authenticationContext = Substitute.For<IAuthenticationContext>();
             _calculatorRepository = Substitute.For<ICalculatorRepository>();
             _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<FitnessPortalMappingProfile>()));
-            _calculatorService = new CalculatorService(_calculatorRepository, _mapper);
+            _calculatorService = new CalculatorService(_authenticationContext, _calculatorRepository, _mapper);
         }
 
         [TestMethod]
@@ -32,9 +35,10 @@ namespace FitnessPortalAPI.Tests.Services
                 Height = 175f,
                 Weight = 70f,
             };
+            _authenticationContext.UserId.Returns(userId);
 
             // act
-            await _calculatorService.CalculateBMIAsync(createBMIQuery, userId);
+            await _calculatorService.CalculateBMIAsync(createBMIQuery);
 
             // assert
             await _calculatorRepository.Received(1).AddBmiAsync(Arg.Is<BMI>(b =>
@@ -60,9 +64,10 @@ namespace FitnessPortalAPI.Tests.Services
 
             _calculatorRepository.GetBMIsForUserPaginatedAsync(userId, bmiQuery.PageNumber, bmiQuery.PageSize).Returns(bmis);
             _calculatorRepository.GetTotalBMIsCountForUserAsync(userId).Returns(totalItemsCount);
+            _authenticationContext.UserId.Returns(userId);
 
             // act
-            var result = await _calculatorService.GetAllBMIsForUserPaginatedAsync(bmiQuery, userId);
+            var result = await _calculatorService.GetAllBMIsForUserPaginatedAsync(bmiQuery);
 
             // assert
             result.ShouldNotBeNull();
