@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using FitnessPortalAPI.Authentication;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FitnessPortalAPI.DependencyInjection;
 
@@ -11,6 +12,7 @@ public static class AuthenticationDependencyInjection
 		var authSettings = new AuthenticationSettings();
 		configuration.GetSection("Authentication").Bind(authSettings);
 		services.AddSingleton(authSettings);
+		services.AddScoped<IAuthenticationContext, AuthenticationContext>();
 
 		services.AddAuthentication(options =>
 		{

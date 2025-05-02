@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitnessPortalAPI.Authentication;
 using FitnessPortalAPI.Constants;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
@@ -15,6 +16,7 @@ namespace FitnessPortalAPI.Tests.Services
     [TestClass]
     public class AccountServiceTests
     {
+        private IAuthenticationContext _authenticationContext;
         private IAccountRepository _accountRepository;
         private IPasswordHasher<User> _passwordHasher;
         private AuthenticationSettings _authenticationSettings;
@@ -24,6 +26,7 @@ namespace FitnessPortalAPI.Tests.Services
 
         public AccountServiceTests()
         {
+            _authenticationContext = Substitute.For<IAuthenticationContext>();
             _accountRepository = Substitute.For<IAccountRepository>();
             _passwordHasher = Substitute.For<IPasswordHasher<User>>();
             _authenticationSettings = new AuthenticationSettings
@@ -35,7 +38,8 @@ namespace FitnessPortalAPI.Tests.Services
             _tokenStore = Substitute.For<ITokenStore>();
             _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<FitnessPortalMappingProfile>()));
             _accountService = new AccountService(
-                _accountRepository,
+				_authenticationContext,
+				_accountRepository,
                 _passwordHasher,
                 _authenticationSettings,
                 _tokenStore,
@@ -167,6 +171,7 @@ namespace FitnessPortalAPI.Tests.Services
                 Friends = new List<User> { },
             };
 
+            _authenticationContext.UserId.Returns(userId);
             _accountRepository.GetUserByIdAsync(userId).Returns(user);
 
             // act
