@@ -1,5 +1,5 @@
-﻿namespace FitnessPortalAPI;
-public class AuthenticationSettings
+﻿namespace FitnessPortalAPI.Options;
+public class AuthenticationOptions
 {
 	public string JwtKey { get; set; }
 	public int JwtExpireDays { get; set; }

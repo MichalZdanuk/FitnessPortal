@@ -2,6 +2,7 @@
 using FitnessPortalAPI.Authentication;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
+using FitnessPortalAPI.Mappings;
 using FitnessPortalAPI.Models.Articles;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;

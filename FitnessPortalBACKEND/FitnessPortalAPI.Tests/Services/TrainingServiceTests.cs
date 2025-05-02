@@ -3,6 +3,7 @@ using FitnessPortalAPI.Authentication;
 using FitnessPortalAPI.Constants;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
+using FitnessPortalAPI.Mappings;
 using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;

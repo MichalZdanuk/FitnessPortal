@@ -1,4 +1,5 @@
 ﻿using FitnessPortalAPI.Models.Calculators;
+using FitnessPortalAPI.Utils;
 
 namespace FitnessPortalAPI.Services;
 

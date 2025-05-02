@@ -1,4 +1,5 @@
 ﻿using FitnessPortalAPI.Models.UserProfileActions;
+using FitnessPortalAPI.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,7 +11,7 @@ public class AccountService(IAuthenticationContext authenticationContext,
 		IHttpContextAccessor httpContextAccessor,
 		IAccountRepository accountRepository,
 		IPasswordHasher<User> passwordHasher,
-		AuthenticationSettings authenticationSettings,
+		AuthenticationOptions authenticationSettings,
 		ITokenStore tokenStore,
 		IMapper mapper)
 		: IAccountService

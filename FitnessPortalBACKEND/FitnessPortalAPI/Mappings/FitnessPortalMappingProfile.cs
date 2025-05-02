@@ -4,7 +4,7 @@ using FitnessPortalAPI.Models.Friendship;
 using FitnessPortalAPI.Models.Trainings;
 using FitnessPortalAPI.Models.UserProfileActions;
 
-namespace FitnessPortalAPI;
+namespace FitnessPortalAPI.Mappings;
 public class FitnessPortalMappingProfile : Profile
 {
 	public FitnessPortalMappingProfile()

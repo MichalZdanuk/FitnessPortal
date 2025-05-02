@@ -3,7 +3,9 @@ using FitnessPortalAPI.Authentication;
 using FitnessPortalAPI.Constants;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
+using FitnessPortalAPI.Mappings;
 using FitnessPortalAPI.Models.UserProfileActions;
+using FitnessPortalAPI.Options;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Services.Interfaces;
@@ -21,7 +23,7 @@ namespace FitnessPortalAPI.Tests.Services
         private IHttpContextAccessor _httpContextAccessor;
         private IAccountRepository _accountRepository;
         private IPasswordHasher<User> _passwordHasher;
-        private AuthenticationSettings _authenticationSettings;
+        private AuthenticationOptions _authenticationSettings;
         private ITokenStore _tokenStore;
         private IMapper _mapper;
         private AccountService _accountService;
@@ -32,7 +34,7 @@ namespace FitnessPortalAPI.Tests.Services
             _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             _accountRepository = Substitute.For<IAccountRepository>();
             _passwordHasher = Substitute.For<IPasswordHasher<User>>();
-            _authenticationSettings = new AuthenticationSettings
+            _authenticationSettings = new AuthenticationOptions
             {
                 JwtKey = "SUPER_LONG_PRIVATE_KEY_DONT_SHARE",
                 JwtExpireDays = 1,

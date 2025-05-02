@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FitnessPortalAPI.Authentication;
 using FitnessPortalAPI.Entities;
+using FitnessPortalAPI.Mappings;
 using FitnessPortalAPI.Models.Calculators;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;
