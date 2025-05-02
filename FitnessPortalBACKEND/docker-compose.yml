@@ -7,3 +7,14 @@ services:
     build:
       context: .
       dockerfile: FitnessPortalAPI/Dockerfile
+
+  fitnessportalclient:
+    image: ${DOCKER_REGISTRY-}fitnessportalclient
+    build:
+      context: ../FitnessPortalFRONTEND
+      dockerfile: /Dockerfile
+    depends_on:
+      - fitnessportalapi
+    ports:
+      - "5173:5173"
+
