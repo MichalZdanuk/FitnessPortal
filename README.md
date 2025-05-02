@@ -1,6 +1,7 @@
 # 💪 FitnessPortal
 Projekt realizowany w ramach przedmiotu *"Projekt Dyplomowy - 1DI1633"* na Politechnice Warszawskiej w semestrze 2023L. Tematem projektu jest zaimplementowanie w pełni funkcjonalnego portalu typu fitness (postawienie bazy, zbudowanie oraz wystawienie API oraz zaimplementowanie aplikacji klienckiej, która łączy się z API).
 ***
+
 ## 🎨 Projekt graficzny - FIGMA:
 Projekt Figma został wykonany na samym początku projektu, celem ułatwienia sobie implementowania FrontEnd'u. Wykorzystałem podstawowe dobre praktyki projektowania interfejsów użytkownika: prawo Fitsa, liczba Mullera, czy spójność wewnątrz aplikacji. Metodyka jaką kierowałem się projektując interfejs to **Atomic Design** - więcej można o niej poczytać tutaj:
 
@@ -13,6 +14,8 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 *https://www.figma.com/file/Gbzk6fX0RZ585CyDuZ9sMN/PortalFitness?type=design&node-id=0-1&t=eWWCsW8vmUPUCj6D-0*
 
 ![figma](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/41c639ae-5367-4fce-9bba-f0e506e658f8)
+
+---
 
 ## 💻 Technologie:
 ### BackEnd:
@@ -28,6 +31,9 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * localstorage
 * JavaScript + Bootstrap
 * ESLint, prettier
+
+---
+
 ## 📜 Wymagania (wstępnie zdefiniowane funkcjonalności):
 * rejestracja/logowanie
 * uaktualnianie danych konta (wiąże się to z generowaniem nowego tokena JWT; zaimplementowana blacklist'a na stare token'y)
@@ -38,7 +44,10 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * proste kalkulatory: kalkulator BMI, kalkulator zapotrzebowania dziennego na kalorie BMR, kalkulator poziomu tkanki tłuszczowej na podstawie podanych obwodów ciała
 * opisy różnych ćwiczeń/aktywności fizycznych - (statyczny) leksykon ćwiczeń
 * wysoka responsywność na urządzenia mobile oraz desktop
-## 🌱 Możliwy rozwój aplikacji(funkcjonalności, o które chciałbym wzbogacić aplikację):
+
+---
+
+## 🌱 Możliwy rozwój aplikacji (funkcjonalności, o które chciałbym wzbogacić aplikację):
 * dostosowanie aplikacji front'endowej pod urządzenia typu mobile (responsywność) **(zrobione)**
 * dodanie pipeline CI celeme bezpiecznego wprowadzania kodu do repozytorium **(zrobione)**
 * paginacja rezultatów **(zrobione)**
@@ -47,7 +56,10 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * dodawanie komentarzy do artykułów, ocena komentarzy poprzez "łapkę" w górę/dół
 * dwujęzyczność portalu - Angielski/Polski (w tym zapisanie po stronie backEnd'u preferencji użytkownika, by po zalogowaniu posiadał stan taki jaki zostawił wylogowując się z aplikacji)
 * mechanizm proponowania nowych obciążeń - prognozowanie progresu w ćwiczeniach na podstawie wykonanych już treningów
-* konteryzacja rozwiązania przy użyciu Docker'a
+* konteryzacja rozwiązania przy użyciu Docker'a **(zrobione)**
+
+---
+
 ## 🧪 Testowanie aplikacji
 ### BackEnd
 * *testy jednostkowe* - sprawdziłem poprawność funkcjonowania narzędzia kalkulatora, validatorów oraz przede wszystkim serwisów (wykorzystane biblioteki *MSUnit*, *NSubstitute*, *Shouldly*)
@@ -65,12 +77,15 @@ Link do projektu Figma (*UWAGA: Projekt Figma obejmuje tylko design na urządzen
 * samodzielne ręczne przetestowanie aplikacji poprzez uruchomienie na ekranach różnej rozdzielczości, uruchiomienie w przeglądarce jako tryb mobile
 * przekazanie aplikacji do niewielkiej grupy osób trzecich celem sprawdzenia intuicyjności aplikacji oraz poznania opinii na temat design'u
 
+---
+
 ## 🤖 Continuous Integration:
 Zdecydowałem się w tym repozytorium na wykorzystanie Github Actions do stworzenia **pipeline'a CI**. Dwa proste pliki *api-build-test.yml* oraz *frontend-lint-build.yml* nakładają restrykcje, dzięki którym kod przed wdrożeniem na branch main jest sprawdzany na backend'zie poda kątem budowy projektu oraz uzyskania pozytywnych wyników testów jednostkowych i architektonicznych, a
 na frontend'zie pod względem formatowania kodu oraz budowy plików projektowych.
 
 ![pipelines](https://github.com/user-attachments/assets/0e44faa7-3c82-4a48-a1cf-2e8eed6702fe)
 
+---
 
 ## 🌐 REST API
 
@@ -92,6 +107,7 @@ na frontend'zie pod względem formatowania kodu oraz budowy plików projektowych
 * ### Training (dodawanie treningów i przegląd, przegląd ulubionych(na podstawie częstotliwości), możliwość filtrowania treningów ze względu na okres czasowy):
 ![training_endpoints](https://github.com/MichalZdanuk/FitnessPortal/assets/76063659/f16db5a7-313c-4213-afbe-54aa8ce4b666)
 
+---
 
 ## 🎥 Demo:
 * strona główna
@@ -153,3 +169,19 @@ na frontend'zie pod względem formatowania kodu oraz budowy plików projektowych
 ![bmi](https://github.com/user-attachments/assets/ab04a7e4-a39f-4678-8cfc-326718ce5cb9)
 
 *Pomaga użytkownikom w zrozumieniu zmian w ich składzie ciała i ich wpływu na zdrowie.*
+
+---
+
+## 🏃 Uruchamianie aplikacji:
+
+Aplikację można uruchomić przy użyciu **Docker**, wykonując poniższe polecenia:
+
+```bash
+git clone https://github.com/MichalZdanuk/FitnessPortal.git
+```
+```bash
+cd FitnessPortal/FitnessPortalBACKEND
+```
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+```
