@@ -7,6 +7,7 @@ using FitnessPortalAPI.Models.UserProfileActions;
 using FitnessPortalAPI.Repositories;
 using FitnessPortalAPI.Services;
 using FitnessPortalAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using Shouldly;
@@ -17,6 +18,7 @@ namespace FitnessPortalAPI.Tests.Services
     public class AccountServiceTests
     {
         private IAuthenticationContext _authenticationContext;
+        private IHttpContextAccessor _httpContextAccessor;
         private IAccountRepository _accountRepository;
         private IPasswordHasher<User> _passwordHasher;
         private AuthenticationSettings _authenticationSettings;
@@ -27,6 +29,7 @@ namespace FitnessPortalAPI.Tests.Services
         public AccountServiceTests()
         {
             _authenticationContext = Substitute.For<IAuthenticationContext>();
+            _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             _accountRepository = Substitute.For<IAccountRepository>();
             _passwordHasher = Substitute.For<IPasswordHasher<User>>();
             _authenticationSettings = new AuthenticationSettings
@@ -39,6 +42,7 @@ namespace FitnessPortalAPI.Tests.Services
             _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<FitnessPortalMappingProfile>()));
             _accountService = new AccountService(
 				_authenticationContext,
+				_httpContextAccessor,
 				_accountRepository,
                 _passwordHasher,
                 _authenticationSettings,
@@ -175,7 +179,7 @@ namespace FitnessPortalAPI.Tests.Services
             _accountRepository.GetUserByIdAsync(userId).Returns(user);
 
             // act
-            var result = await _accountService.GetProfileInfoAsync(userId);
+            var result = await _accountService.GetProfileInfoAsync();
 
             // assert
             result.ShouldNotBeNull();
@@ -189,7 +193,7 @@ namespace FitnessPortalAPI.Tests.Services
             _accountRepository.GetUserByIdAsync(invalidUserId).Returns(Task.FromResult<User?>(null));
 
             // act
-            async Task Act() => await _accountService.GetProfileInfoAsync(invalidUserId);
+            async Task Act() => await _accountService.GetProfileInfoAsync();
 
             // assert
             var exception = await Should.ThrowAsync<NotFoundException>(Act);
@@ -222,12 +226,17 @@ namespace FitnessPortalAPI.Tests.Services
                 Height = 180.0f,
             };
 
-            var previousToken = "previousToken";
+			var previousToken = "Bearer previousToken";
 
-            _accountRepository.GetUserByIdAsync(userId).Returns(userToBeUpdated);
+			var httpContext = new DefaultHttpContext();
+			httpContext.Request.Headers["Authorization"] = previousToken;
+			_httpContextAccessor.HttpContext.Returns(httpContext);
+			_authenticationContext.UserId.Returns(userId);
+
+			_accountRepository.GetUserByIdAsync(userId).Returns(userToBeUpdated);
 
             // act
-            var result = await _accountService.UpdateProfileAsync(updateUserDto, userId, previousToken);
+            var result = await _accountService.UpdateProfileAsync(updateUserDto);
 
             // assert
             result.ShouldNotBeNull();
@@ -252,12 +261,17 @@ namespace FitnessPortalAPI.Tests.Services
                 Height = 185.0f
             };
 
-            var previousToken = "previousToken";
+			var previousToken = "Bearer previousToken";
 
-            _accountRepository.GetUserByIdAsync(userId).Returns(Task.FromResult<User?>(null));
+			var httpContext = new DefaultHttpContext();
+			httpContext.Request.Headers["Authorization"] = previousToken;
+			_httpContextAccessor.HttpContext.Returns(httpContext);
+			_authenticationContext.UserId.Returns(userId);
+
+			_accountRepository.GetUserByIdAsync(userId).Returns(Task.FromResult<User?>(null));
 
             // act
-            Func<Task> act = async () => await _accountService.UpdateProfileAsync(updateUserDto, userId, previousToken);
+            Func<Task> act = async () => await _accountService.UpdateProfileAsync(updateUserDto);
 
             // assert
             await Should.ThrowAsync<ForbiddenException>(act);
