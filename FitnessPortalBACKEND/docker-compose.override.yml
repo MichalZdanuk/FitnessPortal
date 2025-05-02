@@ -1,0 +1,30 @@
+services:
+  fitnessportaldb:
+    container_name: fitnessportaldb
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=HardPassword12345678abc!
+    ports:
+      - "1580:1433"
+
+  fitnessportalapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__MSSQL=Server=fitnessportaldb;Database=FitnessPortalDatabase;User Id=sa;Password=HardPassword12345678abc!;Encrypt=False;TrustServerCertificate=True
+      - AllowedOrigins=http://localhost:5173
+      - Version__ApiVersion=1.0
+      - AuthenticationSettings_JwtKey=SUPER_LONG_PRIVATE_KEY_DONT_SHARE
+      - AuthenticationSettings_JwtExpireDays=1
+      - AuthenticationSettings_JwtIssuer=http://fitnessportalapi.com
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    depends_on:
+      - fitnessportaldb
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

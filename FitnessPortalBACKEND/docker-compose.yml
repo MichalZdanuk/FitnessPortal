@@ -1,0 +1,9 @@
+services:
+  fitnessportaldb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+  fitnessportalapi:
+    image: ${DOCKER_REGISTRY-}fitnessportalapi
+    build:
+      context: .
+      dockerfile: FitnessPortalAPI/Dockerfile
