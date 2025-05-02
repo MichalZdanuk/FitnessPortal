@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitnessPortalAPI.Authentication;
 using FitnessPortalAPI.Constants;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
@@ -13,15 +14,19 @@ namespace FitnessPortalAPI.Tests.Services
     [TestClass]
     public class TrainingServiceTests
     {
+        private int userId = 1;
+        private IAuthenticationContext _authenticationContext;
         private ITrainingRepository _trainingRepository;
         private IMapper _mapper;
         private TrainingService _trainingService;
 
         public TrainingServiceTests()
         {
+            _authenticationContext = Substitute.For<IAuthenticationContext>();
+            _authenticationContext.UserId.Returns(userId);
             _trainingRepository = Substitute.For<ITrainingRepository>();
             _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<FitnessPortalMappingProfile>()));
-            _trainingService = new TrainingService(_trainingRepository, _mapper);
+            _trainingService = new TrainingService(_authenticationContext, _trainingRepository, _mapper);
         }
 
         [TestMethod]
@@ -47,21 +52,19 @@ namespace FitnessPortalAPI.Tests.Services
                     }
                 }
             };
-            var userId = 1;
 
             // act
-            await _trainingService.AddTrainingAsync(createTrainingDto, userId);
+            await _trainingService.AddTrainingAsync(createTrainingDto);
 
             // assert
             await _trainingRepository.Received(1).CreateTrainingAsync(Arg.Any<Training>(), Arg.Any<List<Exercise>>());
         }
 
         [TestMethod]
-        public async Task DeleteTraining_ExistingTrainingValidUserId_ShouldCallRepositoryDeleteTraining()
+        public async Task DeleteTraining_ExistingTraining_ShouldCallRepositoryDeleteTraining()
         {
             // arrange
             var trainingId = 1;
-            var userId = 1;
             var training = new Training()
             {
                 Id = trainingId,
@@ -70,48 +73,25 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetTrainingByIdAsync(trainingId).Returns(training);
 
             // act
-            await _trainingService.DeleteTrainingAsync(trainingId, userId);
+            await _trainingService.DeleteTrainingAsync(trainingId);
 
             // assert
             await _trainingRepository.Received(1).DeleteTrainingAsync(trainingId);
         }
 
         [TestMethod]
-        public async Task DeleteTraining_NotExistingTrainingValidUserId_ShouldThrowBadRequestException()
+        public async Task DeleteTraining_NotExistingTraining_ShouldThrowBadRequestException()
         {
             // arrange
             var invalidTrainingId = 1;
-            var userId = 1;
             _trainingRepository.GetTrainingByIdAsync(invalidTrainingId).Returns(Task.FromResult<Training?>(null));
 
             // act
-            async Task Act() => await _trainingService.DeleteTrainingAsync(invalidTrainingId, userId);
+            async Task Act() => await _trainingService.DeleteTrainingAsync(invalidTrainingId);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
             exception.Message.ShouldBe("Training not found");
-        }
-
-        [TestMethod]
-        public async Task DeleteTraining_ExistingTrainingInvalidUserId_ShouldThrowForbiddenException()
-        {
-            // arrange
-            var trainingId = 1;
-            var userId = 1;
-            var invaliduserId = 999;
-            var training = new Training()
-            {
-                Id = trainingId,
-                UserId = userId,
-            };
-            _trainingRepository.GetTrainingByIdAsync(trainingId).Returns(training);
-
-            // act
-            async Task Act() => await _trainingService.DeleteTrainingAsync(trainingId, invaliduserId);
-
-            // assert
-            var exception = await Should.ThrowAsync<ForbiddenException>(Act);
-            exception.Message.ShouldBe("You are not allowed to delete this training");
         }
 
         [TestMethod]
@@ -123,14 +103,13 @@ namespace FitnessPortalAPI.Tests.Services
                 PageNumber = 1,
                 PageSize = 10,
             };
-            var userId = 1;
             var trainings = Enumerable.Range(1, 10).Select(i => new Training { Id = i }).ToList();
             var totalItemsCount = 10;
             _trainingRepository.GetPaginatedTrainingsForUserAsync(userId, query).Returns(trainings);
             _trainingRepository.GetTotalTrainingsCountForUserAsync(userId).Returns(totalItemsCount);
 
             // act
-            var result = await _trainingService.GetTrainingsPaginatedAsync(query, userId);
+            var result = await _trainingService.GetTrainingsPaginatedAsync(query);
 
             // assert
             result.ShouldNotBeNull();
@@ -147,14 +126,13 @@ namespace FitnessPortalAPI.Tests.Services
                 PageNumber = 1,
                 PageSize = 10,
             };
-            var userId = 1;
             var trainings = new List<Training>();
             var totalItemsCount = 0;
             _trainingRepository.GetPaginatedTrainingsForUserAsync(userId, query).Returns(trainings);
             _trainingRepository.GetTotalTrainingsCountForUserAsync(userId).Returns(totalItemsCount);
 
             // act
-            var result = await _trainingService.GetTrainingsPaginatedAsync(query, userId);
+            var result = await _trainingService.GetTrainingsPaginatedAsync(query);
 
             // assert
             result.ShouldNotBeNull();
@@ -167,7 +145,6 @@ namespace FitnessPortalAPI.Tests.Services
         {
             // arrange
             var period = TrainingPeriod.Month;
-            var userId = 1;
             var startDate = DateTime.Now.AddMonths(-1).Date;
             var endDate = DateTime.Now.Date;
             var expectedTrainingData = new List<Training>
@@ -179,7 +156,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetChartDataAsync(userId, startDate, endDate).Returns(expectedTrainingData);
 
             // act
-            var result = await _trainingService.GetTrainingChartDataAsync(period, userId);
+            var result = await _trainingService.GetTrainingChartDataAsync(period);
 
             // assert
             result.ShouldNotBeNull();
@@ -192,10 +169,9 @@ namespace FitnessPortalAPI.Tests.Services
         {
             // arrange
             var period = (TrainingPeriod)99;
-            var userId = 1;
 
             // act
-            async Task Act() => await _trainingService.GetTrainingChartDataAsync(period, userId);
+            async Task Act() => await _trainingService.GetTrainingChartDataAsync(period);
 
             // assert
             var exception = await Should.ThrowAsync<BadRequestException>(Act);
@@ -207,14 +183,13 @@ namespace FitnessPortalAPI.Tests.Services
         {
             // arrange
             var period = TrainingPeriod.Month;
-            var userId = 1;
             var startDate = DateTime.Now.AddMonths(-1);
             var endDate = DateTime.Now;
             var expectedTrainingData = new List<Training>();
             _trainingRepository.GetChartDataAsync(userId, startDate, endDate).Returns(expectedTrainingData);
 
             // act
-            var result = await _trainingService.GetTrainingChartDataAsync(period, userId);
+            var result = await _trainingService.GetTrainingChartDataAsync(period);
 
             // assert
             result.ShouldNotBeNull();
@@ -225,7 +200,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetTrainingStats_ValidData_ShouldReturnTrainingStats()
         {
             // arrange
-            var userId = 1;
             var user = new User { Id = userId };
             var bestTraining = new Training { Id = 1 };
             var mostRecentTraining = new Training { Id = 2 };
@@ -236,7 +210,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetTotalTrainingsCountForUserAsync(userId).Returns(totalTrainings);
 
             // act
-            var result = await _trainingService.GetTrainingStatsAsync(userId);
+            var result = await _trainingService.GetTrainingStatsAsync();
 
             // assert
             result.ShouldNotBeNull();
@@ -251,11 +225,10 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetTrainingStats_EmptyData_ShouldReturnEmptyTrainingStats()
         {
             // arrange
-            var userId = 1;
             _trainingRepository.GetUserWithTrainingsAsync(userId).Returns(new User { Id = userId });
 
             // act
-            var result = await _trainingService.GetTrainingStatsAsync(userId);
+            var result = await _trainingService.GetTrainingStatsAsync();
 
             // assert
             result.ShouldNotBeNull();
@@ -268,11 +241,10 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetTrainingStats_InvalidUserId_ShouldThrowNotFoundException()
         {
             // arrange
-            var userId = 1;
             _trainingRepository.GetUserWithTrainingsAsync(userId).Returns(Task.FromResult<User?>(null));
 
             // act
-            async Task Act() => await _trainingService.GetTrainingStatsAsync(userId);
+            async Task Act() => await _trainingService.GetTrainingStatsAsync();
 
             // assert
             var exception = await Should.ThrowAsync<NotFoundException>(Act);
@@ -283,8 +255,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetFavouriteExercises_ValidData_ShouldReturnFavouriteExercises()
         {
             // arrange
-            var userId = 1;
-
             var exercises = new List<Exercise>
             {
                 new Exercise { Name = "ExerciseA", NumberOfReps = 10, Payload = 100 },
@@ -323,7 +293,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetRecentTrainingsForUserAsync(userId, 3).Returns(trainings);
 
             // act
-            var result = await _trainingService.GetFavouriteExercisesAsync(userId);
+            var result = await _trainingService.GetFavouriteExercisesAsync();
 
             // assert
             result.ShouldNotBeNull();
@@ -338,7 +308,6 @@ namespace FitnessPortalAPI.Tests.Services
         public async Task GetFavouriteExercises_NotEnoughData_ShouldReturnEmptyList()
         {
             // arrange
-            var userId = 1;
             var training = new Training
             {
                 Id = 1,
@@ -350,7 +319,7 @@ namespace FitnessPortalAPI.Tests.Services
             _trainingRepository.GetRecentTrainingsForUserAsync(userId, 3).Returns(new List<Training> { training });
 
             // act
-            var result = await _trainingService.GetFavouriteExercisesAsync(userId);
+            var result = await _trainingService.GetFavouriteExercisesAsync();
 
             // assert
             result.ShouldNotBeNull();

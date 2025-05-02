@@ -1,15 +1,18 @@
 ﻿using FitnessPortalAPI.Models.Trainings;
+using FitnessPortalAPI.Utils;
 
 namespace FitnessPortalAPI.Services;
 
-public class TrainingService(ITrainingRepository trainingRepository, IMapper mapper)
+public class TrainingService(IAuthenticationContext authenticationContext,
+	ITrainingRepository trainingRepository,
+	IMapper mapper)
 		: ITrainingService
 {
-	public async Task<int> AddTrainingAsync(CreateTrainingDto dto, int userId)
+	public async Task<int> AddTrainingAsync(CreateTrainingDto dto)
 	{
 		var training = mapper.Map<Training>(dto);
 		training.DateOfTraining = DateTime.Now;
-		training.UserId = userId;
+		training.UserId = authenticationContext.UserId;
 
 		var exercises = dto.Exercises.Select(exerciseDto => mapper.Map<Exercise>(exerciseDto)).ToList();
 
@@ -25,44 +28,48 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 		return await trainingRepository.CreateTrainingAsync(training, exercises);
 	}
 
-	public async Task DeleteTrainingAsync(int id, int userId)
+	public async Task DeleteTrainingAsync(int id)
 	{
 		var training = await trainingRepository.GetTrainingByIdAsync(id);
 
-		if (training == null)
+		if (training is null)
 			throw new BadRequestException("Training not found");
 
-		if (training.UserId != userId)
+		if (training.UserId != authenticationContext.UserId)
 			throw new ForbiddenException("You are not allowed to delete this training");
 
 		await trainingRepository.DeleteTrainingAsync(id);
 	}
 
-	public async Task<PageResult<TrainingDto>> GetTrainingsPaginatedAsync(TrainingQuery query, int userId)
+	public async Task<PageResult<TrainingDto>> GetTrainingsPaginatedAsync(TrainingQuery query)
 	{
+		var userId = authenticationContext.UserId;
+
 		var trainings = await trainingRepository.GetPaginatedTrainingsForUserAsync(userId, query);
 		var totalItemsCount = await trainingRepository.GetTotalTrainingsCountForUserAsync(userId);
 		var trainingsDtos = mapper.Map<List<TrainingDto>>(trainings);
+
 		var result = new PageResult<TrainingDto>(trainingsDtos, totalItemsCount, query.PageSize, query.PageNumber);
 
 		return result;
 	}
 
-	public async Task<IEnumerable<TrainingChartDataDto>> GetTrainingChartDataAsync(TrainingPeriod period, int userId)
+	public async Task<IEnumerable<TrainingChartDataDto>> GetTrainingChartDataAsync(TrainingPeriod period)
 	{
-		(DateTime startDate, DateTime endDate) = CalculateDateRange(period);
+		(DateTime startDate, DateTime endDate) = DateRangeHelper.CalculateDateRange(period);
 
-		var trainings = await trainingRepository.GetChartDataAsync(userId, startDate, endDate);
+		var trainings = await trainingRepository.GetChartDataAsync(authenticationContext.UserId, startDate, endDate);
 		var trainingChartData = mapper.Map<IEnumerable<TrainingChartDataDto>>(trainings);
 
 		return trainingChartData;
 	}
 
-	public async Task<TrainingStatsDto> GetTrainingStatsAsync(int userId)
+	public async Task<TrainingStatsDto> GetTrainingStatsAsync()
 	{
+		var userId = authenticationContext.UserId;
 		var user = await trainingRepository.GetUserWithTrainingsAsync(userId);
 
-		if (user == null)
+		if (user is null)
 		{
 			throw new NotFoundException("User not found");
 		}
@@ -81,9 +88,9 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 		return userTrainingStats;
 	}
 
-	public async Task<FavouriteExercisesDto> GetFavouriteExercisesAsync(int userId)
+	public async Task<FavouriteExercisesDto> GetFavouriteExercisesAsync()
 	{
-		var userTrainings = await trainingRepository.GetRecentTrainingsForUserAsync(userId, 3);
+		var userTrainings = await trainingRepository.GetRecentTrainingsForUserAsync(authenticationContext.UserId, 3);
 		var trainingsList = userTrainings.ToList();
 
 		if (trainingsList.Count < 3)
@@ -127,31 +134,5 @@ public class TrainingService(ITrainingRepository trainingRepository, IMapper map
 		};
 
 		return favouriteDto;
-	}
-
-	private (DateTime startDate, DateTime endDate) CalculateDateRange(TrainingPeriod period)
-	{
-		DateTime endDate = DateTime.Now;
-		DateTime startDate;
-
-		switch (period)
-		{
-			case TrainingPeriod.Month:
-				startDate = endDate.AddMonths(-1);
-				break;
-			case TrainingPeriod.Quarter:
-				startDate = endDate.AddMonths(-3);
-				break;
-			case TrainingPeriod.HalfYear:
-				startDate = endDate.AddMonths(-6);
-				break;
-			default:
-				throw new BadRequestException("Invalid period value. Supported values are 'month', 'quarter', and 'halfyear'");
-		}
-
-		startDate = startDate.Date;
-		endDate = endDate.Date;
-
-		return (startDate, endDate);
 	}
 }
