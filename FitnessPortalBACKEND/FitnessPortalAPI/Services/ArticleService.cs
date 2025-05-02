@@ -2,14 +2,16 @@
 
 namespace FitnessPortalAPI.Services;
 
-public class ArticleService(IArticleRepository articleRepository, IMapper mapper)
+public class ArticleService(IAuthenticationContext authenticationContext,
+	IArticleRepository articleRepository,
+	IMapper mapper)
 		: IArticleService
 {
-	public async Task<int> CreateAsync(CreateArticleDto dto, int userId)
+	public async Task<int> CreateAsync(CreateArticleDto dto)
 	{
 		var article = mapper.Map<Article>(dto);
 		article.DateOfPublication = DateTime.Now;
-		article.CreatedById = userId;
+		article.CreatedById = authenticationContext.UserId;
 
 		var articleId = await articleRepository.CreateAsync(article);
 

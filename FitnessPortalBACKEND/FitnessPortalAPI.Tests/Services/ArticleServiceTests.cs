@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitnessPortalAPI.Authentication;
 using FitnessPortalAPI.Entities;
 using FitnessPortalAPI.Exceptions;
 using FitnessPortalAPI.Models.Articles;
@@ -12,15 +13,17 @@ namespace FitnessPortalAPI.Tests.Services
     [TestClass]
     public class ArticleServiceTests
     {
+        private IAuthenticationContext _authenticationContext;
         private IArticleRepository _articleRepository;
         private IMapper _mapper;
         private ArticleService _articleService;
 
         public ArticleServiceTests()
         {
+            _authenticationContext = Substitute.For<IAuthenticationContext>();
             _articleRepository = Substitute.For<IArticleRepository>();
             _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<FitnessPortalMappingProfile>()));
-            _articleService = new ArticleService(_articleRepository, _mapper);
+            _articleService = new ArticleService(_authenticationContext, _articleRepository, _mapper);
         }
 
         [TestMethod]
@@ -35,9 +38,10 @@ namespace FitnessPortalAPI.Tests.Services
                 Content = "TestContent",
                 Category = "TestCategory"
             };
+            _authenticationContext.UserId.Returns(userId);
 
             // act
-            await _articleService.CreateAsync(createdDto, userId);
+            await _articleService.CreateAsync(createdDto);
 
             // assert
             await _articleRepository.Received(1).CreateAsync(Arg.Is<Article>(a => 
