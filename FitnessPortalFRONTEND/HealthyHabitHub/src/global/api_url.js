@@ -1,1 +1,1 @@
-export const apiUrl = 'https://localhost:5001'
+export const apiUrl = import.meta.env.API_URL || 'https://localhost:7087';
